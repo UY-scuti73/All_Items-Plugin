@@ -1,0 +1,118 @@
+name: All_Items
+version: '${project.version}'
+main: xyz.quazaros.main
+api-version: 1.20.6
+
+commands:
+  alist:
+    description: Lists the Items You Have Collected
+    usage: /alist
+    permission: all_items.items
+  mlist:
+    description: Lists the Mobs You Have Killed
+    usage: /mlist
+    permission: all_items.mobs
+  asend:
+    description: Sends the Item Currently in Your Hand. You Are Also Able to Send Your Hotbar and Inventory
+    usage:
+      -/asend
+      -/asend hotbar
+      -/asend inventory
+    permission: all_items.items
+  aprog:
+    description: Displays the Total Item Progress
+    usage: /aprog
+    permission: all_items.items
+  mprog:
+    description: Displays the Total Mob Progress
+    usage: /mprog
+    permission: all_items.mobs
+  aplayer:
+    description: Displays the Item Score of a Player
+    usage: /aplayer <player_name>
+    permission: all_items.items
+  mplayer:
+    description: Displays the Mob Score of a Player
+    usage: /mplayer <player_name>
+    permission: all_items.mobs
+  acheck:
+    description: Displays Whether or Not an Item Has Been Obtained
+    usage: /acheck <item_name>
+    permission: all_items.items
+  mcheck:
+    description: Displays Whether or Not an Item Has Been Obtained
+    usage: /mcheck <item_name>
+    permission: all_items.mobs
+  ahelp:
+    description: Displays the Usage of each Item Command in the Plugin
+    usage: /ahelp
+    permission: all_items.items
+  mhelp:
+    description: Displays the Usage of each Mob Command in the Plugin
+    usage: /mhelp
+    permission: all_items.mobs
+  asettings:
+    description: (ADMIN) Displays the Settings of the Plugin
+    usage: /asettings
+    permission: all_items.admin
+  msettings:
+    description: (ADMIN) Displays the Settings of the Plugin
+    usage: /msettings
+    permission: all_items.admin
+  areset:
+    description: (ADMIN) Resets the ItemData After a Server Restart
+    usage: /areset
+    permission: all_items.admin
+  mreset:
+    description: (ADMIN) Resets the MobData After a Server Restart
+    usage: /mreset
+    permission: all_items.admin
+  atoggle:
+    description: (ADMIN) Toggles the items functionality
+    usage: /atoggle
+    permission: all_items.admin
+  mtoggle:
+    description: (ADMIN) Toggles the mob functionality
+    usage: /mtoggle
+    permission: all_items.admin
+  aconfig:
+    description: (ADMIN) Modifies the Settings of the Items of the Plugin
+    usage:
+      -/aconfig file <file_name>
+      -/aconfig autocollect
+      -/aconfig subtract
+    permission: all_items.admin
+  mconfig:
+    description: (ADMIN) Modifies the Settings of the Mobs of the Plugin
+    usage:
+      -/mconfig file <file_name>
+    permission: all_items.admin
+  asubmit:
+     description: (ADMIN) Automatically Submits an Item
+     usage: /asubmit <item_name> <player_name (optional)>
+     permission: all_items.admin
+  aunsubmit:
+    description: (ADMIN) Unsubmits an Item
+    usage: /aunsubmit <item_name>
+    permission: all_items.admin
+  msubmit:
+    description: (ADMIN) Automatically Submits a Mob
+    usage: /msubmit <mob_name> <player_name (optional)>
+    permission: all_items.admin
+  munsubmit:
+    description: (ADMIN) Unsubmits a Mob
+    usage: /munsubmit <mob_name>
+    permission: all_items.admin
+
+permissions:
+  all_items.items:
+    description: Will allow players to access the items section of the plugin
+    default: true
+  all_items.mobs:
+    description: Will allow players to access the mobs section of the plugin
+    default: true
+  all_items.admin:
+    description: Will allow players to access the admin commands
+    default: op
+
+
