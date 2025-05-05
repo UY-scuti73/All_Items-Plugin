@@ -50,9 +50,11 @@ public class playerList {
             for (int i=0; i<players.size(); i++) {
                 players.get(i).score = 0;
             }
+            String found;
             for (int i = 0; i < item_list.indexes.size(); i++) {
+                found = item_list.items.get(item_list.indexes.get(i)).item_founder;
                 for (int j = 0; j < players.size(); j++) {
-                    if (item_list.items.get(item_list.indexes.get(i)).item_founder.equals(players.get(j).name)) {
+                    if (found != null && found.equals(players.get(j).name)) {
                         players.get(j).score++;
                     }
                 }

@@ -26,11 +26,13 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
     private static main plugin;
 
     file obj_file;
+    metaList meta_list;
     inventory inv;
     inventory mob_inv;
+    playerList player_list;
+
     itemList all_items;
     itemList all_mobs;
-    playerList player_list;
 
     List<String> config_list;
     List<String> send_list;
@@ -56,7 +58,10 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
     private void enable() {
         plugin = this;
         getServer().getPluginManager().registerEvents(this, this);
+
         obj_file = new file();
+        meta_list = new metaList();
+
         inv = new inventory(false);
         mob_inv = new inventory(true);
         player_list = new playerList();
@@ -73,9 +78,9 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
             throw new RuntimeException(e);
         }
 
-        all_items = obj_file.Data.total_items;
-        all_mobs = obj_file.Data.total_mobs;
-        player_list = obj_file.Data.player_list;
+        all_items = obj_file.total_items;
+        all_mobs = obj_file.total_mobs;
+        player_list = obj_file.player_list;
 
         inv.set_inventory(all_items.get_sub_items(), get_progress(false), player_list);
         mob_inv.set_inventory(all_mobs.get_sub_items(), get_progress(true), player_list);
@@ -109,11 +114,11 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
 
         Player p = (Player) sender;
 
-        if (check_itmes(command.getName()) && !obj_file.Data.toggle_items) {
+        if (check_itmes(command.getName()) && !obj_file.toggle_items) {
             p.sendMessage(ChatColor.RED + "Item Functionality has Been Disabled");
             return true;
         }
-        if (check_mobs(command.getName()) && !obj_file.Data.toggle_mobs) {
+        if (check_mobs(command.getName()) && !obj_file.toggle_mobs) {
             p.sendMessage(ChatColor.RED + "Mob Functionality has Been Disabled");
             return true;
         }
@@ -148,7 +153,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
             } else {
                 String message = (all_items.check_items(p.getInventory().getItemInMainHand(), p.getDisplayName(), false));
                 if (message.contains("ubmitted")) {
-                    if (obj_file.Data.sub_item) {
+                    if (obj_file.sub_item) {
                         ItemStack tempItem = new ItemStack(p.getInventory().getItemInMainHand().getType(), p.getInventory().getItemInMainHand().getAmount() - 1);
                         p.getInventory().setItemInMainHand(tempItem);
                         if (message.contains(ChatColor.GREEN.toString())) {
@@ -271,17 +276,17 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         if (command.getName().equalsIgnoreCase("asettings")) {
             if (p.isOp()) {
                 String str_sub, str_auto, temp;
-                if (obj_file.Data.sub_item) {
+                if (obj_file.sub_item) {
                     str_sub = "True";
                 } else str_sub = "False";
-                if (obj_file.Data.auto_collect) {
+                if (obj_file.auto_collect) {
                     str_auto = "True";
                 } else str_auto = "False";
-                if (obj_file.Data.toggle_items) {
+                if (obj_file.toggle_items) {
                     temp = "Enabled";
                 } else temp = "Disabled";
                 String toggle = ChatColor.LIGHT_PURPLE +""+ ChatColor.BOLD + "Toggled: " + ChatColor.AQUA +""+ ChatColor.BOLD + temp;
-                p.sendMessage(toggle + ChatColor.LIGHT_PURPLE + "\nFile: " + ChatColor.AQUA + obj_file.Data.file_name + ChatColor.LIGHT_PURPLE + "\nItem Subtraction: " + ChatColor.AQUA + str_sub + ChatColor.LIGHT_PURPLE + "\nAuto Collect: " + ChatColor.AQUA + str_auto);
+                p.sendMessage(toggle + ChatColor.LIGHT_PURPLE + "\nFile: " + ChatColor.AQUA + obj_file.file_name + ChatColor.LIGHT_PURPLE + "\nItem Subtraction: " + ChatColor.AQUA + str_sub + ChatColor.LIGHT_PURPLE + "\nAuto Collect: " + ChatColor.AQUA + str_auto);
             } else {p.sendMessage(ChatColor.RED + "You Don't Have Permission");}
         }
 
@@ -289,47 +294,47 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         if (command.getName().equalsIgnoreCase("msettings")) {
             if (p.isOp()) {
                 String temp;
-                if (obj_file.Data.toggle_mobs) {
+                if (obj_file.toggle_mobs) {
                     temp = "Enabled";
                 } else temp = "Disabled";
                 String toggle = ChatColor.LIGHT_PURPLE +""+ ChatColor.BOLD + "Toggled: " + ChatColor.AQUA +""+ ChatColor.BOLD + temp;
-                p.sendMessage(toggle + ChatColor.LIGHT_PURPLE + "\nFile: " + ChatColor.AQUA + obj_file.Data.mob_file_name);
+                p.sendMessage(toggle + ChatColor.LIGHT_PURPLE + "\nFile: " + ChatColor.AQUA + obj_file.mob_file_name);
             } else {p.sendMessage(ChatColor.RED + "You Don't Have Permission");}
         }
 
         //Resets the item data
         if (command.getName().equalsIgnoreCase("areset")) {
             if(p.isOp()) {
-                if (obj_file.Data.reset) {
+                if (obj_file.reset) {
                     p.sendMessage(ChatColor.DARK_GREEN + "Reset Cancelled");
                 } else {
                     p.sendMessage(ChatColor.DARK_RED + "Items Will Be Reset After a Server Restart. To Cancel Run This Command Again");
                 }
-                obj_file.Data.reset = !obj_file.Data.reset;
+                obj_file.reset = !obj_file.reset;
             } else {p.sendMessage(ChatColor.RED + "You Don't Have Permission");}
         }
 
         //Resets the mob data
         if (command.getName().equalsIgnoreCase("mreset")) {
             if(p.isOp()) {
-                if (obj_file.Data.mob_reset) {
+                if (obj_file.mob_reset) {
                     p.sendMessage(ChatColor.DARK_GREEN + "Reset Cancelled");
                 } else {
                     p.sendMessage(ChatColor.DARK_RED + "Mobs Will Be Reset After a Server Restart. To Cancel Run This Command Again");
                 }
-                obj_file.Data.mob_reset = !obj_file.Data.mob_reset;
+                obj_file.mob_reset = !obj_file.mob_reset;
             } else {p.sendMessage(ChatColor.RED + "You Don't Have Permission");}
         }
 
         //Enables/Disables the item feature of the plugin
         if (command.getName().equalsIgnoreCase("atoggle")) {
             if(p.isOp()) {
-                if (obj_file.Data.toggle_items) {
+                if (obj_file.toggle_items) {
                     p.sendMessage(ChatColor.DARK_RED + "All Items has Been Disabled");
                 } else {
                     p.sendMessage(ChatColor.DARK_GREEN + "All Items has Been Enabled");
                 }
-                obj_file.Data.toggle_items = !obj_file.Data.toggle_items;
+                obj_file.toggle_items = !obj_file.toggle_items;
                 set_all_permissions();
             }
         }
@@ -337,12 +342,12 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         //Enables/Disables the mob feature of the plugin
         if (command.getName().equalsIgnoreCase("mtoggle")) {
             if(p.isOp()) {
-                if (obj_file.Data.toggle_mobs) {
+                if (obj_file.toggle_mobs) {
                     p.sendMessage(ChatColor.DARK_RED + "All Mobs has Been Disabled");
                 } else {
                     p.sendMessage(ChatColor.DARK_GREEN + "All Mobs has Been Enabled");
                 }
-                obj_file.Data.toggle_mobs = !obj_file.Data.toggle_mobs;
+                obj_file.toggle_mobs = !obj_file.toggle_mobs;
                 set_all_permissions();
             }
         }
@@ -356,25 +361,25 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
                         if (args.length == 1) {
                             p.sendMessage(ChatColor.RED + "Please Enter Name of File");
                         } else {
-                            obj_file.Data.file_name = args[1];
-                            p.sendMessage(ChatColor.DARK_GREEN + "File is Now Set to \"" + obj_file.Data.file_name + "\" Restart Server to Make Change to the List");
+                            obj_file.file_name = args[1];
+                            p.sendMessage(ChatColor.DARK_GREEN + "File is Now Set to \"" + obj_file.file_name + "\" Restart Server to Make Change to the List");
                         }
                     //Toggles the auto collect setting
                     } else if (args[0].equalsIgnoreCase("autocollect")) {
-                        if (obj_file.Data.auto_collect) {
+                        if (obj_file.auto_collect) {
                             p.sendMessage(ChatColor.DARK_RED + "Auto-Collect Disabled");
                         } else {
                             p.sendMessage(ChatColor.DARK_GREEN + "Auto-Collect Enabled");
                         }
-                        obj_file.Data.auto_collect = !obj_file.Data.auto_collect;
+                        obj_file.auto_collect = !obj_file.auto_collect;
                     //Toggles the item subtraction setting
                     } else if (args[0].equalsIgnoreCase("subtract")) {
-                        if (obj_file.Data.sub_item) {
+                        if (obj_file.sub_item) {
                             p.sendMessage(ChatColor.DARK_RED + "Item Subtraction Disabled");
                         } else {
                             p.sendMessage(ChatColor.DARK_GREEN + "Item Subtraction Enabled");
                         }
-                        obj_file.Data.sub_item = !obj_file.Data.sub_item;
+                        obj_file.sub_item = !obj_file.sub_item;
                     }
                 } else {p.sendMessage(ChatColor.RED + "Please Enter A Setting to Change");}
             } else {p.sendMessage(ChatColor.RED + "You Don't Have Permission");}
@@ -389,8 +394,8 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
                         if (args.length == 1) {
                             p.sendMessage(ChatColor.RED + "Please Enter Name of File");
                         } else {
-                            obj_file.Data.mob_file_name = args[1];
-                            p.sendMessage(ChatColor.DARK_GREEN + "File is Now Set to \"" + obj_file.Data.mob_file_name + "\" Restart Server to Make Change to the List");
+                            obj_file.mob_file_name = args[1];
+                            p.sendMessage(ChatColor.DARK_GREEN + "File is Now Set to \"" + obj_file.mob_file_name + "\" Restart Server to Make Change to the List");
                         }
                     }
                 } else {p.sendMessage(ChatColor.RED + "Please Enter A Setting to Change");}
@@ -706,19 +711,19 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
     //Handles when a player picks up an item
     @EventHandler
     public void PlayerPickupItemEvent(PlayerPickupItemEvent e) {
-        if (!obj_file.Data.toggle_items) {
+        if (!obj_file.toggle_items) {
             return;
         }
 
-        if (obj_file.Data.auto_collect) {
-            if (obj_file.Data.sub_item) {
+        if (obj_file.auto_collect) {
+            if (obj_file.sub_item) {
                 e.setCancelled(true);
             }
             Player p = e.getPlayer();
             String message = all_items.check_items(e.getItem().getItemStack(), p.getDisplayName(), true);
             if (message.contains("ubmitted")) {
                 if (message.contains(ChatColor.GREEN.toString())) {
-                    if (obj_file.Data.sub_item) {
+                    if (obj_file.sub_item) {
                         e.getItem().setItemStack(new ItemStack(Material.AIR));
                     }
                     p.sendMessage(message);
@@ -733,7 +738,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
     //Handles when a player kills a mob
     @EventHandler
     public void EntityDeathEvent(EntityDeathEvent e) {
-        if (!obj_file.Data.toggle_mobs) {
+        if (!obj_file.toggle_mobs) {
             return;
         }
 
@@ -783,7 +788,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
                         p.sendMessage(message);
                         check_completed(false);
                         temp2++;
-                        if (obj_file.Data.sub_item) {
+                        if (obj_file.sub_item) {
                             ItemStack tempItem = new ItemStack(p.getInventory().getItem(i).getType(), p.getInventory().getItem(i).getAmount() - 1);
                             p.getInventory().setItem(i, tempItem);
                         }
@@ -832,10 +837,10 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
             return;
         }
 
-        if (obj_file.Data.toggle_items) {
+        if (obj_file.toggle_items) {
             player.addAttachment(getPlugin(), "all_items.items", true);
         }
-        if (obj_file.Data.toggle_mobs) {
+        if (obj_file.toggle_mobs) {
             player.addAttachment(getPlugin(), "all_items.mobs", true);
         }
     }

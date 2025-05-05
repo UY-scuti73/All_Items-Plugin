@@ -30,7 +30,7 @@ public class itemList {
     public itemList() {
         items = new ArrayList<item>();
         indexes = new ArrayList<>();
-        meta_list = new metaList();
+        meta_list = main.getPlugin().meta_list;
         item_names = new ArrayList<>();
     }
 
