@@ -240,6 +240,34 @@ public class itemList {
         return temp;
     }
 
+    //Gets the total progress
+    public int get_progress() {
+        int cnt = 0;
+        for (item i : items) {
+            if (i.isFound) {
+                cnt++;
+            }
+        }
+        return cnt;
+    }
+
+    public boolean complete() {
+        int prog = get_progress();
+        int total = items.size();
+        int temp = prog/total;
+        if (temp == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String progPer() {
+        String s1 = Integer.toString(get_progress());
+        String s2 = Integer.toString(items.size());
+        return s1 + "/" + s2;
+    }
+
     //Turns the current date and time into a readable string
     public String date() {
         LocalDateTime d = LocalDateTime.now();
@@ -323,6 +351,11 @@ public class itemList {
         //Update the name list
         update_item_names();
     }
+
+    //Sets the item list to the item list defined
+    public void set(ArrayList<item> items) {
+        this.items = items;
+    }
 }
 
 class item {
@@ -376,6 +409,18 @@ class item {
         item_meta.setEnchantmentGlintOverride(true);
         item_stack.setItemMeta(item_meta);
         item_data.submit(item_name, p, time);
+        isFound = true;
+    }
+
+    public void submit(String time) {
+        item_time = time;
+        item_meta.setDisplayName(ChatColor.GREEN+item_display_name);
+        item_lore.set(0, ChatColor.AQUA+"Found");
+        item_lore.add(ChatColor.AQUA+"At " + item_time);
+        item_meta.setLore(item_lore);
+        item_meta.setEnchantmentGlintOverride(true);
+        item_stack.setItemMeta(item_meta);
+        item_data.submit(item_name, "", time);
         isFound = true;
     }
 

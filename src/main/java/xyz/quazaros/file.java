@@ -20,6 +20,9 @@ public class file {
     private final File file_alphabetical;
     private final File file_all;
     private final File file_normal_mobs;
+    private final File file_personal;
+    private final File personal_items;
+    private final File personal_mobs;
 
     private final String path_pre;
 
@@ -59,6 +62,10 @@ public class file {
         file_alphabetical = new File(path_pre + "/Lists/alphabetical.txt");
         file_all = new File(path_pre + "/Lists/all.txt");
         file_normal_mobs = new File(path_pre + "/MobLists/normal.txt");
+
+        file_personal = new File(path_pre + "/PersonalLists");
+        personal_items = new File(file_personal + "/Items");
+        personal_mobs = new File(file_personal + "/Mobs");
 
         normal = new ArrayList<>();
         alphabetical = new ArrayList<>();
@@ -296,6 +303,49 @@ public class file {
             }
             if (file_mobs.exists()) {
                 file_mobs.delete();
+            }
+        }
+
+        file_personal.mkdirs();
+        personal_items.mkdirs();
+        personal_mobs.mkdirs();
+
+        //Gets Personal Lists
+        for (player p :  players.players) {
+            item_data_list.clear();
+            File tempFile = new File(personal_items +"/"+ p.name + ".json");
+            if (!reset) {
+                tempFile.createNewFile();
+                myWriter = new FileWriter(tempFile, false);
+                for (item i : p.item_list.items) {
+                    item_data_list.add(i.item_data);
+                }
+                gson.toJson(item_data_list, item_data_list.getClass(), myWriter);
+                myWriter.flush();
+                myWriter.close();
+            } else {
+                p.itemPerScore = 0;
+                if (tempFile.exists()) {
+                    tempFile.delete();
+                }
+            }
+
+            item_data_list.clear();
+            tempFile = new File(personal_mobs +"/"+ p.name + ".json");
+            if (!mob_reset) {
+                tempFile.createNewFile();
+                myWriter = new FileWriter(tempFile, false);
+                for (item i : p.mob_list.items) {
+                    item_data_list.add(i.item_data);
+                }
+                gson.toJson(item_data_list, item_data_list.getClass(), myWriter);
+                myWriter.flush();
+                myWriter.close();
+            } else {
+                p.mobPerScore = 0;
+                if (tempFile.exists()) {
+                    tempFile.delete();
+                }
             }
         }
 

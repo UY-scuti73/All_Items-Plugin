@@ -24,6 +24,7 @@ public class inventory {
     ItemStack sort;
 
     boolean is_mob;
+    boolean is_public;
 
     public inventory(boolean mob) {
         forward = new ItemStack(Material.ARROW);
@@ -31,29 +32,23 @@ public class inventory {
         leaderboard = new ItemStack(Material.DIAMOND);
         players = new ItemStack(Material.OAK_HANGING_SIGN);
         sort = new ItemStack(Material.HOPPER);
-        is_mob = mob;
     }
 
     //Sets the inventory to reflect the item list
-    public void set_inventory(ArrayList<item> item_list, int prog, playerList player_list) {
+    public void set_inventory(ArrayList<item> item_list, int prog, String text, boolean mob, boolean pub) {
+        is_mob = mob;
+        is_public = pub;
         ArrayList<item> sorted_items;
         sorted_items = sort(item_list);
         size = (item_list.size()/45)+1;
         total = item_list.size();
         progress = prog;
-        menuButtons(total,prog,player_list);
-
-        String text;
-        if (is_mob) {
-            text = "All Mobs List ";
-        } else {
-            text = "All Items List ";
-        }
+        menuButtons(total, prog);
 
         //Sets every item in the item list to a spot in the menu, and sets the menu buttons
         for (int i = 0; i<size ; i++){
-            inventory_list.add(Bukkit.createInventory(null, 9*6, ChatColor.DARK_GREEN+text+(i+1)));
-            sorted_list.add(Bukkit.createInventory(null, 9 * 6, ChatColor.DARK_GREEN + text + (i + 1)));
+            inventory_list.add(Bukkit.createInventory(null, 9*6, ChatColor.DARK_GREEN + text + " " + (i+1)));
+            sorted_list.add(Bukkit.createInventory(null, 9 * 6, ChatColor.DARK_GREEN + text + " " + (i + 1)));
 
             for (int j = 0; j<45 ; j++){
                 if (j+45*i<item_list.size()) {
@@ -77,7 +72,7 @@ public class inventory {
     }
 
     //Sets the menu buttons in the alist menu
-    public void menuButtons(int total, int completed, playerList player_list) {
+    public void menuButtons(int total, int completed) {
         ItemMeta forwardM = forward.getItemMeta();
         forwardM.setDisplayName(ChatColor.GOLD + "Next Page");
         forward.setItemMeta(forwardM);
@@ -99,9 +94,9 @@ public class inventory {
         ItemMeta playersM = players.getItemMeta();
         playersM.setDisplayName(ChatColor.AQUA + "Leaderboard");
         if (!is_mob) {
-            playersM.setLore(player_list.leaderboard(false));
+            playersM.setLore(main.getPlugin().player_list.leaderboard(false));
         } else {
-            playersM.setLore(player_list.leaderboard(true));
+            playersM.setLore(main.getPlugin().player_list.leaderboard(true));
         }
         players.setItemMeta(playersM);
     }

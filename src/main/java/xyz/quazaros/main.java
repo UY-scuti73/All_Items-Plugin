@@ -31,6 +31,9 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
     inventory mob_inv;
     playerList player_list;
 
+    itemList emptyItemList;
+    itemList emptyMobList;
+
     itemList all_items;
     itemList all_mobs;
 
@@ -41,6 +44,9 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
     String admin_help_string;
     String mob_help_string;
     String admin_mob_help_string;
+
+    String s_inventory_name;
+    String s_mob_inventory_name;
 
     @Override
     public void onEnable() {
@@ -54,7 +60,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         System.out.println("All-Items Plugin Has Stopped");
     }
 
-    ////Handles what happens when the plugin enables
+    //Handles what happens when the plugin enables
     private void enable() {
         plugin = this;
         getServer().getPluginManager().registerEvents(this, this);
@@ -66,11 +72,16 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         mob_inv = new inventory(true);
         player_list = new playerList();
 
+        emptyItemList = new itemList();
+        emptyItemList.total();
+        emptyMobList = new itemList();
+        emptyMobList.total_mobs();
+
         all_items = new itemList();
-        all_items.total();
+        all_items.set(emptyItemList.items);
 
         all_mobs = new itemList();
-        all_mobs.total_mobs();
+        all_mobs.set(emptyMobList.items);
 
         try {
             obj_file.get_data();
@@ -82,8 +93,8 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         all_mobs = obj_file.total_mobs;
         player_list = obj_file.player_list;
 
-        inv.set_inventory(all_items.get_sub_items(), get_progress(false), player_list);
-        mob_inv.set_inventory(all_mobs.get_sub_items(), get_progress(true), player_list);
+        inv.set_inventory(all_items.get_sub_items(), all_items.get_progress(), "All Items List", false, true);
+        mob_inv.set_inventory(all_mobs.get_sub_items(), all_mobs.get_progress(), "All Mobs List", true, true);
 
         config_list = new ArrayList<>();
         send_list = new ArrayList<>();
@@ -113,39 +124,68 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         Player p = (Player) sender;
+        String command_name = command.getName();
 
-        if (check_itmes(command.getName()) && !obj_file.toggle_items) {
+        if (check_itmes(command_name) && !obj_file.toggle_items) {
             p.sendMessage(ChatColor.RED + "Item Functionality has Been Disabled");
             return true;
         }
-        if (check_mobs(command.getName()) && !obj_file.toggle_mobs) {
+        if (check_mobs(command_name) && !obj_file.toggle_mobs) {
             p.sendMessage(ChatColor.RED + "Mob Functionality has Been Disabled");
             return true;
         }
 
-        //Brings up the list of items menu
-        if (command.getName().equalsIgnoreCase("alist")) {
-            //Resets the menu counter to 0
-            player_list.players.get(player_list.get_player_place(p.getName())).invItt = 0;
-            player_list.players.get(player_list.get_player_place(p.getName())).sorted = false;
-            player_list.players.get(player_list.get_player_place(p.getName())).mobs = false;
+        if (command_name.equalsIgnoreCase("aself")) {
+            if (!player_list.player_exists(p.getName())) {
+                p.sendMessage(ChatColor.RED + "Player Not Found");
+                return true;
+            }
+            player pl = player_list.get_player_from_string(p.getName());
+            pl.invItt = 0;
+            pl.sorted = false;
+            pl.mobs = false;
             player_list.initialize_score(all_items, false);
-            inv.set_inventory(all_items.get_sub_items(), get_progress(false), player_list);
-            p.openInventory(inv.inventory_list.get(0));
+
+            pl.inv.set_inventory(pl.item_list.get_sub_items(), pl.item_list.get_progress(), p.getDisplayName() + " " + "All Items List", false, true);
+            p.openInventory(pl.inv.inventory_list.get(0));
+        }
+
+        //Brings up the list of items menu
+        if (command_name.equalsIgnoreCase("alist")) {
+            if (!player_list.player_exists(p.getName())) {
+                p.sendMessage(ChatColor.RED + "Player Not Found");
+                return  true;
+            }
+            player pl = player_list.get_player_from_string(p.getName());
+            pl.invItt = 0;
+            pl.sorted = false;
+            pl.mobs = false;
+            player_list.initialize_score(all_items, false);
+            if (args.length == 0) {
+                pl.inv.set_inventory(all_items.get_sub_items(), all_items.get_progress(), "All Items List", false, true);
+                p.openInventory(pl.inv.inventory_list.get(0));
+            } else if (args.length >=1) {
+                if (player_list.player_exists(args[0])) {
+                    pl.inv.set_inventory(pl.item_list.get_sub_items(), pl.item_list.get_progress(), p.getDisplayName() + " " + "All Items List", false, true);
+                    p.openInventory(pl.inv.inventory_list.get(0));
+                } else {
+                    p.sendMessage(ChatColor.RED + "Player Not Found");
+                }
+            }
         }
 
         //Brings up the list of mobs menu
-        if (command.getName().equalsIgnoreCase("mlist")) {
+        if (command_name.equalsIgnoreCase("mlist")) {
             player_list.players.get(player_list.get_player_place(p.getName())).invItt = 0;
             player_list.players.get(player_list.get_player_place(p.getName())).sorted = false;
             player_list.players.get(player_list.get_player_place(p.getName())).mobs = true;
             player_list.initialize_score(all_mobs, true);
-            mob_inv.set_inventory(all_mobs.get_sub_items(), get_progress(true), player_list);
+            mob_inv.set_inventory(all_mobs.get_sub_items(), all_mobs.get_progress(), "All Mobs List", true, true);
             p.openInventory(mob_inv.inventory_list.get(0));
         }
 
         //Sends the item in a players hand
-        if (command.getName().equalsIgnoreCase("asend")) {
+        if (command_name.equalsIgnoreCase("asend")) {
             if (args.length >= 1 && args[0].equalsIgnoreCase("inventory")) {
                 inv_check(p.getInventory(), p, p.getInventory().getSize());
             } else if (args.length >= 1 && args[0].equalsIgnoreCase("hotbar")) {
@@ -166,17 +206,17 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Sends the progress of the challenge
-        if (command.getName().equalsIgnoreCase("aprog")) {
-            p.sendMessage(ChatColor.LIGHT_PURPLE + "Progress: " + ChatColor.AQUA + Integer.toString(get_progress(false)) + "/" + all_items.indexes.size());
+        if (command_name.equalsIgnoreCase("aprog")) {
+            p.sendMessage(ChatColor.LIGHT_PURPLE + "Progress: " + ChatColor.AQUA + all_items.progPer());
         }
 
         //Sends the progress of the mob challenge
-        if (command.getName().equalsIgnoreCase("mprog")) {
-            p.sendMessage(ChatColor.LIGHT_PURPLE + "Progress: " + ChatColor.AQUA + Integer.toString(get_progress(true)) + "/" + all_mobs.indexes.size());
+        if (command_name.equalsIgnoreCase("mprog")) {
+            p.sendMessage(ChatColor.LIGHT_PURPLE + "Progress: " + ChatColor.AQUA + all_mobs.progPer());
         }
 
         //Sends the score of a player
-        if (command.getName().equalsIgnoreCase("aplayer")) {
+        if (command_name.equalsIgnoreCase("aplayer")) {
             player_list.initialize_score(all_items, false);
             if (args.length == 0) {
                 p.sendMessage(ChatColor.RED + "Please Enter Player Name");
@@ -191,7 +231,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Sends the score of a player
-        if (command.getName().equalsIgnoreCase("mplayer")) {
+        if (command_name.equalsIgnoreCase("mplayer")) {
             player_list.initialize_score(all_mobs, true);
             if (args.length == 0) {
                 p.sendMessage(ChatColor.RED + "Please Enter Player Name");
@@ -206,7 +246,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Checks the item that the player sends
-        if (command.getName().equalsIgnoreCase("acheck")) {
+        if (command_name.equalsIgnoreCase("acheck")) {
             if (args.length == 0) {
                 p.sendMessage(ChatColor.RED + "Please Enter Item Name");
             } else {
@@ -229,7 +269,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Checks the mob that the player sends
-        if (command.getName().equalsIgnoreCase("mcheck")) {
+        if (command_name.equalsIgnoreCase("mcheck")) {
             if (args.length == 0) {
                 p.sendMessage(ChatColor.RED + "Please Enter Item Name");
             } else {
@@ -252,7 +292,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Explains the item commands of the plugin
-        if (command.getName().equalsIgnoreCase("ahelp")) {
+        if (command_name.equalsIgnoreCase("ahelp")) {
             if (p.isOp()) {
                 p.sendMessage(admin_help_string);
             } else {
@@ -261,7 +301,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Explains the mob commands of the plugin
-        if (command.getName().equalsIgnoreCase("mhelp")) {
+        if (command_name.equalsIgnoreCase("mhelp")) {
             if (p.isOp()) {
                 p.sendMessage(admin_mob_help_string);
             } else {
@@ -273,7 +313,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         //ADMIN COMMANDS
 
         //Sends the item settings of the plugin
-        if (command.getName().equalsIgnoreCase("asettings")) {
+        if (command_name.equalsIgnoreCase("asettings")) {
             if (p.isOp()) {
                 String str_sub, str_auto, temp;
                 if (obj_file.sub_item) {
@@ -291,7 +331,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Sends the mob settings of the plugin
-        if (command.getName().equalsIgnoreCase("msettings")) {
+        if (command_name.equalsIgnoreCase("msettings")) {
             if (p.isOp()) {
                 String temp;
                 if (obj_file.toggle_mobs) {
@@ -303,7 +343,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Resets the item data
-        if (command.getName().equalsIgnoreCase("areset")) {
+        if (command_name.equalsIgnoreCase("areset")) {
             if(p.isOp()) {
                 if (obj_file.reset) {
                     p.sendMessage(ChatColor.DARK_GREEN + "Reset Cancelled");
@@ -315,7 +355,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Resets the mob data
-        if (command.getName().equalsIgnoreCase("mreset")) {
+        if (command_name.equalsIgnoreCase("mreset")) {
             if(p.isOp()) {
                 if (obj_file.mob_reset) {
                     p.sendMessage(ChatColor.DARK_GREEN + "Reset Cancelled");
@@ -327,7 +367,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Enables/Disables the item feature of the plugin
-        if (command.getName().equalsIgnoreCase("atoggle")) {
+        if (command_name.equalsIgnoreCase("atoggle")) {
             if(p.isOp()) {
                 if (obj_file.toggle_items) {
                     p.sendMessage(ChatColor.DARK_RED + "All Items has Been Disabled");
@@ -340,7 +380,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Enables/Disables the mob feature of the plugin
-        if (command.getName().equalsIgnoreCase("mtoggle")) {
+        if (command_name.equalsIgnoreCase("mtoggle")) {
             if(p.isOp()) {
                 if (obj_file.toggle_mobs) {
                     p.sendMessage(ChatColor.DARK_RED + "All Mobs has Been Disabled");
@@ -353,7 +393,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Modifies the config
-        if (command.getName().equalsIgnoreCase("aconfig")) {
+        if (command_name.equalsIgnoreCase("aconfig")) {
             if (p.isOp()) {
                 if (!(args.length == 0)) {
                     //Swaps the item file
@@ -386,7 +426,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Modifies the config
-        if (command.getName().equalsIgnoreCase("mconfig")) {
+        if (command_name.equalsIgnoreCase("mconfig")) {
             if (p.isOp()) {
                 if (!(args.length == 0)) {
                     //Swaps the item file
@@ -403,7 +443,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Submits an item from the plugin
-        if (command.getName().equalsIgnoreCase("asubmit")) {
+        if (command_name.equalsIgnoreCase("asubmit")) {
             if (p.isOp()) {
                 if (args.length == 0) {
                     p.sendMessage(ChatColor.RED + "Please Enter Item Name");
@@ -443,7 +483,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Unsubmits an item from the plugin
-        if (command.getName().equalsIgnoreCase("aunsubmit")) {
+        if (command_name.equalsIgnoreCase("aunsubmit")) {
             if (p.isOp()) {
                 if (args.length == 0) {
                     p.sendMessage(ChatColor.RED + "Please Enter Item Name");
@@ -469,7 +509,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Submits a mob from the plugin
-        if (command.getName().equalsIgnoreCase("msubmit")) {
+        if (command_name.equalsIgnoreCase("msubmit")) {
             if (p.isOp()) {
                 if (args.length == 0) {
                     p.sendMessage(ChatColor.RED + "Please Enter Mob Name");
@@ -509,7 +549,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
 
         //Unsubmits a mob from the plugin
-        if (command.getName().equalsIgnoreCase("munsubmit")) {
+        if (command_name.equalsIgnoreCase("munsubmit")) {
             if (p.isOp()) {
                 if (args.length == 0) {
                     p.sendMessage(ChatColor.RED + "Please Enter Item Name");
@@ -554,23 +594,24 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         player_list.update_player_names();
+        String command_name = command.getName();
 
-        if (command.getName().equalsIgnoreCase("asubmit") || command.getName().equalsIgnoreCase("aunsubmit") || command.getName().equalsIgnoreCase("acheck")) {
+        if (command_name.equalsIgnoreCase("asubmit") || command_name.equalsIgnoreCase("aunsubmit") || command_name.equalsIgnoreCase("acheck")) {
             if (args.length == 1) {
                 return all_items.item_names;
             }
-            if (command.getName().equalsIgnoreCase("asubmit") && args.length == 2) {
+            if (command_name.equalsIgnoreCase("asubmit") && args.length == 2) {
                 return player_list.player_names;
             }
-        } else if (command.getName().equalsIgnoreCase("aplayer")) {
+        } else if (command_name.equalsIgnoreCase("aplayer")) {
             if (args.length == 1) {
                 return player_list.player_names;
             }
-        } else if (command.getName().equalsIgnoreCase("asend")) {
+        } else if (command_name.equalsIgnoreCase("asend")) {
             if (args.length == 1) {
                 return send_list;
             }
-        } else if (command.getName().equalsIgnoreCase("aconfig")) {
+        } else if (command_name.equalsIgnoreCase("aconfig")) {
             if (args.length == 1) {
                 return config_list;
             }
@@ -579,18 +620,18 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
             }
         }
 
-        if (command.getName().equalsIgnoreCase("msubmit") || command.getName().equalsIgnoreCase("munsubmit") || command.getName().equalsIgnoreCase("mcheck")) {
+        if (command_name.equalsIgnoreCase("msubmit") || command_name.equalsIgnoreCase("munsubmit") || command_name.equalsIgnoreCase("mcheck")) {
             if (args.length == 1) {
                 return all_mobs.item_names;
             }
-            if (command.getName().equalsIgnoreCase("msubmit") && args.length == 2) {
+            if (command_name.equalsIgnoreCase("msubmit") && args.length == 2) {
                 return player_list.player_names;
             }
-        } else if (command.getName().equalsIgnoreCase("mplayer")) {
+        } else if (command_name.equalsIgnoreCase("mplayer")) {
             if (args.length == 1) {
                 return player_list.player_names;
             }
-        } else if (command.getName().equalsIgnoreCase("mconfig")) {
+        } else if (command_name.equalsIgnoreCase("mconfig")) {
             if (args.length == 1) {
                 return Arrays.asList("file");
             }
@@ -623,84 +664,54 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
     @EventHandler
     public void guiClickEvent(InventoryClickEvent e) {
         Player p = (Player) e.getWhoClicked();
-        if(inv.inventory_list.contains(e.getInventory()) || inv.sorted_list.contains(e.getInventory()) || mob_inv.inventory_list.contains(e.getInventory()) || mob_inv.sorted_list.contains(e.getInventory())) {
+        player pl = player_list.get_player_from_string(p.getName());
+        if(pl.inv.inventory_list.contains(e.getInventory()) || pl.inv.sorted_list.contains(e.getInventory())) {
             //Prevents the player from moving any items in the menu
             e.setCancelled(true);
-
-            int temp_player = player_list.get_player_place(p.getName());
 
             switch (e.getSlot()) {
                 //Goes to the last page if the back arrow is pressed, unless it is on the first page
                 case 45: {
-                    if (!e.getInventory().equals(inv.inventory_list.get(0)) && !e.getInventory().equals(inv.sorted_list.get(0)) && !e.getInventory().equals(mob_inv.inventory_list.get(0)) && !e.getInventory().equals(mob_inv.sorted_list.get(0))) {
-                        player_list.players.get(temp_player).invItt -= 1;
+                    if (!e.getInventory().equals(pl.inv.inventory_list.get(0)) && !e.getInventory().equals(pl.inv.sorted_list.get(0))) {
+                        pl.invItt -= 1;
                     }
                     else{
-                        if (!player_list.players.get(temp_player).mobs) {
-                            player_list.players.get(temp_player).invItt = inv.size - 1;
-                        } else {
-                            player_list.players.get(temp_player).invItt = mob_inv.size - 1;
-                        }
+                        pl.invItt = pl.inv.size - 1;
                     }
 
-                    if (!player_list.get_player_from_string(p.getName()).mobs) {
-                        if (!player_list.get_player_from_string(p.getName()).sorted) {
-                            p.openInventory(inv.inventory_list.get(player_list.players.get(temp_player).invItt));
-                        } else {
-                            p.openInventory(inv.sorted_list.get(player_list.players.get(temp_player).invItt));
-                        }
+                    if (!pl.sorted) {
+                        p.openInventory(pl.inv.inventory_list.get(pl.invItt));
                     } else {
-                        if (!player_list.get_player_from_string(p.getName()).sorted) {
-                            p.openInventory(mob_inv.inventory_list.get(player_list.players.get(temp_player).invItt));
-                        } else {
-                            p.openInventory(mob_inv.sorted_list.get(player_list.players.get(temp_player).invItt));
-                        }
+                        p.openInventory(pl.inv.sorted_list.get(pl.invItt));
                     }
+
                     break;
                 }
                 //Goes to the next page if the forward arrow is pressed, unless it is on the last page
                 case 53: {
-                    if (!e.getInventory().equals(inv.inventory_list.get(inv.size-1)) && !e.getInventory().equals(inv.sorted_list.get(inv.size-1)) && !e.getInventory().equals(mob_inv.inventory_list.get(mob_inv.size-1)) && !e.getInventory().equals(mob_inv.sorted_list.get((mob_inv.size-1)))) {
-                        player_list.players.get(temp_player).invItt += 1;
+                    if (!e.getInventory().equals(pl.inv.inventory_list.get(pl.inv.size-1)) && !e.getInventory().equals(pl.inv.sorted_list.get(pl.inv.size-1))) {
+                        pl.invItt += 1;
                     }
                     else{
-                        player_list.players.get(temp_player).invItt = 0;
+                        pl.invItt = 0;
                     }
 
-                    if (!player_list.get_player_from_string(p.getName()).mobs) {
-                        if (!player_list.get_player_from_string(p.getName()).sorted) {
-                            p.openInventory(inv.inventory_list.get(player_list.players.get(temp_player).invItt));
-                        } else {
-                            p.openInventory(inv.sorted_list.get(player_list.players.get(temp_player).invItt));
-                        }
+                    if (!pl.sorted) {
+                        p.openInventory(pl.inv.inventory_list.get(pl.invItt));
                     } else {
-                        if (!player_list.get_player_from_string(p.getName()).sorted) {
-                            p.openInventory(mob_inv.inventory_list.get(player_list.players.get(temp_player).invItt));
-                        } else {
-                            p.openInventory(mob_inv.sorted_list.get(player_list.players.get(temp_player).invItt));
-                        }
+                        p.openInventory(pl.inv.sorted_list.get(pl.invItt));
                     }
 
                     break;
                 }
                 //Handles what happens when the sort button is presses
                 case 47: {
-                    if (!player_list.get_player_from_string(p.getName()).mobs) {
-                        player_list.players.get(temp_player).invItt = 0;
-                        player_list.players.get(temp_player).sorted = !player_list.players.get(temp_player).sorted;
-                        if (player_list.get_player_from_string(p.getName()).sorted) {
-                            p.openInventory(inv.sorted_list.get(0));
-                        } else {
-                            p.openInventory(inv.inventory_list.get(0));
-                        }
+                    pl.invItt = 0;
+                    pl.sorted = !pl.sorted;
+                    if (pl.sorted) {
+                        p.openInventory(pl.inv.sorted_list.get(0));
                     } else {
-                        player_list.players.get(temp_player).invItt = 0;
-                        player_list.players.get(temp_player).sorted = !player_list.players.get(temp_player).sorted;
-                        if (player_list.get_player_from_string(p.getName()).sorted) {
-                            p.openInventory(mob_inv.sorted_list.get(0));
-                        } else {
-                            p.openInventory(mob_inv.inventory_list.get(0));
-                        }
+                        p.openInventory(pl.inv.inventory_list.get(0));
                     }
                     break;
                 }
@@ -802,23 +813,6 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         }
     }
 
-    //Gets the total progress
-    private int get_progress(boolean is_mob) {
-        ArrayList<item> temp;
-        if (!is_mob) {
-            temp = all_items.get_sub_items();
-        } else {
-            temp = all_mobs.get_sub_items();
-        }
-        int cnt = 0;
-        for (item i : temp) {
-            if (i.isFound) {
-                cnt++;
-            }
-        }
-        return cnt;
-    }
-
     //Sets the permissions of every player
     private void set_all_permissions() {
         for (Player p : Bukkit.getOnlinePlayers()) {
@@ -849,27 +843,20 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
     private void check_completed(boolean is_mob) {
         int total;
         String message;
+        itemList temp;
         if (!is_mob) {
             total = all_items.indexes.size();
             message = ChatColor.GREEN + "All Items Have Been Collected";
+            temp = all_items;
         } else {
             total = all_mobs.indexes.size();
             message = ChatColor.GREEN + "All Mobs Have Been Collected";
+            temp = all_mobs;
         }
-        boolean is_complete = complete(get_progress(is_mob), total);
-        if (is_complete) {
+        if (temp.complete()) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.sendTitle(ChatColor.YELLOW + "CONGRATULATIONS", message);
             }
-        }
-    }
-
-    private boolean complete(int prog, int total) {
-        int temp = prog/total;
-        if (temp == 1) {
-            return true;
-        } else {
-            return false;
         }
     }
 

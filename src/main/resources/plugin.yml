@@ -4,6 +4,8 @@ main: xyz.quazaros.main
 api-version: 1.20.6
 
 commands:
+  aself:
+    permission: all_items.items
   alist:
     description: Lists the Items You Have Collected
     usage: /alist

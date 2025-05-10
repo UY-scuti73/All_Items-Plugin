@@ -34,6 +34,14 @@ public class playerList {
         return null;
     }
 
+    //Checks if a player exists
+    public boolean player_exists(String s) {
+        if (get_player_place(s) != -1) {
+            return true;
+        }
+        return false;
+    }
+
     //Checks if a player_name is in the list
     public boolean in_list(String s) {
         for (player p : players) {
@@ -173,15 +181,29 @@ class player {
     String name;
     int score;
     int mobScore;
+    int itemPerScore;
+    int mobPerScore;
     int invItt;
     boolean sorted;
     boolean mobs;
+    itemList item_list;
+    itemList mob_list;
+    inventory inv;
 
     public player(String p_name) {
         name = p_name;
         score = 0;
+        mobScore = 0;
+        itemPerScore = 0;
+        mobPerScore = 0;
+
         invItt = 0;
         sorted = false;
         mobs = false;
+        item_list = new itemList();
+        item_list.set(main.getPlugin().emptyItemList.items);
+        mob_list = new itemList();
+        mob_list.set(main.getPlugin().emptyMobList.items);
+        inv = new inventory(false);
     }
 }
