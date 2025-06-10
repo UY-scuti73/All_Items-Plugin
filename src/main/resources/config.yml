@@ -1,0 +1,48 @@
+###########
+## ITEMS ##
+###########
+
+all_items:
+  toggle: true
+
+  file: normal
+
+  subtraction: false
+
+  auto_collect: false
+
+  global: true
+  personal: true
+  others_lists: true
+  list_priority: 0
+
+##########
+## MOBS ##
+##########
+
+all_mobs:
+  toggle: true
+
+  file: normal
+
+  global: true
+  personal: true
+  others_lists: true
+  list_priority: 0
+
+##########
+## INFO ##
+##########
+
+# "toggle": Enables (true)/Disables (false) the respected part of the plugin (if you only wanted items for example).
+
+# "file": Chooses the list to go off of in either ItemLists or MobLists (there are a few there by default, you can use those or make your own).
+
+# "global/personal/others_lists": Allows everyone to see a server-wide list, a personal list, or other personal lists respectively.
+# "list_priority": #Submission message and itemSubtraction (if enabled) takes priority for global list (0) or personal list (1).
+
+# "subtraction": Subtracts the item(s) once it is submitted
+
+# "auto_collect": Automatically submits an item once it is picked up by the player
+
+#For any issues please reach out on discord... https://discord.gg/zHzFgWX8KW

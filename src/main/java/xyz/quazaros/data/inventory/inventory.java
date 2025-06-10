@@ -1,4 +1,4 @@
-package xyz.quazaros;
+package xyz.quazaros.data.inventory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -6,16 +6,18 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import xyz.quazaros.data.items.item;
+import xyz.quazaros.data.items.itemList;
+import xyz.quazaros.main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class inventory {
-    ArrayList<Inventory> inventory_list = new ArrayList<>();
-    ArrayList<Inventory> sorted_list = new ArrayList<>();
-    int size;
-    int progress;
-    int total;
+    public ArrayList<Inventory> inventory_list = new ArrayList<>();
+    public ArrayList<Inventory> sorted_list = new ArrayList<>();
+
+    public int size;
 
     ItemStack forward;
     ItemStack back;
@@ -35,19 +37,21 @@ public class inventory {
     }
 
     //Sets the inventory to reflect the item list
-    public void set_inventory(ArrayList<item> item_list, int prog, String text, boolean mob, boolean pub) {
-        is_mob = mob;
-        is_public = pub;
+    public void set_inventory(itemList itemList, String text) {
+        is_mob = itemList.mob;
+        is_public = !itemList.personal;
+        ArrayList<item> item_list = itemList.get_sub_items();
         ArrayList<item> sorted_items;
         sorted_items = sort(item_list);
         size = (item_list.size()/45)+1;
-        total = item_list.size();
-        progress = prog;
-        menuButtons(total, prog);
+        menuButtons(itemList.progPer());
+
+        inventory_list.clear();
+        sorted_list.clear();
 
         //Sets every item in the item list to a spot in the menu, and sets the menu buttons
         for (int i = 0; i<size ; i++){
-            inventory_list.add(Bukkit.createInventory(null, 9*6, ChatColor.DARK_GREEN + text + " " + (i+1)));
+            inventory_list.add(Bukkit.createInventory(null, 9 * 6, ChatColor.DARK_GREEN + text + " " + (i+1)));
             sorted_list.add(Bukkit.createInventory(null, 9 * 6, ChatColor.DARK_GREEN + text + " " + (i + 1)));
 
             for (int j = 0; j<45 ; j++){
@@ -72,7 +76,7 @@ public class inventory {
     }
 
     //Sets the menu buttons in the alist menu
-    public void menuButtons(int total, int completed) {
+    public void menuButtons(String progPercent) {
         ItemMeta forwardM = forward.getItemMeta();
         forwardM.setDisplayName(ChatColor.GOLD + "Next Page");
         forward.setItemMeta(forwardM);
@@ -87,7 +91,7 @@ public class inventory {
 
         ItemMeta leaderboardM = leaderboard.getItemMeta();
         leaderboardM.setDisplayName(ChatColor.AQUA + "Progress");
-        leaderboardM.setLore(Arrays.asList(ChatColor.LIGHT_PURPLE + String.valueOf(completed) + "/" + String.valueOf(total)));
+        leaderboardM.setLore(Arrays.asList(ChatColor.LIGHT_PURPLE + progPercent));
         leaderboardM.setEnchantmentGlintOverride(true);
         leaderboard.setItemMeta(leaderboardM);
 
@@ -102,7 +106,7 @@ public class inventory {
     }
 
     //Sorts the items for the filter
-    public ArrayList<item> sort(ArrayList<item> items) {
+    private ArrayList<item> sort(ArrayList<item> items) {
         ArrayList<item> temp = new ArrayList<>();
         for (item i : items) {
             if (!i.isFound) {

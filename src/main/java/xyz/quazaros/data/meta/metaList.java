@@ -1,4 +1,4 @@
-package xyz.quazaros;
+package xyz.quazaros.data.meta;
 
 import org.bukkit.Bukkit;
 import org.bukkit.MusicInstrument;
@@ -6,28 +6,31 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.MusicInstrumentMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionType;
+import xyz.quazaros.data.items.item;
+import xyz.quazaros.file;
+import xyz.quazaros.main;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 public class metaList {
 
     file File;
 
-    ArrayList<item> items;
-    ArrayList<item> mobs;
+    public ArrayList<item> items;
+    public ArrayList<item> mobs;
 
-    ArrayList<enchantments> enchantment_list;
-    ArrayList<ArrayList<enchantments>> main_enchantment_list;
-    ArrayList<potions> potion_list;
-    ArrayList<instruments> instrument_list;
+    public ArrayList<enchantments> enchantment_list;
+    public ArrayList<ArrayList<enchantments>> main_enchantment_list;
+    public ArrayList<potions> potion_list;
+    public ArrayList<instruments> instrument_list;
+
+    ArrayList<String> items_init;
+    ArrayList<String> mobs_init;
 
     int version;
 
-    public metaList() {
-        File = main.getPlugin().obj_file;
+    public metaList(ArrayList<String> items_init_p, ArrayList<String> mobs_init_p) {
+        File = main.getPlugin().file;
 
         items = new ArrayList<>();
         mobs = new ArrayList<>();
@@ -38,6 +41,9 @@ public class metaList {
 
         version = get_version();
 
+        items_init = items_init_p;
+        mobs_init = mobs_init_p;
+
         initialize_enchantedBooks();
         initialize_potions();
         initialize_horns();
@@ -46,7 +52,7 @@ public class metaList {
     }
 
     private void initialize_items() {
-        for (String s : File.all_items_init) {
+        for (String s : items_init) {
             items.add(new item(s));
         }
 
@@ -58,8 +64,8 @@ public class metaList {
     }
 
     private void initialize_mobs() {
-        for (String s : File.all_mobs_init) {
-            mobs.add(new item(s));
+        for (String s : mobs_init) {
+            mobs.add(new item(s + "_spawn_egg"));
         }
 
         //Removes the null items
@@ -301,50 +307,3 @@ public class metaList {
     }
 }
 
-class enchantments {
-    String name;
-    Enchantment enchant;
-    int level;
-
-    public enchantments(String name, Enchantment enchant, int level) {
-        this.name = name;
-        this.enchant = enchant;
-        this.level = level;
-    }
-}
-
-class potions {
-    String name;
-    ArrayList<PotionType> effect;
-
-    public potions(String name) {
-        this.name = name;
-        ArrayList<String> temp = new ArrayList<>();
-        temp.add(name);
-        temp.add("long_"+name);
-        temp.add("strong_"+name);
-        effect = to_potion(temp);
-    }
-
-    private ArrayList<PotionType> to_potion(List<String> strings) {
-        ArrayList<PotionType> temp = new ArrayList<>();
-        for (String s : strings) {
-            for (PotionType p : PotionType.values()) {
-                if (p.toString().equalsIgnoreCase(s)) {
-                    temp.add(p);
-                }
-            }
-        }
-        return temp;
-    }
-}
-
-class instruments {
-    String name;
-    MusicInstrument instrument;
-
-    public instruments(String name, MusicInstrument instrument) {
-        this.name = name;
-        this.instrument = instrument;
-    }
-}

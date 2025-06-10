@@ -5,14 +5,24 @@ api-version: 1.20.6
 
 commands:
   aself:
+    description: Lists the Items You Have Collected
+    usage: /aself
     permission: all_items.items
   alist:
-    description: Lists the Items You Have Collected
-    usage: /alist
+    description: Lists the Items The Server Has Collected
+    usage:
+      -/alist
+      -/alist <player_name>
+    permission: all_items.items
+  mself:
+    description: Lists the Mobs You Have Killed
+    usage: /mself
     permission: all_items.items
   mlist:
-    description: Lists the Mobs You Have Killed
-    usage: /mlist
+    description: Lists the Mobs The Server Has Killed
+    usage:
+      -/mlist
+      -/mlist <player_name>
     permission: all_items.mobs
   asend:
     description: Sends the Item Currently in Your Hand. You Are Also Able to Send Your Hotbar and Inventory
@@ -22,12 +32,16 @@ commands:
       -/asend inventory
     permission: all_items.items
   aprog:
-    description: Displays the Total Item Progress
-    usage: /aprog
+    description: Displays the Total/Personal Item Progress
+    usage:
+      -/aprog
+      -/aprog <player_name>
     permission: all_items.items
   mprog:
-    description: Displays the Total Mob Progress
-    usage: /mprog
+    description: Displays the Total/Personal Mob Progress
+    usage:
+      -/mprog
+      -/mprog <player_name>
     permission: all_items.mobs
   aplayer:
     description: Displays the Item Score of a Player
@@ -39,11 +53,15 @@ commands:
     permission: all_items.mobs
   acheck:
     description: Displays Whether or Not an Item Has Been Obtained
-    usage: /acheck <item_name>
+    usage:
+      /acheck <item_name>
+      /acheck <item_name> <player_name>
     permission: all_items.items
   mcheck:
     description: Displays Whether or Not an Item Has Been Obtained
-    usage: /mcheck <item_name>
+    usage:
+      /mcheck <item_name>
+      /mcheck <item_name> <player_name>
     permission: all_items.mobs
   ahelp:
     description: Displays the Usage of each Item Command in the Plugin
@@ -69,41 +87,33 @@ commands:
     description: (ADMIN) Resets the MobData After a Server Restart
     usage: /mreset
     permission: all_items.admin
-  atoggle:
-    description: (ADMIN) Toggles the items functionality
-    usage: /atoggle
-    permission: all_items.admin
-  mtoggle:
-    description: (ADMIN) Toggles the mob functionality
-    usage: /mtoggle
-    permission: all_items.admin
-  aconfig:
-    description: (ADMIN) Modifies the Settings of the Items of the Plugin
-    usage:
-      -/aconfig file <file_name>
-      -/aconfig autocollect
-      -/aconfig subtract
-    permission: all_items.admin
-  mconfig:
-    description: (ADMIN) Modifies the Settings of the Mobs of the Plugin
-    usage:
-      -/mconfig file <file_name>
-    permission: all_items.admin
   asubmit:
      description: (ADMIN) Automatically Submits an Item
-     usage: /asubmit <item_name> <player_name (optional)>
+     usage:
+      -/asubmit <item_name>
+      -/asubmit <item_name> <player_name>
+      -/asubmit <player_name> <item_name>
+      -/asubmit personal <player_name> <item_name>
      permission: all_items.admin
   aunsubmit:
     description: (ADMIN) Unsubmits an Item
-    usage: /aunsubmit <item_name>
+    usage:
+      -/aunsubmit <item_name>
+      -/aunsubmit <player_name> <item_name>
     permission: all_items.admin
   msubmit:
     description: (ADMIN) Automatically Submits a Mob
-    usage: /msubmit <mob_name> <player_name (optional)>
+    usage:
+      -/msubmit <mob_name>
+      -/msubmit <mob_name> <player_name>
+      -/msubmit <player_name> <mob_name>
+      -/msubmit personal <player_name> <mob_name>
     permission: all_items.admin
   munsubmit:
     description: (ADMIN) Unsubmits a Mob
-    usage: /munsubmit <mob_name>
+    usage:
+      -/munsubmit <mob_name>
+      -/munsubmit <player_name> <mob_name>
     permission: all_items.admin
 
 permissions:

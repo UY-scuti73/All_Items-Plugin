@@ -1,13 +1,14 @@
-package xyz.quazaros;
+package xyz.quazaros.data.player;
 
 import org.bukkit.ChatColor;
+import xyz.quazaros.data.items.itemList;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class playerList {
-    ArrayList<player> players;
-    List<String> player_names;
+    public ArrayList<player> players;
+    public List<String> player_names;
 
     public playerList() {
         players = new ArrayList<>();
@@ -177,33 +178,3 @@ public class playerList {
     }
 }
 
-class player {
-    String name;
-    int score;
-    int mobScore;
-    int itemPerScore;
-    int mobPerScore;
-    int invItt;
-    boolean sorted;
-    boolean mobs;
-    itemList item_list;
-    itemList mob_list;
-    inventory inv;
-
-    public player(String p_name) {
-        name = p_name;
-        score = 0;
-        mobScore = 0;
-        itemPerScore = 0;
-        mobPerScore = 0;
-
-        invItt = 0;
-        sorted = false;
-        mobs = false;
-        item_list = new itemList();
-        item_list.set(main.getPlugin().emptyItemList.items);
-        mob_list = new itemList();
-        mob_list.set(main.getPlugin().emptyMobList.items);
-        inv = new inventory(false);
-    }
-}

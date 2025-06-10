@@ -2,6 +2,11 @@ package xyz.quazaros;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.bukkit.configuration.file.YamlConfiguration;
+import xyz.quazaros.data.config.config;
+import xyz.quazaros.data.config.*;
+import xyz.quazaros.data.items.*;
+import xyz.quazaros.data.player.*;
 
 import java.io.*;
 import java.util.*;
@@ -11,205 +16,114 @@ public class file {
     public List<String> mob_file_list;
 
     private final File file_data;
+    private final File file_items;
     private final File file_mobs;
     private final File file_player;
-    private final File file_config;
     private final File file_lists;
-    private final File mob_file_lists;
+    private final File file_mob_lists;
     private final File file_normal;
     private final File file_alphabetical;
     private final File file_all;
     private final File file_normal_mobs;
-    private final File file_personal;
-    private final File personal_items;
-    private final File personal_mobs;
+    private final File file_personal_items;
+    private final File file_personal_mobs;
+    private final File configFile;
+    private final File langFile;
 
     private final String path_pre;
 
     ArrayList<String> item_string_list;
     ArrayList<String> mob_string_list;
-    itemList total_items;
-    itemList total_mobs;
-    playerList player_list;
 
-    String file_name;
-    String mob_file_name;
     boolean reset;
     boolean mob_reset;
-    boolean sub_item;
-    boolean auto_collect;
-    boolean toggle_items;
-    boolean toggle_mobs;
 
     ArrayList<String> normal;
     ArrayList<String> alphabetical;
     ArrayList<String> all;
     ArrayList<String> normal_mobs;
 
+    ArrayList<String> items_init;
+    ArrayList<String> mobs_init;
     ArrayList<String> all_items_init;
     ArrayList<String> all_mobs_init;
 
     public file() {
+        //Sets up file names
         path_pre = xyz.quazaros.main.getPlugin().getDataFolder().getAbsolutePath();
-        file_data = new File(path_pre + "/items.json");
-        file_mobs = new File(path_pre + "/mobs.json");
-        file_player = new File(path_pre + "/players.txt");
-        file_config = new File(path_pre + "/config.txt");
 
-        file_lists = new File(path_pre + "/Lists");
-        mob_file_lists = new File(path_pre + "/MobLists");
-        file_normal = new File(path_pre + "/Lists/normal.txt");
-        file_alphabetical = new File(path_pre + "/Lists/alphabetical.txt");
-        file_all = new File(path_pre + "/Lists/all.txt");
+        file_data = new File(path_pre + "/Data");
+
+        file_items = new File(path_pre + "/Data/items.json");
+        file_mobs = new File(path_pre + "/Data/mobs.json");
+        file_player = new File(path_pre + "/Data/players.txt");
+
+        file_lists = new File(path_pre + "/ItemLists");
+        file_mob_lists = new File(path_pre + "/MobLists");
+        file_normal = new File(path_pre + "/ItemLists/normal.txt");
+        file_alphabetical = new File(path_pre + "/ItemLists/alphabetical.txt");
+        file_all = new File(path_pre + "/ItemLists/all.txt");
         file_normal_mobs = new File(path_pre + "/MobLists/normal.txt");
 
-        file_personal = new File(path_pre + "/PersonalLists");
-        personal_items = new File(file_personal + "/Items");
-        personal_mobs = new File(file_personal + "/Mobs");
+        file_personal_items = new File(path_pre + "/Data/PersonalItems");
+        file_personal_mobs = new File(path_pre + "/Data/PersonalMobs");
+
+        configFile = new File(path_pre + "/config.yml");
+        langFile = new File(path_pre + "/lang.yml");
+
+        //Initializes item lists
+        items_init = new ArrayList<>();
+        mobs_init = new ArrayList<>();
+        all_items_init = new ArrayList<>();
+        all_mobs_init = new ArrayList<>();
+
+        //Sets default settings
+        reset = false;
+        mob_reset = false;
+
+        //Gets the list of items/mobs from the files in resources
+        items_init.addAll(get_from_file("items.txt"));
+        mobs_init.addAll(get_from_file("mobs.txt"));
+        all_items_init.addAll(get_from_file("total_items.txt"));
+        all_mobs_init.addAll(get_from_file("total_mobs.txt"));
+
+        //Initializes string lists
+        item_string_list = new ArrayList<>();
 
         normal = new ArrayList<>();
         alphabetical = new ArrayList<>();
         all = new ArrayList<>();
         normal_mobs = new ArrayList<>();
 
-        all_items_init = new ArrayList<>();
-        all_mobs_init = new ArrayList<>();
-
-        file_name = "normal";
-        mob_file_name = "normal";
-        reset = false;
-        sub_item = false;
-        auto_collect = false;
-        toggle_items = true;
-        toggle_mobs = true;
-
-        item_string_list = new ArrayList<>();
-
-        //For Meta List
-        all_items_init.addAll(get_from_file("total_items.txt"));
-        all_mobs_init.addAll(get_from_file("total_mobs.txt"));
-    }
-
-    private ArrayList<String> get_from_file(String path) {
-        ArrayList<String> temp = new ArrayList<>();
-        try (InputStream inputStream = main.class.getClassLoader().getResourceAsStream(path)) {
-            if (inputStream != null) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    temp.add(line);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return temp;
-    }
-
-    //Gets data upon starting the server
-    public void get_data() throws IOException {
-        total_items = new itemList();
-        total_mobs = new itemList();
-        total_items.total();
-        total_mobs.total_mobs();
-        player_list = new playerList();
-
-        normal.addAll(get_from_file("items.txt"));
-
+        normal.addAll(items_init);
         alphabetical.addAll(normal);
         Collections.sort(alphabetical);
+        all.addAll(all_items_init);
+        normal_mobs.addAll(mobs_init);
+    }
 
-        for (item i : total_items.items) {
-            all.add(i.item_name);
-        }
+    public void get_data() {
+        try {setup_files();} catch (IOException e) {throw new RuntimeException(e);}
 
-        for (item i : total_mobs.items) {
-            normal_mobs.add(i.item_name);
-        }
+        try {get_config();} catch (IOException e) {throw new RuntimeException(e);}
 
-        if (file_config.exists()) {
-            Scanner myScanner = new Scanner(file_config);
-            String temp;
-            temp = myScanner.nextLine();
-            file_name = myScanner.nextLine();
-            temp = myScanner.nextLine();
-            temp = myScanner.nextLine();
-            mob_file_name = myScanner.nextLine();
-            temp = myScanner.nextLine();
-            temp = myScanner.nextLine();
-            temp = myScanner.nextLine();
-            if (temp.equalsIgnoreCase("true")) {sub_item = true;} else {sub_item = false;}
-            temp = myScanner.nextLine();
-            temp = myScanner.nextLine();
-            temp = myScanner.nextLine();
-            if (temp.equalsIgnoreCase("true")) {auto_collect = true;} else {auto_collect = false;}
-            temp = myScanner.nextLine();
-            temp = myScanner.nextLine();
-            temp = myScanner.nextLine();
-            if (temp.equalsIgnoreCase("enabled")) {toggle_items = true;} else {toggle_items = false;}
-            temp = myScanner.nextLine();
-            temp = myScanner.nextLine();
-            temp = myScanner.nextLine();
-            if (temp.equalsIgnoreCase("enabled")) {toggle_mobs = true;} else {toggle_mobs = false;}
+        try {string_list_setup();} catch (IOException e) {throw new RuntimeException(e);}
 
-            item_string_list = get_item_from_list(file_name, false);
-            mob_string_list = get_item_from_list(mob_file_name, true);
-        } else {
-            item_string_list = get_item_from_list("normal", false);
-            mob_string_list = get_item_from_list("normal", true);
-        }
+        main.getPlugin().emptyItemList = new itemList(false, item_string_list);
+        main.getPlugin().emptyMobList = new itemList(true, mob_string_list);
 
-        total_items.indexes = total_items.string_to_index(item_string_list);
-        total_mobs.indexes = total_mobs.string_to_index(mob_string_list);
+        try {get_players();} catch (IOException e) {throw new RuntimeException(e);}
 
-        Gson gson = new GsonBuilder().setLenient().create();
-        Reader myReader;
-        if (file_data.exists()) {
-            myReader = new FileReader(file_data);
-            itemData[] temp = gson.fromJson(myReader, itemData[].class);
-            for (int i=0; i<total_items.items.size(); i++) {
-                if (temp[i] != null && total_items.items.get(i).item_name != null && temp[i].name.equals(total_items.items.get(i).item_name)) {
-                    total_items.items.get(i).item_data = temp[i];
-                    if (total_items.items.get(i).item_data.is_found) {
-                        total_items.items.get(i).submit(temp[i].player, temp[i].date);
-                    }
-                }
-                else {
-                    for (int j=0; j<total_items.items.size(); j++) {
-                        if (temp[i] != null && total_items.items.get(i).item_name != null && temp[i].name.equals(total_items.items.get(j).item_name)) {
-                            total_items.items.get(j).item_data = temp[i];
-                            if (total_items.items.get(j).item_data.is_found) {
-                                total_items.items.get(j).submit(temp[i].player, temp[i].date);
-                            }
-                        }
-                    }
-                }
-            }
-            myReader.close();
-        }
+        try {get_items();} catch (IOException e) {throw new RuntimeException(e);}
+    }
 
-        if (file_mobs.exists()) {
-            myReader = new FileReader(file_mobs);
-            itemData[] temp = gson.fromJson(myReader, itemData[].class);
-            for (int i=0; i<total_mobs.items.size(); i++) {
-                if (temp[i].name.equals(total_mobs.items.get(i).item_name)) {
-                    total_mobs.items.get(i).item_data = temp[i];
-                    if (total_mobs.items.get(i).item_data.is_found) {
-                        total_mobs.items.get(i).submit(temp[i].player, temp[i].date);
-                    }
-                }
-                else {
-                    for (int j=0; j<total_mobs.items.size(); j++) {
-                        if (temp[i].name.equals(total_mobs.items.get(j).item_name)) {
-                            total_mobs.items.get(j).item_data = temp[i];
-                            if (total_mobs.items.get(j).item_data.is_found) {
-                                total_mobs.items.get(j).submit(temp[i].player, temp[i].date);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    public void send_data() {
+        try {send_items();} catch (IOException e) {throw new RuntimeException(e);}
+    }
+
+    //Gets players from the playerList file
+    private void get_players() throws IOException {
+        playerList player_list = main.getPlugin().player_list;
 
         if (file_player.exists()) {
             Scanner myScanner = new Scanner(file_player);
@@ -217,11 +131,51 @@ public class file {
                 player_list.players.add(new player(myScanner.nextLine()));
             }
         }
+    }
 
-        player_list.initialize_score(total_items, false);
-        player_list.initialize_score(total_mobs, true);
+    //Creates directory and files
+    private void setup_files() throws IOException {
+        file_data.mkdirs();
+        file_personal_items.mkdirs();
+        file_personal_mobs.mkdirs();
+    }
 
-        //Sets up the default "list" files
+    //Gets the config and lang
+    private void get_config() throws IOException {
+        config data = main.getPlugin().data;
+        lang Lang = main.getPlugin().lang;
+
+        if (!configFile.exists()) {
+            main.getPlugin().saveResource("config.yml", false);
+        }
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+
+        if (!langFile.exists()) {
+            main.getPlugin().saveResource("lang.yml", false);
+        }
+        YamlConfiguration langConfig = YamlConfiguration.loadConfiguration(langFile);
+
+        data.item_toggle = (config.getString("all_items.toggle").equalsIgnoreCase("true"));
+        data.item_file = config.getString("all_items.file");
+        data.item_subtraction = (config.getString("all_items.subtraction").equalsIgnoreCase("true"));
+        data.item_autoCollect = (config.getString("all_items.auto_collect").equalsIgnoreCase("true"));
+        data.item_global = (config.getString("all_items.global").equalsIgnoreCase("true"));
+        data.item_personal = (config.getString("all_items.personal").equalsIgnoreCase("true"));
+        data.item_others = (config.getString("all_items.others_lists").equalsIgnoreCase("true"));
+        data.item_listPriority = config.getBoolean("all_items.list_priority");
+        data.mob_toggle = (config.getString("all_mobs.toggle").equalsIgnoreCase("true"));
+        data.mob_file = config.getString("all_mobs.file");
+        data.mob_global = (config.getString("all_mobs.global").equalsIgnoreCase("true"));
+        data.mob_personal = (config.getString("all_mobs.personal").equalsIgnoreCase("true"));
+        data.mob_others = (config.getString("all_mobs.others_lists").equalsIgnoreCase("true"));
+        data.mob_listPriority = config.getBoolean("all_mobs.list_priority");
+
+        Lang.inventory_name = langConfig.getString("gui.itemListMenu");
+        Lang.mob_inventory_name = langConfig.getString("gui.mobListMenu");
+    }
+
+    //Sets up the string list files
+    private void string_list_setup() throws IOException {
         file_normal.getParentFile().mkdirs();
 
         if (!file_normal.exists()) {
@@ -260,18 +214,140 @@ public class file {
             myWriter.close();
         }
 
+        item_string_list = get_item_from_list(main.getPlugin().data.item_file, false);
+        mob_string_list = get_item_from_list(main.getPlugin().data.mob_file, true);
+    }
+
+    //Gets data upon starting the server
+    private void get_items() throws IOException {
+        main.getPlugin().all_items = new itemList(main.getPlugin().emptyItemList, false);
+        main.getPlugin().all_mobs = new itemList(main.getPlugin().emptyMobList, false);
+        itemList all_items = main.getPlugin().all_items;
+        itemList all_mobs = main.getPlugin().all_mobs;
+
+        Gson gson = new GsonBuilder().setLenient().create();
+        Reader myReader;
+
+        if (file_items.exists()) {
+            myReader = new FileReader(file_items);
+            itemData[] temp = gson.fromJson(myReader, itemData[].class);
+            for (int i=0; i<all_items.items.size(); i++) {
+                if (temp[i] != null && all_items.items.get(i).item_name != null && temp[i].name.equals(all_items.items.get(i).item_name)) {
+                    all_items.items.get(i).item_data = temp[i];
+                    if (all_items.items.get(i).item_data.is_found) {
+                        all_items.items.get(i).submit(temp[i].player, temp[i].date);
+                    }
+                }
+                else {
+                    for (int j=0; j<all_items.items.size(); j++) {
+                        if (temp[i] != null && all_items.items.get(i).item_name != null && temp[i].name.equals(all_items.items.get(j).item_name)) {
+                            all_items.items.get(j).item_data = temp[i];
+                            if (all_items.items.get(j).item_data.is_found) {
+                                all_items.items.get(j).submit(temp[i].player, temp[i].date);
+                            }
+                        }
+                    }
+                }
+            }
+            myReader.close();
+        }
+
+        if (file_mobs.exists()) {
+            myReader = new FileReader(file_mobs);
+            itemData[] temp = gson.fromJson(myReader, itemData[].class);
+            for (int i=0; i<all_mobs.items.size(); i++) {
+                if (temp[i].name.equals(all_mobs.items.get(i).item_name)) {
+                    all_mobs.items.get(i).item_data = temp[i];
+                    if (all_mobs.items.get(i).item_data.is_found) {
+                        all_mobs.items.get(i).submit(temp[i].player, temp[i].date);
+                    }
+                }
+                else {
+                    for (int j=0; j<all_mobs.items.size(); j++) {
+                        if (temp[i].name.equals(all_mobs.items.get(j).item_name)) {
+                            all_mobs.items.get(j).item_data = temp[i];
+                            if (all_mobs.items.get(j).item_data.is_found) {
+                                all_mobs.items.get(j).submit(temp[i].player, temp[i].date);
+                            }
+                        }
+                    }
+                }
+            }
+            myReader.close();
+        }
+
+        File tempFile;
+        for (player pl : main.getPlugin().player_list.players) {
+            tempFile = new File(path_pre + "/Data/PersonalItems/" + pl.name + ".json");
+            if (tempFile.exists()) {
+                myReader = new FileReader(tempFile);
+                itemData[] temp = gson.fromJson(myReader, itemData[].class);
+                for (int i=0; i<pl.item_list.items.size(); i++) {
+                    if (temp[i] != null && pl.item_list.items.get(i).item_name != null && temp[i].name.equals(pl.item_list.items.get(i).item_name)) {
+                        pl.item_list.items.get(i).item_data = temp[i];
+                        if (pl.item_list.items.get(i).item_data.is_found) {
+                            if (temp[i].player.isEmpty()) {pl.item_list.items.get(i).submit(temp[i].date);}
+                            else {pl.item_list.items.get(i).submit(temp[i].player, temp[i].date);}
+                        }
+                    }
+                    else {
+                        for (int j=0; j<pl.item_list.items.size(); j++) {
+                            if (temp[i] != null && pl.item_list.items.get(i).item_name != null && temp[i].name.equals(pl.item_list.items.get(j).item_name)) {
+                                pl.item_list.items.get(j).item_data = temp[i];
+                                if (pl.item_list.items.get(j).item_data.is_found) {
+                                    if (temp[i].player.isEmpty()) {pl.item_list.items.get(i).submit(temp[i].date);}
+                                    else {pl.item_list.items.get(i).submit(temp[i].player, temp[i].date);}
+                                }
+                            }
+                        }
+                    }
+                }
+                myReader.close();
+            }
+            tempFile = new File(path_pre + "/Data/PersonalMobs/" + pl.name + ".json");
+            if (tempFile.exists()) {
+                myReader = new FileReader(file_mobs);
+                itemData[] temp = gson.fromJson(myReader, itemData[].class);
+                for (int i=0; i<pl.mob_list.items.size(); i++) {
+                    if (temp[i].name.equals(pl.mob_list.items.get(i).item_name)) {
+                        pl.mob_list.items.get(i).item_data = temp[i];
+                        if (pl.mob_list.items.get(i).item_data.is_found) {
+                            if (temp[i].player.isEmpty()) {pl.mob_list.items.get(i).submit(temp[i].date);}
+                            else {pl.mob_list.items.get(i).submit(temp[i].player, temp[i].date);}
+                        }
+                    }
+                    else {
+                        for (int j=0; j<pl.mob_list.items.size(); j++) {
+                            if (temp[i].name.equals(pl.mob_list.items.get(j).item_name)) {
+                                pl.mob_list.items.get(j).item_data = temp[i];
+                                if (pl.mob_list.items.get(j).item_data.is_found) {
+                                    if (temp[i].player.isEmpty()) {pl.mob_list.items.get(i).submit(temp[i].date);}
+                                    else {pl.mob_list.items.get(i).submit(temp[i].player, temp[i].date);}
+                                }
+                            }
+                        }
+                    }
+                }
+                myReader.close();
+            }
+        }
+
         file_list = remove_txt(Arrays.asList(file_lists.list()));
-        mob_file_list = remove_txt(Arrays.asList(mob_file_lists.list()));
+        mob_file_list = remove_txt(Arrays.asList(file_mob_lists.list()));
     }
 
     //Sends the data to files upon closing the server and periodically saving
-    public void send_data(itemList items, itemList mobs, playerList players) throws IOException {
+    private void send_items() throws IOException {
+        itemList items = main.getPlugin().all_items;
+        itemList mobs = main.getPlugin().all_mobs;
+        playerList players = main.getPlugin().player_list;
+
         ArrayList<itemData> item_data_list = new ArrayList<>();
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         Writer myWriter;
         if (!reset) {
-            file_data.createNewFile();
-            myWriter = new FileWriter(file_data, false);
+            file_items.createNewFile();
+            myWriter = new FileWriter(file_items, false);
             for (item i : items.items) {
                 item_data_list.add(i.item_data);
             }
@@ -282,11 +358,13 @@ public class file {
             for (int i=0; i<players.players.size(); i++) {
                 players.players.get(i).score = 0;
             }
-            if (file_data.exists()) {
-                file_data.delete();
+            if (file_items.exists()) {
+                file_items.delete();
+            }
+            if (file_personal_items.exists()) {
+                file_personal_items.delete();
             }
         }
-
         item_data_list.clear();
         if (!mob_reset) {
             file_mobs.createNewFile();
@@ -306,14 +384,10 @@ public class file {
             }
         }
 
-        file_personal.mkdirs();
-        personal_items.mkdirs();
-        personal_mobs.mkdirs();
-
         //Gets Personal Lists
         for (player p :  players.players) {
             item_data_list.clear();
-            File tempFile = new File(personal_items +"/"+ p.name + ".json");
+            File tempFile = new File(file_personal_items +"/"+ p.name + ".json");
             if (!reset) {
                 tempFile.createNewFile();
                 myWriter = new FileWriter(tempFile, false);
@@ -331,7 +405,7 @@ public class file {
             }
 
             item_data_list.clear();
-            tempFile = new File(personal_mobs +"/"+ p.name + ".json");
+            tempFile = new File(file_personal_mobs +"/"+ p.name + ".json");
             if (!mob_reset) {
                 tempFile.createNewFile();
                 myWriter = new FileWriter(tempFile, false);
@@ -355,29 +429,13 @@ public class file {
             myWriter.write(p.name+"\n");
         }
         myWriter.close();
-
-        file_config.createNewFile();
-        myWriter = new FileWriter(file_config, false);
-        myWriter.write("Item File Name:\n");
-        myWriter.write(file_name + "\n\n");
-        myWriter.write("Mob File Name:\n");
-        myWriter.write(mob_file_name + "\n\n");
-        myWriter.write("Subtraction:\n");
-        myWriter.write((sub_item ? "True" : "False") + "\n\n");
-        myWriter.write("Auto Collect:\n");
-        myWriter.write((auto_collect ? "True" : "False") + "\n\n");
-        myWriter.write("Items Toggle:\n");
-        myWriter.write((toggle_items ? "Enabled" : "Disabled") + "\n\n");
-        myWriter.write("Mobs Toggle:\n");
-        myWriter.write((toggle_mobs ? "Enabled" : "Disabled") + "\n\n");
-        myWriter.close();
     }
 
     //Gets the list of items (strings) from a file
     private ArrayList<String> get_item_from_list(String str, boolean is_mob) throws IOException {
         File file_itemlist;
         if (!is_mob) {
-            file_itemlist = new File(path_pre + "/Lists/" + str + ".txt");
+            file_itemlist = new File(path_pre + "/ItemLists/" + str + ".txt");
         } else {
             file_itemlist = new File(path_pre + "/MobLists/" + str + ".txt");
         }
@@ -396,6 +454,24 @@ public class file {
         }
         return temp;
     }
+
+    //Gets the list of strings from a file
+    private ArrayList<String> get_from_file(String path) {
+        ArrayList<String> temp = new ArrayList<>();
+        try (InputStream inputStream = main.class.getClassLoader().getResourceAsStream("Data/" + path)) {
+            if (inputStream != null) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    temp.add(line);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
+
 
     //Removes the .txt extension from each string in a list
     private List<String> remove_txt(List<String> list) {
