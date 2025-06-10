@@ -142,36 +142,17 @@ public class file {
 
     //Gets the config and lang
     private void get_config() throws IOException {
-        config data = main.getPlugin().data;
-        lang Lang = main.getPlugin().lang;
-
         if (!configFile.exists()) {
             main.getPlugin().saveResource("config.yml", false);
         }
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        main.getPlugin().data.initialize(config);
 
         if (!langFile.exists()) {
             main.getPlugin().saveResource("lang.yml", false);
         }
         YamlConfiguration langConfig = YamlConfiguration.loadConfiguration(langFile);
-
-        data.item_toggle = (config.getString("all_items.toggle").equalsIgnoreCase("true"));
-        data.item_file = config.getString("all_items.file");
-        data.item_subtraction = (config.getString("all_items.subtraction").equalsIgnoreCase("true"));
-        data.item_autoCollect = (config.getString("all_items.auto_collect").equalsIgnoreCase("true"));
-        data.item_global = (config.getString("all_items.global").equalsIgnoreCase("true"));
-        data.item_personal = (config.getString("all_items.personal").equalsIgnoreCase("true"));
-        data.item_others = (config.getString("all_items.others_lists").equalsIgnoreCase("true"));
-        data.item_listPriority = config.getBoolean("all_items.list_priority");
-        data.mob_toggle = (config.getString("all_mobs.toggle").equalsIgnoreCase("true"));
-        data.mob_file = config.getString("all_mobs.file");
-        data.mob_global = (config.getString("all_mobs.global").equalsIgnoreCase("true"));
-        data.mob_personal = (config.getString("all_mobs.personal").equalsIgnoreCase("true"));
-        data.mob_others = (config.getString("all_mobs.others_lists").equalsIgnoreCase("true"));
-        data.mob_listPriority = config.getBoolean("all_mobs.list_priority");
-
-        Lang.inventory_name = langConfig.getString("gui.itemListMenu");
-        Lang.mob_inventory_name = langConfig.getString("gui.mobListMenu");
+        main.getPlugin().lang.initialize(langConfig);
     }
 
     //Sets up the string list files

@@ -1,3 +1,23 @@
+#Welcome to the AllItems config! Info is on the bottom of the file.
+
+#############
+## GENERAL ##
+#############
+
+general:
+  global: true
+  personal: true
+  others_lists: true
+  list_priority: 0
+
+  progress: true
+  check: true
+  player: true
+  settings: true
+
+  main_completion: true
+  personal_completion: true
+
 ###########
 ## ITEMS ##
 ###########
@@ -11,11 +31,6 @@ all_items:
 
   auto_collect: false
 
-  global: true
-  personal: true
-  others_lists: true
-  list_priority: 0
-
 ##########
 ## MOBS ##
 ##########
@@ -25,21 +40,20 @@ all_mobs:
 
   file: normal
 
-  global: true
-  personal: true
-  others_lists: true
-  list_priority: 0
-
 ##########
 ## INFO ##
 ##########
 
+# "global/personal/others_lists": Allows everyone to see a server-wide list, a personal list, or other personal lists respectively.
+# "list_priority": #Submission message and itemSubtraction (if enabled) takes priority for global list (0) or personal list (1).
+
+# "progress/check/player/settings": Enables/Disables the respective commands by non-op players
+
+# "main_completion/personal_completion" Sends a completion message to all players if enabled for the main lists or personal lists respectively.
+
 # "toggle": Enables (true)/Disables (false) the respected part of the plugin (if you only wanted items for example).
 
 # "file": Chooses the list to go off of in either ItemLists or MobLists (there are a few there by default, you can use those or make your own).
-
-# "global/personal/others_lists": Allows everyone to see a server-wide list, a personal list, or other personal lists respectively.
-# "list_priority": #Submission message and itemSubtraction (if enabled) takes priority for global list (0) or personal list (1).
 
 # "subtraction": Subtracts the item(s) once it is submitted
 

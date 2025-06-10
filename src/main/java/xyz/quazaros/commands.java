@@ -6,6 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import xyz.quazaros.data.config.config;
+import xyz.quazaros.data.config.lang;
 import xyz.quazaros.data.items.item;
 import xyz.quazaros.data.items.itemList;
 import xyz.quazaros.data.player.player;
@@ -16,6 +18,7 @@ import java.util.List;
 public class commands {
 
     main Main;
+    lang Lang;
 
     //Autofill lists
     List<String> send_list;
@@ -26,14 +29,22 @@ public class commands {
     String mob_help_string;
     String admin_mob_help_string;
 
+    //Settings variables
+    String item_settings;
+    String mob_settings;
+
     public commands() {
         Main = main.getPlugin();
+        Lang = Main.lang;
 
         send_list = new ArrayList<>();
         send_list.add("inventory");
         send_list.add("hotbar");
+    }
 
+    public void initialize() {
         initialize_help_string();
+        initialize_setting_string();
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -46,11 +57,11 @@ public class commands {
         String command_name = command.getName();
 
         if (check_itmes(command_name) && !Main.data.item_toggle) {
-            p.sendMessage(ChatColor.RED + "Item Functionality has Been Disabled");
+            p.sendMessage(ChatColor.RED + Lang.itemDisabled);
             return true;
         }
         if (check_mobs(command_name) && !Main.data.mob_toggle) {
-            p.sendMessage(ChatColor.RED + "Mob Functionality has Been Disabled");
+            p.sendMessage(ChatColor.RED + Lang.mobDisabled);
             return true;
         }
 
@@ -84,8 +95,8 @@ public class commands {
                 ItemStack current_item = p.getInventory().getItemInMainHand();
                 String message_main = Main.all_items.check_items(current_item, p.getDisplayName(), false);
                 String message_personal = pl.item_list.check_items(current_item, p.getDisplayName(), false);
-                String message = Main.data.item_listPriority ? message_personal : message_main;
-                if (message.contains("ubmitted")) {
+                String message = Main.data.general_listPriority ? message_personal : message_main;
+                if (message.contains(ChatColor.GREEN.toString())) {
                     if (Main.data.item_subtraction) {
                         ItemStack tempItem = new ItemStack(p.getInventory().getItemInMainHand().getType(), p.getInventory().getItemInMainHand().getAmount() - 1);
                         p.getInventory().setItemInMainHand(tempItem);
@@ -109,32 +120,12 @@ public class commands {
 
         //Sends the score of a player
         if (command_name.equalsIgnoreCase("aplayer")) {
-            Main.player_list.initialize_score(Main.all_items, false);
-            if (args.length == 0) {
-                p.sendMessage(ChatColor.RED + "Please Enter Player Name");
-            } else {
-                player tempPlayer = Main.player_list.get_player_from_string(args[0]);
-                if (tempPlayer == null) {
-                    p.sendMessage(ChatColor.RED + "Player Does Not Exist");
-                } else {
-                    p.sendMessage(ChatColor.LIGHT_PURPLE + tempPlayer.name + ": " + ChatColor.AQUA + tempPlayer.score);
-                }
-            }
+            handle_player(p, args, false);
         }
 
         //Sends the score of a player
         if (command_name.equalsIgnoreCase("mplayer")) {
-            Main.player_list.initialize_score(Main.all_mobs, true);
-            if (args.length == 0) {
-                p.sendMessage(ChatColor.RED + "Please Enter Player Name");
-            } else {
-                player tempPlayer = Main.player_list.get_player_from_string(args[0]);
-                if (tempPlayer == null) {
-                    p.sendMessage(ChatColor.RED + "Player Does Not Exist");
-                } else {
-                    p.sendMessage(ChatColor.LIGHT_PURPLE +tempPlayer.name + ": " + ChatColor.AQUA + tempPlayer.mobScore);
-                }
-            }
+            handle_player(p, args, true);
         }
 
         //Checks the item that the player sends
@@ -165,60 +156,40 @@ public class commands {
             }
         }
 
-        //ADMIN COMMANDS
-
         //Sends the item settings of the plugin
         if (command_name.equalsIgnoreCase("asettings")) {
-            if (p.isOp()) {
-                String str_sub, str_auto, temp;
-                if (Main.data.item_subtraction) {
-                    str_sub = "True";
-                } else str_sub = "False";
-                if (Main.data.item_autoCollect) {
-                    str_auto = "True";
-                } else str_auto = "False";
-                if (Main.data.item_toggle) {
-                    temp = "Enabled";
-                } else temp = "Disabled";
-                String toggle = ChatColor.LIGHT_PURPLE +""+ ChatColor.BOLD + "Toggled: " + ChatColor.AQUA +""+ ChatColor.BOLD + temp;
-                p.sendMessage(toggle + ChatColor.LIGHT_PURPLE + "\nFile: " + ChatColor.AQUA + Main.data.item_file + ChatColor.LIGHT_PURPLE + "\nItem Subtraction: " + ChatColor.AQUA + str_sub + ChatColor.LIGHT_PURPLE + "\nAuto Collect: " + ChatColor.AQUA + str_auto);
-            } else {p.sendMessage(ChatColor.RED + "You Don't Have Permission");}
+            handle_settings(p, false);
         }
 
         //Sends the mob settings of the plugin
         if (command_name.equalsIgnoreCase("msettings")) {
-            if (p.isOp()) {
-                String temp;
-                if (Main.data.mob_toggle) {
-                    temp = "Enabled";
-                } else temp = "Disabled";
-                String toggle = ChatColor.LIGHT_PURPLE +""+ ChatColor.BOLD + "Toggled: " + ChatColor.AQUA +""+ ChatColor.BOLD + temp;
-                p.sendMessage(toggle + ChatColor.LIGHT_PURPLE + "\nFile: " + ChatColor.AQUA + Main.data.mob_file);
-            } else {p.sendMessage(ChatColor.RED + "You Don't Have Permission");}
+            handle_settings(p, true);
         }
+
+        //ADMIN COMMANDS
 
         //Resets the item data
         if (command_name.equalsIgnoreCase("areset")) {
             if(p.isOp()) {
                 if (Main.file.reset) {
-                    p.sendMessage(ChatColor.DARK_GREEN + "Reset Cancelled");
+                    p.sendMessage(ChatColor.DARK_GREEN + Lang.resetCancel);
                 } else {
-                    p.sendMessage(ChatColor.DARK_RED + "Items Will Be Reset After a Server Restart. To Cancel Run This Command Again");
+                    p.sendMessage(ChatColor.DARK_RED + Lang.areset);
                 }
                 Main.file.reset = !Main.file.reset;
-            } else {p.sendMessage(ChatColor.RED + "You Don't Have Permission");}
+            } else {p.sendMessage(ChatColor.RED + Lang.noPermission);}
         }
 
         //Resets the mob data
         if (command_name.equalsIgnoreCase("mreset")) {
             if(p.isOp()) {
                 if (Main.file.mob_reset) {
-                    p.sendMessage(ChatColor.DARK_GREEN + "Reset Cancelled");
+                    p.sendMessage(ChatColor.DARK_GREEN + Lang.resetCancel);
                 } else {
-                    p.sendMessage(ChatColor.DARK_RED + "Mobs Will Be Reset After a Server Restart. To Cancel Run This Command Again");
+                    p.sendMessage(ChatColor.DARK_RED + Lang.mreset);
                 }
                 Main.file.mob_reset = !Main.file.mob_reset;
-            } else {p.sendMessage(ChatColor.RED + "You Don't Have Permission");}
+            } else {p.sendMessage(ChatColor.RED + Lang.noPermission);}
         }
 
         //Submits an item from the plugin
@@ -317,9 +288,9 @@ public class commands {
             if (inventory_list.get(i) != null) {
                 message_main = Main.all_items.check_items(inventory_list.get(i), p.getDisplayName(), true);
                 message_personal = pl.item_list.check_items(inventory_list.get(i), p.getDisplayName(), true);
-                message = Main.data.item_listPriority ? message_personal : message_main;
-                if (message.contains("ubmitted")) {
-                    if(message.contains(ChatColor.GREEN.toString())) {
+                message = Main.data.general_listPriority ? message_personal : message_main;
+                if (message.contains(ChatColor.GREEN.toString())) {
+                    if(message.endsWith(Lang.itemSubmitted)) {
                         p.sendMessage(message);
                         Main.check_completed(false);
                         Main.check_completed(false, pl);
@@ -334,7 +305,7 @@ public class commands {
             }
         }
         if (temp1 == 0 || temp2 == 0) {
-            p.sendMessage(ChatColor.RED + "You Don't Have Any Items");
+            p.sendMessage(ChatColor.RED + Lang.youHaveNoItems);
         }
     }
 
@@ -342,7 +313,7 @@ public class commands {
     private void handle_list(boolean mob, boolean self, Player p, player pl, String[] args) {
         boolean playerFound = list_setup(mob, self, p, pl, args);
         if (!playerFound) {
-            p.sendMessage(ChatColor.RED + "Player Not Found");
+            p.sendMessage(ChatColor.RED + Lang.playerNotFound);
         }
     }
 
@@ -373,19 +344,38 @@ public class commands {
 
         String temp = "";
         itemList tempList;
+        boolean is_public = true;
         if (personal && !mob) { //aself
-            temp = targetPlayer.name + " " + "Items List";
+            temp = targetPlayer.name + " " + Lang.itemPersonalSuffix;
             tempList = targetPlayer.item_list;
+            is_public = false;
         } else if (!personal && !mob) { //alist
-            temp = "All Items List";
+            temp = Lang.itemListMenu;
             tempList = Main.all_items;
         } else if (personal && mob) { //mself
-            temp = pl.name + " " + "Mobs List";
+            temp = pl.name + " " + Lang.mobPersonalSuffix;
             tempList = targetPlayer.mob_list;
+            is_public = false;
         } else if (!personal && mob) { //mlist
-            temp = "All Mobs List";
+            temp = Lang.mobListMenu;
             tempList = Main.all_mobs;
         } else {tempList = new itemList();}
+
+        if (is_public) {
+            if (!Main.data.general_global) {
+                p.sendMessage(ChatColor.RED + Lang.commandDisabled);
+                return true;
+            }
+        } else {
+            if (targetPlayer.name.equalsIgnoreCase(p.getName()) && !Main.data.general_personal) {
+                p.sendMessage(ChatColor.RED + Lang.commandDisabled);
+                return true;
+            } else if (!targetPlayer.name.equalsIgnoreCase(p.getName()) && !Main.data.general_others) {
+                p.sendMessage(ChatColor.RED + Lang.commandDisabled);
+                return true;
+            }
+        }
+
         pl.inv.set_inventory(tempList, temp);
         p.openInventory(pl.inv.inventory_list.get(0));
         return true;
@@ -393,40 +383,70 @@ public class commands {
 
     //Handles progress commands
     private void handle_prog(Player p, String[] args, boolean mob) {
+        if (!Main.data.general_progress) {
+            p.sendMessage(ChatColor.RED + Lang.commandDisabled);
+            return;
+        }
+
+        boolean is_public = true;
+
         itemList tempList = null;
         if (args.length >= 1) {
             if (!Main.player_list.player_exists(args[0])) {
-                p.sendMessage(ChatColor.RED + "Player Not Found");
+                p.sendMessage(ChatColor.RED + Lang.playerNotFound);
                 return;
             } else {
                 tempList = !mob ? Main.player_list.get_player_from_string(args[0]).item_list : Main.player_list.get_player_from_string(args[0]).mob_list;
+                is_public = false;
             }
         } else if  (args.length == 0) {
             tempList = !mob ? Main.all_items : Main.all_mobs;
+            is_public = true;
         }
 
         if (tempList == null) {return;}
 
-        p.sendMessage(ChatColor.LIGHT_PURPLE + "Progress: " + ChatColor.AQUA + tempList.progPer());
+        if (is_public) {
+            if (!Main.data.general_global) {
+                p.sendMessage(ChatColor.RED + Lang.commandDisabled);
+                return;
+            }
+        } else {
+            if (args[0].equalsIgnoreCase(p.getName()) && !Main.data.general_personal) {
+                p.sendMessage(Lang.commandDisabled);
+                return;
+            } else if (!args[0].equalsIgnoreCase(p.getName()) && !Main.data.general_others) {
+                p.sendMessage(ChatColor.RED + Lang.commandDisabled);
+                return;
+            }
+        }
+
+        p.sendMessage(ChatColor.LIGHT_PURPLE + Lang.progress + ": " + ChatColor.AQUA + tempList.progPer());
     }
 
     //Handles check commands
     private void handle_check(Player p, String[] args, boolean mob) {
+        if (!Main.data.general_check) {
+            p.sendMessage(ChatColor.RED + Lang.commandDisabled);
+            return;
+        }
+
         String item = "";
         itemList tempList = null;
         boolean is_public = args.length == 1;
 
         if (args.length == 0) {
-            p.sendMessage(ChatColor.RED + "Please Enter Item Name");
+            if (!mob) {p.sendMessage(ChatColor.RED + Lang.enterItem);}
+            else {p.sendMessage(ChatColor.RED + Lang.enterMob);}
             return;
         } else if (args.length >= 2) {
             if ( ( !mob && !Main.all_items.item_exists(args[0]) ) || ( mob && !Main.all_mobs.item_exists(args[0]) ) ) {
-                if (!mob) {p.sendMessage(ChatColor.RED + "Item Does Not Exist");}
-                else {p.sendMessage(ChatColor.RED + "Mob Does Not Exist");}
+                if (!mob) {p.sendMessage(ChatColor.RED + Lang.itemNotFound);}
+                else {p.sendMessage(ChatColor.RED + Lang.mobNotFound);}
                 return;
             } else {
                 if (!Main.player_list.player_exists(args[1])) {
-                    p.sendMessage(ChatColor.RED + "Player Not Found");
+                    p.sendMessage(ChatColor.RED + Lang.playerNotFound);
                     return;
                 } else {
                     item = args[0];
@@ -435,8 +455,8 @@ public class commands {
             }
         } else if (args.length >= 1) {
             if ( ( !mob && !Main.all_items.item_exists(args[0]) ) || ( mob && !Main.all_mobs.item_exists(args[0]) ) ) {
-                if (!mob) {p.sendMessage(ChatColor.RED + "Item Does Not Exist");}
-                else {p.sendMessage(ChatColor.RED + "Mob Does Not Exist");}
+                if (!mob) {p.sendMessage(ChatColor.RED + Lang.itemNotFound);}
+                else {p.sendMessage(ChatColor.RED + Lang.mobNotFound);}
                 return;
             } else {
                 item = args[0];
@@ -446,31 +466,92 @@ public class commands {
 
         if (tempList == null || item.isEmpty()) {return;}
 
+        if (is_public) {
+            if (!Main.data.general_global) {
+                p.sendMessage(ChatColor.RED + Lang.commandDisabled);
+                return;
+            }
+        } else {
+            if (args[1].equalsIgnoreCase(p.getName()) && !Main.data.general_personal) {
+                p.sendMessage(ChatColor.RED + Lang.commandDisabled);
+                return;
+            } else if (!args[1].equalsIgnoreCase(p.getName()) && !Main.data.general_others) {
+                p.sendMessage(ChatColor.RED + Lang.commandDisabled);
+                return;
+            }
+        }
+
         int temp = tempList.get_item_index(item);
         if (temp == -1) {
-            if (!mob) {p.sendMessage(ChatColor.RED + "Item Does Not Exist");}
-            else {p.sendMessage(ChatColor.RED + "Mob Does Not Exist");}
+            if (!mob) {p.sendMessage(ChatColor.RED + Lang.itemNotFound);}
+            else {p.sendMessage(ChatColor.RED + Lang.mobNotFound);}
             return;
         }
 
         item tempItem = tempList.items.get(temp);
 
         if (tempItem.isFound) {
-            if (is_public) {p.sendMessage(ChatColor.GREEN + tempItem.item_display_name + " Has Been Found By " + tempItem.item_founder);}
-            else {p.sendMessage(ChatColor.GREEN + tempItem.item_display_name + " Has Been Found");}
+            if (is_public) {p.sendMessage(ChatColor.GREEN + tempItem.item_display_name + " " + Lang.hasBeenFoundBy + " " + tempItem.item_founder);}
+            else {p.sendMessage(ChatColor.GREEN + tempItem.item_display_name + " " + Lang.hasBeenFound);}
         } else {
-            p.sendMessage(ChatColor.RED + tempItem.item_display_name + " Has Not Been Found");
+            p.sendMessage(ChatColor.RED + tempItem.item_display_name + " " + Lang.hasNotBeenFound);
+        }
+    }
+
+    //Handles player commands
+    private void handle_player(Player p, String[] args, boolean mob) {
+        if (!Main.data.general_player) {
+            p.sendMessage(ChatColor.RED + Lang.commandDisabled);
+            return;
+        }
+
+        if (args.length == 0) {
+            p.sendMessage(ChatColor.RED + Lang.enterPlayer);
+            return;
+        }
+
+        if (!Main.data.general_global) {
+            p.sendMessage(ChatColor.RED + Lang.commandDisabled);
+            return;
+        }
+
+        if (!mob) {
+            Main.player_list.initialize_score(Main.all_items, false);
+        } else {
+            Main.player_list.initialize_score(Main.all_mobs, true);
+        }
+
+        player tempPlayer = Main.player_list.get_player_from_string(args[0]);
+        if (tempPlayer == null) {
+            p.sendMessage(ChatColor.RED + Lang.playerNotFound);
+        } else {
+            p.sendMessage(ChatColor.LIGHT_PURPLE + tempPlayer.name + ": " + ChatColor.AQUA + tempPlayer.score);
+        }
+    }
+
+    //Handles setting commands
+    private void handle_settings(Player p, boolean mob) {
+        if (!Main.data.general_settings) {
+            p.sendMessage(ChatColor.RED + Lang.commandDisabled);
+            return;
+        }
+
+        if (!mob) {
+            p.sendMessage(item_settings);
+        } else {
+            p.sendMessage(mob_settings);
         }
     }
 
     //Handles submit and unsubmit commands
     private void handle_submit(Player p, String[] args, boolean mob, boolean unsub) {
         if (!p.isOp()) {
-            p.sendMessage(ChatColor.RED + "You Don't Have Permission");
+            p.sendMessage(ChatColor.RED + Lang.noPermission);
             return;
         }
         if (args.length == 0) {
-            p.sendMessage(ChatColor.RED + "Please Enter Item Name");
+            if (!mob) {p.sendMessage(ChatColor.RED + Lang.enterItem);}
+            else {p.sendMessage(ChatColor.RED + Lang.enterMob);}
             return;
         }
 
@@ -481,13 +562,13 @@ public class commands {
 
         if (args.length >= 3 && args[0].equalsIgnoreCase("personal") && !unsub) {
             if (!Main.player_list.player_exists(args[1])) {
-                p.sendMessage(ChatColor.RED + "Player Not Found");
+                p.sendMessage(ChatColor.RED + Lang.playerNotFound);
                 return;
             }
             pl = Main.player_list.get_player_from_string(args[1]);
             if (!pl.item_list.item_exists(args[2]) && !pl.mob_list.item_exists(args[2])) {
-                if (!mob) {p.sendMessage(ChatColor.RED + "Item Does Not Exist");}
-                else {p.sendMessage(ChatColor.RED + "Mob Does Not Exist");}
+                if (!mob) {p.sendMessage(ChatColor.RED + Lang.itemNotFound);}
+                else {p.sendMessage(ChatColor.RED + Lang.mobKilled);}
                 return;
             }
             item = args[2];
@@ -495,10 +576,10 @@ public class commands {
         } else if (args.length >= 2) {
             if ( (!unsub && ( ( ( !mob && !Main.all_items.item_exists(args[0]) ) || ( mob && !Main.all_mobs.item_exists(args[0]) ) ) && !Main.player_list.player_exists(args[0]) ) ) || ( unsub && !Main.player_list.player_exists(args[0]) ) ) {
                 if (!unsub) {
-                    if (!mob) {p.sendMessage(ChatColor.RED + "Item Does Not Exist");}
-                    else {p.sendMessage(ChatColor.RED + "Mob Does Not Exist");}
+                    if (!mob) {p.sendMessage(ChatColor.RED + Lang.playerNotFound);}
+                    else {p.sendMessage(ChatColor.RED + Lang.playerNotFound);}
                 } else {
-                    p.sendMessage(ChatColor.RED + "Player Not Found");
+                    p.sendMessage(ChatColor.RED + Lang.playerNotFound);
                 }
                 return;
             } else {
@@ -509,7 +590,7 @@ public class commands {
                         item = args[0];
                         targetPlayer = args[1];
                     } else {
-                        p.sendMessage(ChatColor.RED + "Player Not Found");
+                        p.sendMessage(ChatColor.RED + Lang.playerNotFound);
                         return;
                     }
                 } else if (Main.player_list.player_exists(args[0])) {
@@ -518,8 +599,8 @@ public class commands {
                     if (tempList.item_exists(args[1])) {
                         item = args[1];
                     } else {
-                        if (!mob) {p.sendMessage(ChatColor.RED + "Item Does Not Exist");}
-                        else {p.sendMessage(ChatColor.RED + "Mob Does Not Exist");}
+                        if (!mob) {p.sendMessage(ChatColor.RED + Lang.itemNotFound);}
+                        else {p.sendMessage(ChatColor.RED + Lang.mobNotFound);}
                         return;
                     }
                 }
@@ -529,8 +610,8 @@ public class commands {
                 item = args[0];
                 tempList = !mob ? Main.all_items : Main.all_mobs;
             } else {
-                if (!mob) {p.sendMessage(ChatColor.RED + "Item Does Not Exist");}
-                else {p.sendMessage(ChatColor.RED + "Mob Does Not Exist");}
+                if (!mob) {p.sendMessage(ChatColor.RED + Lang.itemNotFound);}
+                else {p.sendMessage(ChatColor.RED + Lang.mobNotFound);}
                 return;
             }
         }
@@ -539,35 +620,35 @@ public class commands {
 
         int temp = tempList.get_item_index(item);
         if (temp == -1) {
-            if (!mob) {p.sendMessage(ChatColor.RED + "Item Does Not Exist");}
-            else {p.sendMessage(ChatColor.RED + "Mob Does Not Exist");}
+            if (!mob) {p.sendMessage(ChatColor.RED + Lang.itemNotFound);}
+            else {p.sendMessage(ChatColor.RED + Lang.mobNotFound);}
             return;
         }
 
         item tempItem = tempList.items.get(temp);
 
         if (!unsub && tempItem.isFound) {
-            p.sendMessage(ChatColor.RED + tempItem.item_display_name + " Has Already Been Found");
+            p.sendMessage(ChatColor.RED + tempItem.item_display_name + " " + Lang.subAlreadyFound);
             return;
         } else if (unsub && !tempItem.isFound) {
-            p.sendMessage(ChatColor.RED + tempItem.item_display_name + " Has Not Been Found");
+            p.sendMessage(ChatColor.RED + tempItem.item_display_name + " " + Lang.subNotFound);
             return;
         }
 
         if (!unsub) {
-            String targetText = targetPlayer.isEmpty() ? ChatColor.DARK_RED + "ADMIN" : targetPlayer;
+            String targetText = targetPlayer.isEmpty() ? ChatColor.DARK_RED + Lang.admin : targetPlayer;
             tempItem.submit(targetText, tempList.date());
-            p.sendMessage(ChatColor.GREEN + tempItem.item_display_name + " Has Been Submitted");
+            p.sendMessage(ChatColor.GREEN + tempItem.item_display_name + " " + Lang.submit);
             Main.check_completed(mob);
             Main.check_completed(mob, pl);
         } else {
             tempItem.unsubmit();
-            p.sendMessage(ChatColor.GREEN + tempItem.item_display_name + " Has Been Unsubmitted");
+            p.sendMessage(ChatColor.GREEN + tempItem.item_display_name + " " + Lang.unsubmit);
             tempList.completed = false;
         }
     }
 
-    //Initializes the string when /ahelp is called
+    //Initializes the help string
     private void initialize_help_string() {
         ChatColor CC1 = ChatColor.GOLD;
         ChatColor CC2 = ChatColor.DARK_AQUA;
@@ -616,5 +697,44 @@ public class commands {
         admin_help_string = admin_help_string + d + b;
         mob_help_string = mob_help_string + d + b;
         admin_mob_help_string = admin_mob_help_string + d + b;
+    }
+
+    //Initialize the setting string
+    private void initialize_setting_string() {
+        String str_item, str_mob, str_sub, str_auto, str_global, str_personal, str_others, str_priority, str_progress, str_check, str_player, str_settings;
+        config Data = Main.data;
+
+        str_item = Data.item_toggle ? "Enabled" :  "Disabled";
+        str_mob = Data.mob_toggle ? "Enabled" :  "Disabled";
+        str_sub = Data.item_subtraction ? "True" :  "False";
+        str_auto = Data.item_autoCollect ? "True" :  "False";
+        str_global = Data.general_global ? "True" :  "False";
+        str_personal = Data.general_personal ? "True" :  "False";
+        str_others = Data.general_others ? "True" :  "False";
+        str_priority = Data.general_listPriority ? "Personal" : "Global";
+        str_progress = Data.general_progress ? "True" :  "False";
+        str_check = Data.general_check ? "True" :  "False";
+        str_player = Data.general_player ? "True" :  "False";
+        str_settings = Data.general_settings ? "True" :  "False";
+
+        String p1 = ChatColor.LIGHT_PURPLE +""+ ChatColor.BOLD + "Items Toggled: " + ChatColor.AQUA +""+ ChatColor.BOLD + str_item;
+        String p2 = ChatColor.LIGHT_PURPLE +""+ ChatColor.BOLD + "Mobs Toggled: " + ChatColor.AQUA +""+ ChatColor.BOLD + str_mob;
+        String p3 = ChatColor.LIGHT_PURPLE + "Item File: " + ChatColor.AQUA + Data.item_file;
+        String p4 = ChatColor.LIGHT_PURPLE + "Mob File: " + ChatColor.AQUA + Data.mob_file;
+        String p5 = ChatColor.LIGHT_PURPLE + "Subtraction: " + ChatColor.AQUA + str_sub;
+        String p6 = ChatColor.LIGHT_PURPLE + "Auto Collection: " + ChatColor.AQUA + str_auto;
+        String p7 = ChatColor.LIGHT_PURPLE + "Global List: " + ChatColor.AQUA + str_global;
+        String p8 = ChatColor.LIGHT_PURPLE + "Personal Lists: " + ChatColor.AQUA + str_personal;
+        String p9 = ChatColor.LIGHT_PURPLE + "Other Lists: " + ChatColor.AQUA + str_others;
+        String p10 = ChatColor.LIGHT_PURPLE + "List Priority: " + ChatColor.AQUA + str_priority;
+        String p11 = ChatColor.LIGHT_PURPLE + "Progress Command: " + ChatColor.AQUA + str_progress;
+        String p12 = ChatColor.LIGHT_PURPLE + "Check Command: " + ChatColor.AQUA + str_check;
+        String p13 = ChatColor.LIGHT_PURPLE + "Player Command: " + ChatColor.AQUA + str_player;
+        String p14 = ChatColor.LIGHT_PURPLE + "Settings Command: " + ChatColor.AQUA + str_settings;
+
+        String general = p7 + "\n" + p8 + "\n" + p9 + "\n" + p10 + "\n" + p11 + "\n" + p12 + "\n" + p13 + "\n" + p14;
+
+        item_settings = p1 + "\n" + p2 + "\n" + p3 + "\n" + p5 + "\n" + p6 + "\n" + general;
+        mob_settings = p1 + "\n" + p2 + "\n" + p4 + general;
     }
 }

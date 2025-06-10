@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import xyz.quazaros.data.config.lang;
 import xyz.quazaros.data.items.item;
 import xyz.quazaros.data.items.itemList;
 import xyz.quazaros.main;
@@ -27,14 +28,6 @@ public class inventory {
 
     boolean is_mob;
     boolean is_public;
-
-    public inventory(boolean mob) {
-        forward = new ItemStack(Material.ARROW);
-        back = new ItemStack(Material.ARROW);
-        leaderboard = new ItemStack(Material.DIAMOND);
-        players = new ItemStack(Material.OAK_HANGING_SIGN);
-        sort = new ItemStack(Material.HOPPER);
-    }
 
     //Sets the inventory to reflect the item list
     public void set_inventory(itemList itemList, String text) {
@@ -77,26 +70,34 @@ public class inventory {
 
     //Sets the menu buttons in the alist menu
     public void menuButtons(String progPercent) {
+        lang Lang = main.getPlugin().lang;
+
+        forward = new ItemStack(Material.ARROW);
+        back = new ItemStack(Material.ARROW);
+        leaderboard = new ItemStack(Material.DIAMOND);
+        players = new ItemStack(Material.OAK_HANGING_SIGN);
+        sort = new ItemStack(Material.HOPPER);
+
         ItemMeta forwardM = forward.getItemMeta();
-        forwardM.setDisplayName(ChatColor.GOLD + "Next Page");
+        forwardM.setDisplayName(ChatColor.GOLD + Lang.nextPage);
         forward.setItemMeta(forwardM);
 
         ItemMeta backM = back.getItemMeta();
-        backM.setDisplayName(ChatColor.GOLD + "Last Page");
+        backM.setDisplayName(ChatColor.GOLD + Lang.lastPage);
         back.setItemMeta(backM);
 
         ItemMeta sortM = sort.getItemMeta();
-        sortM.setDisplayName(ChatColor.AQUA + "Filter Items");
+        sortM.setDisplayName(ChatColor.AQUA + Lang.filterItems);
         sort.setItemMeta(sortM);
 
         ItemMeta leaderboardM = leaderboard.getItemMeta();
-        leaderboardM.setDisplayName(ChatColor.AQUA + "Progress");
+        leaderboardM.setDisplayName(ChatColor.AQUA + Lang.progress);
         leaderboardM.setLore(Arrays.asList(ChatColor.LIGHT_PURPLE + progPercent));
         leaderboardM.setEnchantmentGlintOverride(true);
         leaderboard.setItemMeta(leaderboardM);
 
         ItemMeta playersM = players.getItemMeta();
-        playersM.setDisplayName(ChatColor.AQUA + "Leaderboard");
+        playersM.setDisplayName(ChatColor.AQUA + Lang.leaderboard);
         if (!is_mob) {
             playersM.setLore(main.getPlugin().player_list.leaderboard(false));
         } else {

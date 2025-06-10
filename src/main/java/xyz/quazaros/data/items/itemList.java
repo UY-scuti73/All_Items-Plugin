@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionType;
 
+import xyz.quazaros.data.config.lang;
 import xyz.quazaros.main;
 import xyz.quazaros.data.meta.*;
 
@@ -257,10 +258,10 @@ public class itemList {
         ArrayList<Integer> Index_List = get_index(current_item);
 
         if (Index_List.size() == 0) {
-            return ChatColor.RED + "No Items Found";
+            return ChatColor.RED + main.getPlugin().lang.noItemsFound;
         }
         if (Index_List.get(0) == -1) {
-            return ChatColor.RED + "Please Enter an Item";
+            return ChatColor.RED + main.getPlugin().lang.enterItem;
         }
 
         String temp = "";
@@ -307,14 +308,16 @@ public class itemList {
 
     //Handles what happens when an item is about to be submitted
     public String generate_string(int temp) {
+        lang Lang = main.getPlugin().lang;
         if (!items.get(temp).isFound) {
             if (is_in_indexes(temp)) {
-                return ChatColor.GREEN + items.get(temp).item_display_name + " Submitted!";
+                return ChatColor.GREEN + items.get(temp).item_display_name + " " + Lang.itemSubmitted;
             } else {
-                return ChatColor.RED + "Item submitted, but it is not in the list";
+                return ChatColor.GREEN + Lang.itemSubNotInList;
             }
         } else {
-            return ChatColor.RED + "Item Already Obtained By " + items.get(temp).item_founder;
+            if (personal) {return ChatColor.RED + Lang.alreadyFound;}
+            else {return ChatColor.RED + Lang.alreadyFoundBy + " " + items.get(temp).item_founder;}
         }
     }
 

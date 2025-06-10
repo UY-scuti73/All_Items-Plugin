@@ -8,6 +8,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -61,12 +62,14 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
 
         file = new file();
         meta_list = new metaList(file.all_items_init, file.all_mobs_init);
-        commands = new commands();
         player_list = new playerList();
         data = new config();
         lang = new lang();
+        commands = new commands();
 
         file.get_data();
+
+        commands.initialize();
     }
 
     //Handles what happens when the plugin disables
@@ -162,7 +165,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
     }
 
     //Handles when a player picks up an item
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void PlayerPickupItemEvent(PlayerPickupItemEvent e) {
         if (!data.item_toggle) {
             return;
@@ -171,22 +174,20 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         player pl = player_list.get_player_from_string(e.getPlayer().getName());
 
         if (data.item_autoCollect) {
-            if (data.item_subtraction) {
-                e.setCancelled(true);
-            }
             Player p = e.getPlayer();
-            String message_main = all_items.check_items(e.getItem().getItemStack(), p.getDisplayName(), true);
-            String message_personal = pl.item_list.check_items(e.getItem().getItemStack(), p.getDisplayName(), true);
-            String message = data.item_listPriority ? message_personal : message_main;
-            if (message.contains("ubmitted")) {
-                if (message.contains(ChatColor.GREEN.toString())) {
-                    if (data.item_subtraction) {
+            ItemStack tempStack = e.getItem().getItemStack();
+            String message_main = all_items.check_items(tempStack, p.getDisplayName(), true);
+            String message_personal = pl.item_list.check_items(tempStack, p.getDisplayName(), true);
+            String message = data.general_listPriority ? message_personal : message_main;
+            if (message.endsWith(lang.itemSubmitted)) {
+                if (data.item_subtraction) {
+                    if (tempStack.getAmount() <= 1) {
                         e.getItem().setItemStack(new ItemStack(Material.AIR));
+                    } else {
+                        e.getItem().setItemStack(new ItemStack(tempStack.getType(), tempStack.getAmount() - 1));
                     }
-                    p.sendMessage(message);
                 }
-            } else {
-                e.setCancelled(false);
+                p.sendMessage(message);
             }
             check_completed(false);
             check_completed(false, pl);
@@ -217,17 +218,17 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
             String message_personal = "";
 
             if (!all_mobs.items.get(temp).isFound && all_mobs.is_in_indexes(temp)) {
-                message_main = ChatColor.GREEN + name + " Was Killed By " + p.getName();
+                message_main = ChatColor.GREEN + name + " " + lang.mobKilledBy + " " + p.getName();
                 all_mobs.items.get(temp).submit(p.getName(), all_mobs.date());
                 check_completed(true);
             }
             if (!pl.mob_list.items.get(temp).isFound && pl.mob_list.is_in_indexes(temp)) {
-                message_personal = ChatColor.GREEN + name + " Was Killed";
+                message_personal = ChatColor.GREEN + name + " " + lang.mobKilled;
                 pl.mob_list.items.get(temp).submit(pl.mob_list.date());
                 check_completed(true, pl);
             }
 
-            String message = data.mob_listPriority ? message_personal : message_main;
+            String message = data.general_listPriority ? message_personal : message_main;
             if (!message.isEmpty()) {
                 p.sendMessage(message);
             }
@@ -276,25 +277,25 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
 
         if (pl == null) {
             if (!is_mob) {
-                message = ChatColor.GREEN + "All Items Have Been Collected";
+                message = ChatColor.GREEN + lang.allItems;
                 temp = all_items;
             } else {
-                message = ChatColor.GREEN + "All Mobs Have Been Killed";
+                message = ChatColor.GREEN + lang.allMobs;
                 temp = all_mobs;
             }
         } else {
             if (!is_mob) {
-                message = ChatColor.GREEN + pl.name + " Has Collected All Items";
+                message = ChatColor.GREEN + pl.name + " " + lang.completeItemSuffix;
                 temp = pl.item_list;
             } else {
-                message = ChatColor.GREEN + pl.name + " Has Killed All Mobs";
+                message = ChatColor.GREEN + pl.name + " " + lang.completeMobSuffix;
                 temp = pl.mob_list;
             }
         }
 
         if (temp.complete()) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                p.sendTitle(ChatColor.YELLOW + "CONGRATULATIONS", message);
+                p.sendTitle(ChatColor.YELLOW + lang.congrats, message);
             }
         }
     }

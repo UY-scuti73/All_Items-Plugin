@@ -29,6 +29,6 @@ public class player {
         mobs = false;
         item_list = new itemList(main.getPlugin().emptyItemList, true);
         mob_list = new itemList(main.getPlugin().emptyMobList, true);
-        inv = new inventory(false);
+        inv = new inventory();
     }
 }
