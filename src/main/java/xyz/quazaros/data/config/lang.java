@@ -114,8 +114,8 @@ public class lang {
         leaderboard = config.getString("gui.leaderboard");
         menuItemFound = config.getString("gui.menuItemFound");
         menuItemNotFound = config.getString("gui.menuItemNotFound");
-        byPlayer = config.getString("gui.byPlayer");
-        atTime = config.getString("gui.atTime");
+        byPlayer = config.getString("gui.foundBy");
+        atTime = config.getString("gui.foundAt");
 
         congrats = config.getString("completed.congrats");
         allItems = config.getString("completed.allItems");

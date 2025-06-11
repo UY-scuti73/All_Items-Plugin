@@ -64,8 +64,6 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         file.get_data();
 
         commands.initialize();
-
-        events.autoSave();
     }
 
     //Handles what happens when the plugin disables

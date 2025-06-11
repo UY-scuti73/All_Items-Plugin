@@ -99,9 +99,17 @@ public class inventory {
         ItemMeta playersM = players.getItemMeta();
         playersM.setDisplayName(Lang.colorSec + Lang.leaderboard);
         if (!is_mob) {
-            playersM.setLore(main.getPlugin().player_list.leaderboard(false));
+            if (is_public) {
+                playersM.setLore(main.getPlugin().player_list.leaderboard(false, false));
+            } else {
+                playersM.setLore(main.getPlugin().player_list.leaderboard(false, true));
+            }
         } else {
-            playersM.setLore(main.getPlugin().player_list.leaderboard(true));
+            if (is_public) {
+                playersM.setLore(main.getPlugin().player_list.leaderboard(true, false));
+            } else {
+                playersM.setLore(main.getPlugin().player_list.leaderboard(true, true));
+            }
         }
         players.setItemMeta(playersM);
     }

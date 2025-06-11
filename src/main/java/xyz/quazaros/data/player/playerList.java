@@ -1,9 +1,12 @@
 package xyz.quazaros.data.player;
 
+import org.bukkit.ChatColor;
 import xyz.quazaros.data.items.itemList;
 import xyz.quazaros.main;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class playerList {
@@ -43,40 +46,33 @@ public class playerList {
         return false;
     }
 
-    //Checks if a player_name is in the list
-    public boolean in_list(String s) {
-        for (player p : players) {
-            if (s.equalsIgnoreCase(p.name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     //Initializes the score of every player in the list
-    public void initialize_score(itemList item_list, boolean is_mob) {
-        if (!is_mob) {
-            for (int i=0; i<players.size(); i++) {
-                players.get(i).score = 0;
-            }
-            String found;
-            for (int i = 0; i < item_list.indexes.size(); i++) {
-                found = item_list.items.get(item_list.indexes.get(i)).item_founder;
-                for (int j = 0; j < players.size(); j++) {
-                    if (found != null && found.equals(players.get(j).name)) {
-                        players.get(j).score++;
-                    }
+    public void initialize_score() {
+        itemList all_items = main.getPlugin().all_items;
+        itemList all_mobs = main.getPlugin().all_mobs;
+
+        for (int i=0; i<players.size(); i++) {
+            players.get(i).score = 0;
+            players.get(i).itemPerScore = players.get(i).item_list.get_progress();
+        }
+        String found;
+        for (int i = 0; i < all_items.indexes.size(); i++) {
+            found = all_items.items.get(all_items.indexes.get(i)).item_founder;
+            for (int j = 0; j < players.size(); j++) {
+                if (found != null && found.equals(players.get(j).name)) {
+                    players.get(j).score++;
                 }
             }
-        } else {
-            for (int i=0; i<players.size(); i++) {
-                players.get(i).mobScore = 0;
-            }
-            for (int i = 0; i < item_list.indexes.size(); i++) {
-                for (int j = 0; j < players.size(); j++) {
-                    if (item_list.items.get(item_list.indexes.get(i)).item_founder.equals(players.get(j).name)) {
-                        players.get(j).mobScore++;
-                    }
+        }
+        for (int i=0; i<players.size(); i++) {
+            players.get(i).mobScore = 0;
+            players.get(i).mobPerScore = players.get(i).mob_list.get_progress();
+        }
+        for (int i = 0; i < all_mobs.indexes.size(); i++) {
+            found = all_mobs.items.get(all_mobs.indexes.get(i)).item_founder;
+            for (int j = 0; j < players.size(); j++) {
+                if (found != null && found.equals(players.get(j).name)) {
+                    players.get(j).mobScore++;
                 }
             }
         }
@@ -91,6 +87,41 @@ public class playerList {
         player_names = temp;
     }
 
+    //Gets the top 3 players for the leaderboard
+    public ArrayList<String> leaderboard(boolean mob, boolean personal) {
+        ArrayList<String> temp = new ArrayList<>();
+
+        ArrayList<playerSort> plSort = new ArrayList<>();
+
+        //Regardless of the settings it will set up a player sort object with the right name and score
+        for (player pl : players) {
+            if (!mob && !personal) {
+                plSort.add(new playerSort(pl.name, pl.score));
+            } else if (!mob && personal) {
+                plSort.add(new playerSort(pl.name, pl.itemPerScore));
+            } else if (mob && !personal) {
+                plSort.add(new playerSort(pl.name, pl.mobScore));
+            } else if (mob && personal) {
+                plSort.add(new playerSort(pl.name, pl.mobPerScore));
+            } else {return temp;}
+        }
+
+        //Sorts the objects
+        Collections.sort(plSort);
+
+        //Adds everything to the string list
+        String str;
+        ChatColor color = main.getPlugin().lang.colorDom;
+        for (int i=0; i<plSort.size(); i++) {
+            if (i >= 3) {break;}
+            str = color + Integer.toString(i+1) + ": " + plSort.get(i).name + " - " + plSort.get(i).score;
+            temp.add(str);
+        }
+
+        return temp;
+    }
+
+    /*
     //Gets the top 3 players for the leaderboard
     public ArrayList<String> leaderboard(boolean is_mob) {
         ArrayList<String> temp = new ArrayList<>();
@@ -175,6 +206,6 @@ public class playerList {
             }
         }
         return temp;
-    }
+    }*/
 }
 

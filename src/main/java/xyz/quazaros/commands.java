@@ -236,7 +236,9 @@ public class commands {
             mobPlusPlayer.addAll(Main.player_list.player_names);
         }
 
-        if (command_name.equalsIgnoreCase("asubmit")) {
+        if (command_name.equalsIgnoreCase("alist") || command_name.equalsIgnoreCase("mlist")) {
+            return Main.player_list.player_names;
+        } else if (command_name.equalsIgnoreCase("asubmit")) {
             if (args.length == 1) {
                 itemPlusPlayer.add("personal");
                 return itemPlusPlayer;
@@ -371,7 +373,7 @@ public class commands {
         pl.invItt = 0;
         pl.sorted = false;
         pl.mobs = mob;
-        Main.player_list.initialize_score(pl.item_list, false);
+        Main.player_list.initialize_score();
 
         player targetPlayer = null;
         boolean personal = false;
@@ -561,11 +563,7 @@ public class commands {
             return;
         }
 
-        if (!mob) {
-            Main.player_list.initialize_score(Main.all_items, false);
-        } else {
-            Main.player_list.initialize_score(Main.all_mobs, true);
-        }
+        Main.player_list.initialize_score();
 
         player tempPlayer = Main.player_list.get_player_from_string(args[0]);
         if (tempPlayer == null) {
