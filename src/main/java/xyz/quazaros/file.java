@@ -3,8 +3,6 @@ package xyz.quazaros;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bukkit.configuration.file.YamlConfiguration;
-import xyz.quazaros.data.config.config;
-import xyz.quazaros.data.config.*;
 import xyz.quazaros.data.items.*;
 import xyz.quazaros.data.player.*;
 
@@ -117,8 +115,8 @@ public class file {
         try {get_items();} catch (IOException e) {throw new RuntimeException(e);}
     }
 
-    public void send_data() {
-        try {send_items();} catch (IOException e) {throw new RuntimeException(e);}
+    public void send_data(boolean remove) {
+        try {send_items(remove);} catch (IOException e) {throw new RuntimeException(e);}
     }
 
     //Gets players from the playerList file
@@ -287,7 +285,7 @@ public class file {
             }
             tempFile = new File(path_pre + "/Data/PersonalMobs/" + pl.name + ".json");
             if (tempFile.exists()) {
-                myReader = new FileReader(file_mobs);
+                myReader = new FileReader(tempFile);
                 itemData[] temp = gson.fromJson(myReader, itemData[].class);
                 for (int i=0; i<pl.mob_list.items.size(); i++) {
                     if (temp[i].name.equals(pl.mob_list.items.get(i).item_name)) {
@@ -318,7 +316,10 @@ public class file {
     }
 
     //Sends the data to files upon closing the server and periodically saving
-    private void send_items() throws IOException {
+    private void send_items(boolean remove) throws IOException {
+        boolean item_delete = remove && reset;
+        boolean mob_delete = remove && mob_reset;
+
         itemList items = main.getPlugin().all_items;
         itemList mobs = main.getPlugin().all_mobs;
         playerList players = main.getPlugin().player_list;
@@ -326,7 +327,7 @@ public class file {
         ArrayList<itemData> item_data_list = new ArrayList<>();
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         Writer myWriter;
-        if (!reset) {
+        if (!item_delete) {
             file_items.createNewFile();
             myWriter = new FileWriter(file_items, false);
             for (item i : items.items) {
@@ -347,7 +348,7 @@ public class file {
             }
         }
         item_data_list.clear();
-        if (!mob_reset) {
+        if (!mob_delete) {
             file_mobs.createNewFile();
             myWriter = new FileWriter(file_mobs, false);
             for (item i : mobs.items) {
@@ -369,7 +370,7 @@ public class file {
         for (player p :  players.players) {
             item_data_list.clear();
             File tempFile = new File(file_personal_items +"/"+ p.name + ".json");
-            if (!reset) {
+            if (!item_delete) {
                 tempFile.createNewFile();
                 myWriter = new FileWriter(tempFile, false);
                 for (item i : p.item_list.items) {
@@ -387,7 +388,7 @@ public class file {
 
             item_data_list.clear();
             tempFile = new File(file_personal_mobs +"/"+ p.name + ".json");
-            if (!mob_reset) {
+            if (!mob_delete) {
                 tempFile.createNewFile();
                 myWriter = new FileWriter(tempFile, false);
                 for (item i : p.mob_list.items) {
@@ -452,7 +453,6 @@ public class file {
         }
         return temp;
     }
-
 
     //Removes the .txt extension from each string in a list
     private List<String> remove_txt(List<String> list) {

@@ -18,6 +18,8 @@ general:
   main_completion: true
   personal_completion: true
 
+  auto_save: true
+
 ###########
 ## ITEMS ##
 ###########

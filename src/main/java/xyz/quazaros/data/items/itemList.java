@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
@@ -258,10 +257,10 @@ public class itemList {
         ArrayList<Integer> Index_List = get_index(current_item);
 
         if (Index_List.size() == 0) {
-            return ChatColor.RED + main.getPlugin().lang.noItemsFound;
+            return main.getPlugin().lang.bad + main.getPlugin().lang.noItemsFound;
         }
         if (Index_List.get(0) == -1) {
-            return ChatColor.RED + main.getPlugin().lang.enterItem;
+            return main.getPlugin().lang.bad + main.getPlugin().lang.enterItem;
         }
 
         String temp = "";
@@ -311,13 +310,13 @@ public class itemList {
         lang Lang = main.getPlugin().lang;
         if (!items.get(temp).isFound) {
             if (is_in_indexes(temp)) {
-                return ChatColor.GREEN + items.get(temp).item_display_name + " " + Lang.itemSubmitted;
+                return Lang.good + items.get(temp).item_display_name + " " + Lang.itemSubmitted;
             } else {
-                return ChatColor.GREEN + Lang.itemSubNotInList;
+                return Lang.good + Lang.itemSubNotInList;
             }
         } else {
-            if (personal) {return ChatColor.RED + Lang.alreadyFound;}
-            else {return ChatColor.RED + Lang.alreadyFoundBy + " " + items.get(temp).item_founder;}
+            if (personal) {return Lang.bad + Lang.alreadyFound;}
+            else {return Lang.bad + Lang.alreadyFoundBy + " " + items.get(temp).item_founder;}
         }
     }
 

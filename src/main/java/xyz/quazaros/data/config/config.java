@@ -13,6 +13,7 @@ public class config {
     public boolean general_settings;
     public boolean general_mainCompletion;
     public boolean general_personalCompletion;
+    public boolean general_autoSave;
     public boolean item_toggle;
     public String item_file;
     public boolean item_subtraction;
@@ -31,6 +32,7 @@ public class config {
         general_settings = config.getString("general.settings").equalsIgnoreCase("true");
         general_mainCompletion = config.getString("general.main_completion").equalsIgnoreCase("true");
         general_personalCompletion = config.getString("general.personal_completion").equalsIgnoreCase("true");
+        general_autoSave = config.getString("general.auto_save").equalsIgnoreCase("true");
         item_toggle = (config.getString("all_items.toggle").equalsIgnoreCase("true"));
         item_file = config.getString("all_items.file");
         item_subtraction = (config.getString("all_items.subtraction").equalsIgnoreCase("true"));

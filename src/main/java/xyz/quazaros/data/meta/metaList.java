@@ -6,6 +6,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.MusicInstrumentMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionType;
 import xyz.quazaros.data.items.item;
 import xyz.quazaros.file;
 import xyz.quazaros.main;
@@ -76,88 +77,24 @@ public class metaList {
     }
 
     private void initialize_enchantedBooks() {
-        set_enchants("mending", 1);
-        set_enchants("unbreaking", 3);
-        set_enchants("sharpness", 5);
-        set_enchants("smite", 5);
-        set_enchants("bane_of_arthropods", 5);
-        set_enchants("looting", 3);
-        set_enchants("fire_aspect", 2);
-        set_enchants("sweeping_edge", 3);
-        set_enchants("knockback", 2);
-        set_enchants("efficiency", 5);
-        set_enchants("fortune", 3);
-        set_enchants("silk_touch", 1);
-        set_enchants("protection", 4);
-        set_enchants("fire_protection", 4);
-        set_enchants("blast_protection", 4);
-        set_enchants("projectile_protection", 4);
-        set_enchants("feather_falling", 4);
-        set_enchants("thorns", 3);
-        set_enchants("aqua_affinity", 1);
-        set_enchants("respiration", 3);
-        set_enchants("depth_strider", 3);
-        set_enchants("frost_walker", 2);
-        set_enchants("soul_speed", 3);
-        set_enchants("swift_sneak", 3);
-        set_enchants("power", 5);
-        set_enchants("punch", 2);
-        set_enchants("flame", 1);
-        set_enchants("infinity", 1);
-        set_enchants("piercing", 4);
-        set_enchants("multishot", 1);
-        set_enchants("quick_charge", 3);
-        set_enchants("lure", 3);
-        set_enchants("luck_of_the_sea", 3);
-        set_enchants("impaling", 5);
-        set_enchants("loyalty", 3);
-        set_enchants("riptide", 3);
-        set_enchants("channeling", 1);
-        set_enchants("density", 5);
-        set_enchants("breach", 4);
-        set_enchants("wind_burst", 3);
-        set_enchants("binding_curse", 1);
-        set_enchants("vanishing_curse", 1);
+        for (Enchantment e : Enchantment.values()) {
+            set_enchants(e.getKey().getKey(), e.getMaxLevel());
+        }
     }
 
     private void initialize_potions() {
-        potion_list.add(new potions("water"));
-        potion_list.add(new potions("thick"));
-        potion_list.add(new potions("mundane"));
-        potion_list.add(new potions("awkward"));
-        potion_list.add(new potions("strength"));
-        potion_list.add(new potions("weakness"));
-        potion_list.add(new potions("healing"));
-        potion_list.add(new potions("harming"));
-        potion_list.add(new potions("regeneration"));
-        potion_list.add(new potions("poison"));
-        potion_list.add(new potions("oozing"));
-        potion_list.add(new potions("infested"));
-        potion_list.add(new potions("swiftness"));
-        potion_list.add(new potions("slowness"));
-        potion_list.add(new potions("leaping"));
-        potion_list.add(new potions("slow_falling"));
-        potion_list.add(new potions("fire_resistance"));
-        potion_list.add(new potions("invisibility"));
-        potion_list.add(new potions("night_vision"));
-        potion_list.add(new potions("water_breathing"));
-        potion_list.add(new potions("turtle_master"));
-        potion_list.add(new potions("weaving"));
-        potion_list.add(new potions("wind_charged"));
-        potion_list.add(new potions("luck"));
-
+        for (PotionType p : PotionType.values()) {
+            potion_list.add(new potions(p.name().toLowerCase()));
+        }
         null_remove_potions();
     }
 
     private void initialize_horns() {
-        instrument_list.add(new instruments("ponder", MusicInstrument.PONDER_GOAT_HORN));
-        instrument_list.add(new instruments("sing", MusicInstrument.SING_GOAT_HORN));
-        instrument_list.add(new instruments("seek", MusicInstrument.SEEK_GOAT_HORN));
-        instrument_list.add(new instruments("feel", MusicInstrument.FEEL_GOAT_HORN));
-        instrument_list.add(new instruments("admire", MusicInstrument.ADMIRE_GOAT_HORN));
-        instrument_list.add(new instruments("call", MusicInstrument.CALL_GOAT_HORN));
-        instrument_list.add(new instruments("yearn", MusicInstrument.YEARN_GOAT_HORN));
-        instrument_list.add(new instruments("dream", MusicInstrument.DREAM_GOAT_HORN));
+        String str;
+        for (MusicInstrument i : MusicInstrument.values()) {
+            str = i.getKey().getKey();
+            instrument_list.add(new instruments(str.substring(0, str.length() - 10), i));
+        }
     }
 
     private void set_enchants(String enchant, int lvl) {

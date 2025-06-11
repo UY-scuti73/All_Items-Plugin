@@ -1,5 +1,6 @@
 package xyz.quazaros.data.config;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class lang {
@@ -49,6 +50,18 @@ public class lang {
     public String allMobs;
     public String completeItemSuffix;
     public String completeMobSuffix;
+
+    public ChatColor good;
+    public ChatColor bad;
+    public ChatColor dom;
+    public ChatColor sec;
+
+    public lang() {
+        good = ChatColor.GREEN;
+        bad = ChatColor.RED;
+        dom = ChatColor.LIGHT_PURPLE;
+        sec = ChatColor.AQUA;
+    }
 
     public void initialize(YamlConfiguration config) {
         commandDisabled = config.getString("sendMessages.error.commandDisabled");

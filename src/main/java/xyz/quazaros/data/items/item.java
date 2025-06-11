@@ -1,9 +1,9 @@
 package xyz.quazaros.data.items;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import xyz.quazaros.main;
 
 import java.util.ArrayList;
 
@@ -38,8 +38,8 @@ public class item {
 
             item_stack = new ItemStack(item_type, 1);
             item_meta = item_stack.getItemMeta();
-            item_meta.setDisplayName(ChatColor.RED + item_display_name);
-            item_lore.add(ChatColor.AQUA + "Not Found");
+            item_meta.setDisplayName(main.getPlugin().lang.bad + item_display_name);
+            item_lore.add(main.getPlugin().lang.sec + "Not Found");
             item_meta.setEnchantmentGlintOverride(false);
             item_meta.setLore(item_lore);
             item_stack.setItemMeta(item_meta);
@@ -63,8 +63,8 @@ public class item {
 
             item_stack = new ItemStack(item.item_stack);
             item_meta = item_stack.getItemMeta();
-            item_meta.setDisplayName(ChatColor.RED + item_display_name);
-            item_lore.add(ChatColor.AQUA + "Not Found");
+            item_meta.setDisplayName(main.getPlugin().lang.bad + item_display_name);
+            item_lore.add(main.getPlugin().lang.sec + "Not Found");
             item_meta.setEnchantmentGlintOverride(false);
             item_meta.setLore(item_lore);
             item_stack.setItemMeta(item_meta);
@@ -75,10 +75,10 @@ public class item {
     public void submit(String p, String time) {
         item_founder = p;
         item_time = time;
-        item_meta.setDisplayName(ChatColor.GREEN + item_display_name);
-        item_lore.set(0, ChatColor.AQUA + "Found");
-        item_lore.add(ChatColor.AQUA + "By " + item_founder);
-        item_lore.add(ChatColor.AQUA + "At " + item_time);
+        item_meta.setDisplayName(main.getPlugin().lang.good + item_display_name);
+        item_lore.set(0, main.getPlugin().lang.sec + "Found");
+        item_lore.add(main.getPlugin().lang.sec + "By " + item_founder);
+        item_lore.add(main.getPlugin().lang.sec + "At " + item_time);
         item_meta.setLore(item_lore);
         item_meta.setEnchantmentGlintOverride(true);
         item_stack.setItemMeta(item_meta);
@@ -88,9 +88,9 @@ public class item {
 
     public void submit(String time) {
         item_time = time;
-        item_meta.setDisplayName(ChatColor.GREEN + item_display_name);
-        item_lore.set(0, ChatColor.AQUA + "Found");
-        item_lore.add(ChatColor.AQUA + "At " + item_time);
+        item_meta.setDisplayName(main.getPlugin().lang.good + item_display_name);
+        item_lore.set(0, main.getPlugin().lang.sec + "Found");
+        item_lore.add(main.getPlugin().lang.sec + "At " + item_time);
         item_meta.setLore(item_lore);
         item_meta.setEnchantmentGlintOverride(true);
         item_stack.setItemMeta(item_meta);
@@ -101,10 +101,10 @@ public class item {
     //Handles what happens when an item is unsubmitted
     public void unsubmit() {
         ArrayList<String> empty = new ArrayList<>();
-        empty.add(ChatColor.AQUA + "Not Found");
+        empty.add(main.getPlugin().lang.sec + "Not Found");
         item_founder = "";
         item_time = "";
-        item_meta.setDisplayName(ChatColor.RED + item_display_name);
+        item_meta.setDisplayName(main.getPlugin().lang.good + item_display_name);
         item_lore = empty;
         item_meta.setLore(item_lore);
         item_meta.setEnchantmentGlintOverride(false);
@@ -130,7 +130,7 @@ public class item {
 
         item_stack = new ItemStack(item_type, 1);
         item_meta = item_stack.getItemMeta();
-        item_meta.setDisplayName(ChatColor.RED + item_display_name);
+        item_meta.setDisplayName(main.getPlugin().lang.bad + item_display_name);
         item_meta.setEnchantmentGlintOverride(false);
         item_stack.setItemMeta(item_meta);
 
