@@ -63,6 +63,14 @@ commands:
       /mcheck <item_name>
       /mcheck <item_name> <player_name>
     permission: all_items.mobs
+  asettings:
+    description: Displays the Settings of the Plugin
+    usage: /asettings
+    permission: all_items.items
+  msettings:
+    description: Displays the Settings of the Plugin
+    usage: /msettings
+    permission: all_items.mobs
   ahelp:
     description: Displays the Usage of each Item Command in the Plugin
     usage: /ahelp
@@ -71,14 +79,6 @@ commands:
     description: Displays the Usage of each Mob Command in the Plugin
     usage: /mhelp
     permission: all_items.mobs
-  asettings:
-    description: (ADMIN) Displays the Settings of the Plugin
-    usage: /asettings
-    permission: all_items.admin
-  msettings:
-    description: (ADMIN) Displays the Settings of the Plugin
-    usage: /msettings
-    permission: all_items.admin
   areset:
     description: (ADMIN) Resets the ItemData After a Server Restart
     usage: /areset
