@@ -229,11 +229,11 @@ public class commands {
         ArrayList<String> mobPlusPlayer = new ArrayList<>();
 
         if (command_name.equalsIgnoreCase("asubmit") || command_name.equalsIgnoreCase("aunsubmit")) {
-            itemPlusPlayer.addAll(Main.all_items.item_names);
             itemPlusPlayer.addAll(Main.player_list.player_names);
+            itemPlusPlayer.addAll(Main.all_items.item_names);
         } else if (command_name.equalsIgnoreCase("msubmit") || command_name.equalsIgnoreCase("munsubmit")) {
-            mobPlusPlayer.addAll(Main.all_mobs.item_names);
             mobPlusPlayer.addAll(Main.player_list.player_names);
+            itemPlusPlayer.addAll(Main.all_mobs.item_names);
         }
 
         if (command_name.equalsIgnoreCase("alist") || command_name.equalsIgnoreCase("mlist")) {
@@ -401,7 +401,7 @@ public class commands {
             temp = Lang.itemListMenu;
             tempList = Main.all_items;
         } else if (personal && mob) { //mself
-            temp = pl.name + " " + Lang.mobPersonalSuffix;
+            temp = targetPlayer.name + " " + Lang.mobPersonalSuffix;
             tempList = targetPlayer.mob_list;
             is_public = false;
         } else if (!personal && mob) { //mlist
