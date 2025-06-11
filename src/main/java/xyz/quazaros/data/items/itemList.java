@@ -257,10 +257,10 @@ public class itemList {
         ArrayList<Integer> Index_List = get_index(current_item);
 
         if (Index_List.size() == 0) {
-            return main.getPlugin().lang.bad + main.getPlugin().lang.noItemsFound;
+            return main.getPlugin().lang.colorBad + main.getPlugin().lang.noItemsFound;
         }
         if (Index_List.get(0) == -1) {
-            return main.getPlugin().lang.bad + main.getPlugin().lang.enterItem;
+            return main.getPlugin().lang.colorBad + main.getPlugin().lang.enterItem;
         }
 
         String temp = "";
@@ -310,13 +310,13 @@ public class itemList {
         lang Lang = main.getPlugin().lang;
         if (!items.get(temp).isFound) {
             if (is_in_indexes(temp)) {
-                return Lang.good + items.get(temp).item_display_name + " " + Lang.itemSubmitted;
+                return Lang.colorGood + items.get(temp).item_display_name + " " + Lang.itemSubmitted;
             } else {
-                return Lang.good + Lang.itemSubNotInList;
+                return Lang.colorGood + Lang.itemSubNotInList;
             }
         } else {
-            if (personal) {return Lang.bad + Lang.alreadyFound;}
-            else {return Lang.bad + Lang.alreadyFoundBy + " " + items.get(temp).item_founder;}
+            if (personal) {return Lang.colorBad + Lang.alreadyFound;}
+            else {return Lang.colorBad + Lang.alreadyFoundBy + " " + items.get(temp).item_founder;}
         }
     }
 

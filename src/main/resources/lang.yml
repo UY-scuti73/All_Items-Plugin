@@ -41,6 +41,10 @@ gui:
   progress: "Progress"
   filterItems: "Filter Items"
   leaderboard: "Leaderboard"
+  menuItemFound: "Found"
+  menuItemNotFound: "Not Found"
+  foundBy: "By"
+  foundAt: "At"
 
 completed:
   congrats: "CONGRATULATIONS"

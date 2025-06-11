@@ -79,25 +79,25 @@ public class inventory {
         sort = new ItemStack(Material.HOPPER);
 
         ItemMeta forwardM = forward.getItemMeta();
-        forwardM.setDisplayName(ChatColor.GOLD + Lang.nextPage);
+        forwardM.setDisplayName(Lang.colorHigh + Lang.nextPage);
         forward.setItemMeta(forwardM);
 
         ItemMeta backM = back.getItemMeta();
-        backM.setDisplayName(ChatColor.GOLD + Lang.lastPage);
+        backM.setDisplayName(Lang.colorHigh + Lang.lastPage);
         back.setItemMeta(backM);
 
         ItemMeta sortM = sort.getItemMeta();
-        sortM.setDisplayName(ChatColor.AQUA + Lang.filterItems);
+        sortM.setDisplayName(Lang.colorSec + Lang.filterItems);
         sort.setItemMeta(sortM);
 
         ItemMeta leaderboardM = leaderboard.getItemMeta();
-        leaderboardM.setDisplayName(ChatColor.AQUA + Lang.progress);
-        leaderboardM.setLore(Arrays.asList(ChatColor.LIGHT_PURPLE + progPercent));
+        leaderboardM.setDisplayName(Lang.colorSec + Lang.progress);
+        leaderboardM.setLore(Arrays.asList(Lang.colorDom + progPercent));
         leaderboardM.setEnchantmentGlintOverride(true);
         leaderboard.setItemMeta(leaderboardM);
 
         ItemMeta playersM = players.getItemMeta();
-        playersM.setDisplayName(ChatColor.AQUA + Lang.leaderboard);
+        playersM.setDisplayName(Lang.colorSec + Lang.leaderboard);
         if (!is_mob) {
             playersM.setLore(main.getPlugin().player_list.leaderboard(false));
         } else {

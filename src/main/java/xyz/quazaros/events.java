@@ -1,7 +1,6 @@
 package xyz.quazaros;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -127,12 +126,12 @@ public class events {
             String message_personal = "";
 
             if (!Main.all_mobs.items.get(temp).isFound && Main.all_mobs.is_in_indexes(temp)) {
-                message_main = Main.lang.good + name + " " + Main.lang.mobKilledBy + " " + p.getName();
+                message_main = Main.lang.colorGood + name + " " + Main.lang.mobKilledBy + " " + p.getName();
                 Main.all_mobs.items.get(temp).submit(p.getName(), Main.all_mobs.date());
                 checkCompleted(true, null);
             }
             if (!pl.mob_list.items.get(temp).isFound && pl.mob_list.is_in_indexes(temp)) {
-                message_personal = Main.lang.good + name + " " + Main.lang.mobKilled;
+                message_personal = Main.lang.colorGood + name + " " + Main.lang.mobKilled;
                 pl.mob_list.items.get(temp).submit(pl.mob_list.date());
                 checkCompleted(true, pl);
             }
@@ -174,27 +173,27 @@ public class events {
             if (!Main.data.general_mainCompletion) {return;}
 
             if (!is_mob) {
-                message = Main.lang.good + Main.lang.allItems;
+                message = Main.lang.colorGood + Main.lang.allItems;
                 temp = Main.all_items;
             } else {
-                message = Main.lang.good + Main.lang.allMobs;
+                message = Main.lang.colorGood + Main.lang.allMobs;
                 temp = Main.all_mobs;
             }
         } else {
             if (!Main.data.general_personalCompletion) {return;}
 
             if (!is_mob) {
-                message = Main.lang.good + pl.name + " " + Main.lang.completeItemSuffix;
+                message = Main.lang.colorGood + pl.name + " " + Main.lang.completeItemSuffix;
                 temp = pl.item_list;
             } else {
-                message = Main.lang.good + pl.name + " " + Main.lang.completeMobSuffix;
+                message = Main.lang.colorGood + pl.name + " " + Main.lang.completeMobSuffix;
                 temp = pl.mob_list;
             }
         }
 
         if (temp.complete()) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                p.sendTitle(ChatColor.YELLOW + Main.lang.congrats, message);
+                p.sendTitle(Main.lang.colorHigh + Main.lang.congrats, message);
             }
         }
     }

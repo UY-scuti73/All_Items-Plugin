@@ -57,11 +57,11 @@ public class commands {
         String command_name = command.getName();
 
         if (check_itmes(command_name) && !Main.data.item_toggle) {
-            p.sendMessage(Lang.bad + Lang.itemDisabled);
+            p.sendMessage(Lang.colorBad + Lang.itemDisabled);
             return true;
         }
         if (check_mobs(command_name) && !Main.data.mob_toggle) {
-            p.sendMessage(Lang.bad + Lang.mobDisabled);
+            p.sendMessage(Lang.colorBad + Lang.mobDisabled);
             return true;
         }
 
@@ -96,7 +96,7 @@ public class commands {
                 String message_main = Main.all_items.check_items(current_item, p.getDisplayName(), false);
                 String message_personal = pl.item_list.check_items(current_item, p.getDisplayName(), false);
                 String message = Main.data.general_listPriority ? message_personal : message_main;
-                if (message.contains(Lang.good.toString())) {
+                if (message.contains(Lang.colorGood.toString())) {
                     if (Main.data.item_subtraction) {
                         ItemStack tempItem = new ItemStack(p.getInventory().getItemInMainHand().getType(), p.getInventory().getItemInMainHand().getAmount() - 1);
                         p.getInventory().setItemInMainHand(tempItem);
@@ -140,20 +140,12 @@ public class commands {
 
         //Explains the item commands of the plugin
         if (command_name.equalsIgnoreCase("ahelp")) {
-            if (p.isOp()) {
-                p.sendMessage(admin_help_string);
-            } else {
-                p.sendMessage(help_string);
-            }
+            handle_help(p, false);
         }
 
         //Explains the mob commands of the plugin
         if (command_name.equalsIgnoreCase("mhelp")) {
-            if (p.isOp()) {
-                p.sendMessage(admin_mob_help_string);
-            } else {
-                p.sendMessage(mob_help_string);
-            }
+            handle_help(p, true);
         }
 
         //Sends the item settings of the plugin
@@ -170,26 +162,12 @@ public class commands {
 
         //Resets the item data
         if (command_name.equalsIgnoreCase("areset")) {
-            if(p.isOp()) {
-                if (Main.file.reset) {
-                    p.sendMessage(ChatColor.DARK_GREEN + Lang.resetCancel);
-                } else {
-                    p.sendMessage(ChatColor.DARK_RED + Lang.areset);
-                }
-                Main.file.reset = !Main.file.reset;
-            } else {p.sendMessage(Lang.bad + Lang.noPermission);}
+            handle_reset(p, false);
         }
 
         //Resets the mob data
         if (command_name.equalsIgnoreCase("mreset")) {
-            if(p.isOp()) {
-                if (Main.file.mob_reset) {
-                    p.sendMessage(ChatColor.DARK_GREEN + Lang.resetCancel);
-                } else {
-                    p.sendMessage(ChatColor.DARK_RED + Lang.mreset);
-                }
-                Main.file.mob_reset = !Main.file.mob_reset;
-            } else {p.sendMessage(Lang.bad + Lang.noPermission);}
+            handle_reset(p, true);
         }
 
         //Submits an item from the plugin
@@ -216,17 +194,30 @@ public class commands {
     }
 
     private boolean check_itmes(String command) {
-        if (command.equalsIgnoreCase("alist") || command.equalsIgnoreCase("asend") || command.equalsIgnoreCase("acheck") || command.equalsIgnoreCase("aplayer") || command.equalsIgnoreCase("aprog")) {
-            return true;
-        }
-        return false;
+        if (command.equalsIgnoreCase("alist")
+                || command.equalsIgnoreCase("asend")
+                || command.equalsIgnoreCase("acheck")
+                || command.equalsIgnoreCase("aplayer")
+                || command.equalsIgnoreCase("aprog")
+                || command.equalsIgnoreCase("asettings")
+                || command.equalsIgnoreCase("ahelp")
+                || command.equalsIgnoreCase("areset")
+                || command.equalsIgnoreCase("asubmit")
+                || command.equalsIgnoreCase("aunubmit")
+        ){return true;} else {return false;}
     }
 
     private boolean check_mobs(String command) {
-        if (command.equalsIgnoreCase("mlist") || command.equalsIgnoreCase("mcheck") || command.equalsIgnoreCase("mplayer") || command.equalsIgnoreCase("mprog")) {
-            return true;
-        }
-        return false;
+        if (command.equalsIgnoreCase("mlist")
+                || command.equalsIgnoreCase("mcheck")
+                || command.equalsIgnoreCase("mplayer")
+                || command.equalsIgnoreCase("mprog")
+                || command.equalsIgnoreCase("msettings")
+                || command.equalsIgnoreCase("mhelp")
+                || command.equalsIgnoreCase("mreset")
+                || command.equalsIgnoreCase("msubmit")
+                || command.equalsIgnoreCase("munubmit")
+        ){return true;} else {return false;}
     }
 
     //Adds the tab completions to specific commands
@@ -344,7 +335,7 @@ public class commands {
                 message_main = Main.all_items.check_items(inventory_list.get(i), p.getDisplayName(), true);
                 message_personal = pl.item_list.check_items(inventory_list.get(i), p.getDisplayName(), true);
                 message = Main.data.general_listPriority ? message_personal : message_main;
-                if (message.contains(Lang.good.toString())) {
+                if (message.contains(Lang.colorGood.toString())) {
                     if(message.endsWith(Lang.itemSubmitted)) {
                         p.sendMessage(message);
                         Main.events.checkCompleted(false, null);
@@ -360,7 +351,7 @@ public class commands {
             }
         }
         if (temp1 == 0 || temp2 == 0) {
-            p.sendMessage(Lang.bad + Lang.youHaveNoItems);
+            p.sendMessage(Lang.colorBad + Lang.youHaveNoItems);
         }
     }
 
@@ -368,7 +359,7 @@ public class commands {
     private void handle_list(boolean mob, boolean self, Player p, player pl, String[] args) {
         boolean playerFound = list_setup(mob, self, p, pl, args);
         if (!playerFound) {
-            p.sendMessage(Lang.bad + Lang.playerNotFound);
+            p.sendMessage(Lang.colorBad + Lang.playerNotFound);
         }
     }
 
@@ -418,15 +409,15 @@ public class commands {
 
         if (is_public) {
             if (!Main.data.general_global) {
-                p.sendMessage(Lang.bad + Lang.commandDisabled);
+                p.sendMessage(Lang.colorBad + Lang.commandDisabled);
                 return true;
             }
         } else {
             if (targetPlayer.name.equalsIgnoreCase(p.getName()) && !Main.data.general_personal) {
-                p.sendMessage(Lang.bad + Lang.commandDisabled);
+                p.sendMessage(Lang.colorBad + Lang.commandDisabled);
                 return true;
             } else if (!targetPlayer.name.equalsIgnoreCase(p.getName()) && !Main.data.general_others) {
-                p.sendMessage(Lang.bad + Lang.commandDisabled);
+                p.sendMessage(Lang.colorBad + Lang.commandDisabled);
                 return true;
             }
         }
@@ -439,7 +430,7 @@ public class commands {
     //Handles progress commands
     private void handle_prog(Player p, String[] args, boolean mob) {
         if (!Main.data.general_progress) {
-            p.sendMessage(Lang.bad + Lang.commandDisabled);
+            p.sendMessage(Lang.colorBad + Lang.commandDisabled);
             return;
         }
 
@@ -448,7 +439,7 @@ public class commands {
         itemList tempList = null;
         if (args.length >= 1) {
             if (!Main.player_list.player_exists(args[0])) {
-                p.sendMessage(Lang.bad + Lang.playerNotFound);
+                p.sendMessage(Lang.colorBad + Lang.playerNotFound);
                 return;
             } else {
                 tempList = !mob ? Main.player_list.get_player_from_string(args[0]).item_list : Main.player_list.get_player_from_string(args[0]).mob_list;
@@ -463,7 +454,7 @@ public class commands {
 
         if (is_public) {
             if (!Main.data.general_global) {
-                p.sendMessage(Lang.bad + Lang.commandDisabled);
+                p.sendMessage(Lang.colorBad + Lang.commandDisabled);
                 return;
             }
         } else {
@@ -471,18 +462,18 @@ public class commands {
                 p.sendMessage(Lang.commandDisabled);
                 return;
             } else if (!args[0].equalsIgnoreCase(p.getName()) && !Main.data.general_others) {
-                p.sendMessage(Lang.bad + Lang.commandDisabled);
+                p.sendMessage(Lang.colorBad + Lang.commandDisabled);
                 return;
             }
         }
 
-        p.sendMessage(Lang.dom + Lang.progress + ": " + Lang.sec + tempList.progPer());
+        p.sendMessage(Lang.colorDom + Lang.progress + ": " + Lang.colorSec + tempList.progPer());
     }
 
     //Handles check commands
     private void handle_check(Player p, String[] args, boolean mob) {
         if (!Main.data.general_check) {
-            p.sendMessage(Lang.bad + Lang.commandDisabled);
+            p.sendMessage(Lang.colorBad + Lang.commandDisabled);
             return;
         }
 
@@ -491,17 +482,17 @@ public class commands {
         boolean is_public = args.length == 1;
 
         if (args.length == 0) {
-            if (!mob) {p.sendMessage(Lang.bad + Lang.enterItem);}
-            else {p.sendMessage(Lang.bad + Lang.enterMob);}
+            if (!mob) {p.sendMessage(Lang.colorBad + Lang.enterItem);}
+            else {p.sendMessage(Lang.colorBad + Lang.enterMob);}
             return;
         } else if (args.length >= 2) {
             if ( ( !mob && !Main.all_items.item_exists(args[0]) ) || ( mob && !Main.all_mobs.item_exists(args[0]) ) ) {
-                if (!mob) {p.sendMessage(Lang.bad + Lang.itemNotFound);}
-                else {p.sendMessage(Lang.bad + Lang.mobNotFound);}
+                if (!mob) {p.sendMessage(Lang.colorBad + Lang.itemNotFound);}
+                else {p.sendMessage(Lang.colorBad + Lang.mobNotFound);}
                 return;
             } else {
                 if (!Main.player_list.player_exists(args[1])) {
-                    p.sendMessage(Lang.bad + Lang.playerNotFound);
+                    p.sendMessage(Lang.colorBad + Lang.playerNotFound);
                     return;
                 } else {
                     item = args[0];
@@ -510,8 +501,8 @@ public class commands {
             }
         } else if (args.length >= 1) {
             if ( ( !mob && !Main.all_items.item_exists(args[0]) ) || ( mob && !Main.all_mobs.item_exists(args[0]) ) ) {
-                if (!mob) {p.sendMessage(Lang.bad + Lang.itemNotFound);}
-                else {p.sendMessage(Lang.bad + Lang.mobNotFound);}
+                if (!mob) {p.sendMessage(Lang.colorBad + Lang.itemNotFound);}
+                else {p.sendMessage(Lang.colorBad + Lang.mobNotFound);}
                 return;
             } else {
                 item = args[0];
@@ -523,50 +514,50 @@ public class commands {
 
         if (is_public) {
             if (!Main.data.general_global) {
-                p.sendMessage(Lang.bad + Lang.commandDisabled);
+                p.sendMessage(Lang.colorBad + Lang.commandDisabled);
                 return;
             }
         } else {
             if (args[1].equalsIgnoreCase(p.getName()) && !Main.data.general_personal) {
-                p.sendMessage(Lang.bad + Lang.commandDisabled);
+                p.sendMessage(Lang.colorBad + Lang.commandDisabled);
                 return;
             } else if (!args[1].equalsIgnoreCase(p.getName()) && !Main.data.general_others) {
-                p.sendMessage(Lang.bad + Lang.commandDisabled);
+                p.sendMessage(Lang.colorBad + Lang.commandDisabled);
                 return;
             }
         }
 
         int temp = tempList.get_item_index(item);
         if (temp == -1) {
-            if (!mob) {p.sendMessage(Lang.bad + Lang.itemNotFound);}
-            else {p.sendMessage(Lang.bad + Lang.mobNotFound);}
+            if (!mob) {p.sendMessage(Lang.colorBad + Lang.itemNotFound);}
+            else {p.sendMessage(Lang.colorBad + Lang.mobNotFound);}
             return;
         }
 
         item tempItem = tempList.items.get(temp);
 
         if (tempItem.isFound) {
-            if (is_public) {p.sendMessage(Lang.good + tempItem.item_display_name + " " + Lang.hasBeenFoundBy + " " + tempItem.item_founder);}
-            else {p.sendMessage(Lang.good + tempItem.item_display_name + " " + Lang.hasBeenFound);}
+            if (is_public) {p.sendMessage(Lang.colorGood + tempItem.item_display_name + " " + Lang.hasBeenFoundBy + " " + tempItem.item_founder);}
+            else {p.sendMessage(Lang.colorGood + tempItem.item_display_name + " " + Lang.hasBeenFound);}
         } else {
-            p.sendMessage(Lang.bad + tempItem.item_display_name + " " + Lang.hasNotBeenFound);
+            p.sendMessage(Lang.colorBad + tempItem.item_display_name + " " + Lang.hasNotBeenFound);
         }
     }
 
     //Handles player commands
     private void handle_player(Player p, String[] args, boolean mob) {
         if (!Main.data.general_player) {
-            p.sendMessage(Lang.bad + Lang.commandDisabled);
+            p.sendMessage(Lang.colorBad + Lang.commandDisabled);
             return;
         }
 
         if (args.length == 0) {
-            p.sendMessage(Lang.bad + Lang.enterPlayer);
+            p.sendMessage(Lang.colorBad + Lang.enterPlayer);
             return;
         }
 
         if (!Main.data.general_global) {
-            p.sendMessage(Lang.bad + Lang.commandDisabled);
+            p.sendMessage(Lang.colorBad + Lang.commandDisabled);
             return;
         }
 
@@ -578,16 +569,16 @@ public class commands {
 
         player tempPlayer = Main.player_list.get_player_from_string(args[0]);
         if (tempPlayer == null) {
-            p.sendMessage(Lang.bad + Lang.playerNotFound);
+            p.sendMessage(Lang.colorBad + Lang.playerNotFound);
         } else {
-            p.sendMessage(Lang.dom + tempPlayer.name + ": " + Lang.sec + tempPlayer.score);
+            p.sendMessage(Lang.colorDom + tempPlayer.name + ": " + Lang.colorSec + tempPlayer.score);
         }
     }
 
     //Handles setting commands
     private void handle_settings(Player p, boolean mob) {
         if (!Main.data.general_settings) {
-            p.sendMessage(Lang.bad + Lang.commandDisabled);
+            p.sendMessage(Lang.colorBad + Lang.commandDisabled);
             return;
         }
 
@@ -598,15 +589,47 @@ public class commands {
         }
     }
 
+    //Handles help commands
+    private void handle_help(Player p, boolean mob) {
+        String helpMessage;
+        if (p.isOp()) {
+            helpMessage = !mob ? admin_help_string : admin_mob_help_string;
+        } else {
+            helpMessage = !mob ? help_string : mob_help_string;
+        }
+        p.sendMessage(helpMessage);
+    }
+
+    //Handles reset commands
+    private void handle_reset(Player p, boolean mob) {
+        if(p.isOp()) {
+            if (!mob) {
+                if (Main.file.reset) {
+                    p.sendMessage(Lang.colorGood + Lang.resetCancel);
+                } else {
+                    p.sendMessage(Lang.colorWar + Lang.areset);
+                }
+                Main.file.reset = !Main.file.reset;
+            } else {
+                if (Main.file.mob_reset) {
+                    p.sendMessage(Lang.colorGood + Lang.resetCancel);
+                } else {
+                    p.sendMessage(Lang.colorWar + Lang.mreset);
+                }
+                Main.file.mob_reset = !Main.file.mob_reset;
+            }
+        } else {p.sendMessage(Lang.colorBad + Lang.noPermission);}
+    }
+
     //Handles submit and unsubmit commands
     private void handle_submit(Player p, String[] args, boolean mob, boolean unsub) {
         if (!p.isOp()) {
-            p.sendMessage(Lang.bad + Lang.noPermission);
+            p.sendMessage(Lang.colorBad + Lang.noPermission);
             return;
         }
         if (args.length == 0) {
-            if (!mob) {p.sendMessage(Lang.bad + Lang.enterItem);}
-            else {p.sendMessage(Lang.bad + Lang.enterMob);}
+            if (!mob) {p.sendMessage(Lang.colorBad + Lang.enterItem);}
+            else {p.sendMessage(Lang.colorBad + Lang.enterMob);}
             return;
         }
 
@@ -617,13 +640,13 @@ public class commands {
 
         if (args.length >= 3 && args[0].equalsIgnoreCase("personal") && !unsub) {
             if (!Main.player_list.player_exists(args[1])) {
-                p.sendMessage(Lang.bad + Lang.playerNotFound);
+                p.sendMessage(Lang.colorBad + Lang.playerNotFound);
                 return;
             }
             pl = Main.player_list.get_player_from_string(args[1]);
             if ( ( !mob && !pl.item_list.item_exists(args[2]) ) || ( mob && !pl.mob_list.item_exists(args[2]) ) ) {
-                if (!mob) {p.sendMessage(Lang.bad + Lang.itemNotFound);}
-                else {p.sendMessage(Lang.bad + Lang.mobKilled);}
+                if (!mob) {p.sendMessage(Lang.colorBad + Lang.itemNotFound);}
+                else {p.sendMessage(Lang.colorBad + Lang.mobKilled);}
                 return;
             }
             item = args[2];
@@ -631,10 +654,10 @@ public class commands {
         } else if (args.length >= 2) {
             if ( (!unsub && ( ( ( !mob && !Main.all_items.item_exists(args[0]) ) || ( mob && !Main.all_mobs.item_exists(args[0]) ) ) && !Main.player_list.player_exists(args[0]) ) ) || ( unsub && !Main.player_list.player_exists(args[0]) ) ) {
                 if (!unsub) {
-                    if (!mob) {p.sendMessage(Lang.bad + Lang.playerNotFound);}
-                    else {p.sendMessage(Lang.bad + Lang.playerNotFound);}
+                    if (!mob) {p.sendMessage(Lang.colorBad + Lang.playerNotFound);}
+                    else {p.sendMessage(Lang.colorBad + Lang.playerNotFound);}
                 } else {
-                    p.sendMessage(Lang.bad + Lang.playerNotFound);
+                    p.sendMessage(Lang.colorBad + Lang.playerNotFound);
                 }
                 return;
             } else {
@@ -645,7 +668,7 @@ public class commands {
                         item = args[0];
                         targetPlayer = args[1];
                     } else {
-                        p.sendMessage(Lang.bad + Lang.playerNotFound);
+                        p.sendMessage(Lang.colorBad + Lang.playerNotFound);
                         return;
                     }
                 } else if (Main.player_list.player_exists(args[0])) {
@@ -654,8 +677,8 @@ public class commands {
                     if (tempList.item_exists(args[1])) {
                         item = args[1];
                     } else {
-                        if (!mob) {p.sendMessage(Lang.bad + Lang.itemNotFound);}
-                        else {p.sendMessage(Lang.bad + Lang.mobNotFound);}
+                        if (!mob) {p.sendMessage(Lang.colorBad + Lang.itemNotFound);}
+                        else {p.sendMessage(Lang.colorBad + Lang.mobNotFound);}
                         return;
                     }
                 }
@@ -665,8 +688,8 @@ public class commands {
                 item = args[0];
                 tempList = !mob ? Main.all_items : Main.all_mobs;
             } else {
-                if (!mob) {p.sendMessage(Lang.bad + Lang.itemNotFound);}
-                else {p.sendMessage(Lang.bad + Lang.mobNotFound);}
+                if (!mob) {p.sendMessage(Lang.colorBad + Lang.itemNotFound);}
+                else {p.sendMessage(Lang.colorBad + Lang.mobNotFound);}
                 return;
             }
         }
@@ -675,30 +698,30 @@ public class commands {
 
         int temp = tempList.get_item_index(item);
         if (temp == -1) {
-            if (!mob) {p.sendMessage(Lang.bad + Lang.itemNotFound);}
-            else {p.sendMessage(Lang.bad + Lang.mobNotFound);}
+            if (!mob) {p.sendMessage(Lang.colorBad + Lang.itemNotFound);}
+            else {p.sendMessage(Lang.colorBad + Lang.mobNotFound);}
             return;
         }
 
         item tempItem = tempList.items.get(temp);
 
         if (!unsub && tempItem.isFound) {
-            p.sendMessage(Lang.bad + tempItem.item_display_name + " " + Lang.subAlreadyFound);
+            p.sendMessage(Lang.colorBad + tempItem.item_display_name + " " + Lang.subAlreadyFound);
             return;
         } else if (unsub && !tempItem.isFound) {
-            p.sendMessage(Lang.bad + tempItem.item_display_name + " " + Lang.subNotFound);
+            p.sendMessage(Lang.colorBad + tempItem.item_display_name + " " + Lang.subNotFound);
             return;
         }
 
         if (!unsub) {
-            String targetText = targetPlayer.isEmpty() ? ChatColor.DARK_RED + Lang.admin : targetPlayer;
+            String targetText = targetPlayer.isEmpty() ? Lang.colorWar + Lang.admin : targetPlayer;
             tempItem.submit(targetText, tempList.date());
-            p.sendMessage(Lang.good + tempItem.item_display_name + " " + Lang.submit);
+            p.sendMessage(Lang.colorGood + tempItem.item_display_name + " " + Lang.submit);
             Main.events.checkCompleted(mob, null);
             Main.events.checkCompleted(mob, pl);
         } else {
             tempItem.unsubmit();
-            p.sendMessage(Lang.good + tempItem.item_display_name + " " + Lang.unsubmit);
+            p.sendMessage(Lang.colorGood + tempItem.item_display_name + " " + Lang.unsubmit);
             tempList.completed = false;
         }
     }
@@ -709,49 +732,68 @@ public class commands {
         ChatColor CC2 = ChatColor.DARK_AQUA;
         ChatColor CC3 = ChatColor.DARK_RED;
         String b = ChatColor.WHITE + "------------------------------------------------\n";
-        String t = ChatColor.GREEN + "Help Menu: ";
+        String t = ChatColor.DARK_GREEN + "Help Menu: ";
         String d = ChatColor.LIGHT_PURPLE + "Join The Discord: " + ChatColor.AQUA +""+ ChatColor.UNDERLINE + "https://discord.gg/zHzFgWX8KW\n";
 
-        String Alist = CC1 + "/alist: " + CC2 + "Lists the Items You Have Found\n\n";
+        String Alist1 = CC1 + "/alist: " + CC2 + "Lists the Items You Have Found\n";
+        String Alist2 = CC1 + "/alist <player_name>: " + CC2 + "Lists the Personal Items a Player Has Found\n";
+        String Alist3 = CC1 + "/aself: " + CC2 + "Lists the Personal Items You Have Found\n\n";
+        String Alist = Alist1 + Alist2 + Alist3;
         String Asend1 = CC1 + "/asend: " + CC2 + "Sends the Item in Your Hand\n";
         String Asend2 = CC1 + "/asend hotbar: " + CC2 + "Sends the Item in Your Hotbar\n";
         String Asend3 = CC1 + "/asend inventory: " + CC2 + "Sends the Item in Your Inventory\n\n";
         String Asend = Asend1 + Asend2 + Asend3;
-        String Aprog = CC1 + "/aprog: " + CC2 + "Displays the Total Item Progress\n\n";
+        String Aprog1 = CC1 + "/aprog: " + CC2 + "Displays the Total Item Progress\n";
+        String Aprog2 = CC1 + "/aprog <player_name>: " + CC2 + "Displays the Total Item Progress of a Players Personal List\n\n";
+        String Aprog = Aprog1 + Aprog2;
         String Aplayer = CC1 + "/aplayer <player_name>: " + CC2 + "Displays the Score of a Player\n\n";
-        String Acheck = CC1 + "/acheck <item_name>: " + CC2 + "Displays Whether an Item Has Been Obtained or Not\n\n";
+        String Acheck1 = CC1 + "/acheck <item_name>: " + CC2 + "Displays Whether an Item Has Been Obtained or Not\n";
+        String Acheck2 = CC1 + "/acheck <item_name> <player_name>: " + CC2 + "Displays Whether an Item Has Been Obtained or Not in a Players Personal List\n\n";
+        String Acheck = Acheck1 + Acheck2;
+        String Asettings = CC1 + "/asettings " + CC2 + "Displays the Settings of the Plugin\n\n";
         String Ahelp = CC1 + "/ahelp: " + CC2 + "Displays This Help Message\n\n";
-        String Asettings = CC3 + "(ADMIN) " + CC1 + "/asettings " + CC2 + "Displays the Settings of the Plugin\n\n";
         String Areset = CC3 + "(ADMIN) " + CC1 + "/areset: " + CC2 + "Resets the ItemData Upon a Server Reset\n\n";
-        String Aconfig1 = CC3 + "(ADMIN) " + CC1 + "/aconfig file <file_name>: " + CC2 + "Swaps the File the ItemList is Derived From\n";
-        String Aconfig2 = CC3 + "(ADMIN) " + CC1 + "/aconfig autocollect: " + CC2 + "Toggles the Auto-Collection Feature\n";
-        String Aconfig3 = CC3 + "(ADMIN) " + CC1 + "/aconfig subtract: " + CC2 + "Toggles the Subtraction Feature\n\n";
-        String Aconfig = Aconfig1 + Aconfig2 + Aconfig3;
-        String Atoggle = CC3 + "(ADMIN)" + CC1 + "/atoggle: " + CC2 + "Enables/Disables the item functionality of the plugin\n\n";
-        String Asubmit = CC3 + "(ADMIN) " + CC1 + "/asubmit <item_name> <player_name (optional)>: " + CC2 + "Submits the Item Listed as the Player Listed\n\n";
-        String Aunsubmit = CC3 + "(ADMIN) " + CC1 + "/aunsubmit <item_name>: " + CC2 + "Unsubmits the Item Listed\n";
+        String Asubmit1 = CC3 + "(ADMIN) " + CC1 + "/asubmit <item_name>: " + CC2 + "Submits the Item Listed as ADMIN\n";
+        String Asubmit2 = CC3 + "(ADMIN) " + CC1 + "/asubmit <item_name> <player_name>: " + CC2 + "Submits the Item Listed as the Player Listed\n";
+        String Asubmit3 = CC3 + "(ADMIN) " + CC1 + "/asubmit <player_name> <item_name>: " + CC2 + "Submits the Item Listed in the Specific Player's Personal List\n";
+        String Asubmit4 = CC3 + "(ADMIN) " + CC1 + "/asubmit personal <player_name> <item_name>: " + CC2 + "Same as Above\n\n";
+        String Asubmit = Asubmit1 + Asubmit2 + Asubmit3 + Asubmit4;
+        String Aunsubmit1 = CC3 + "(ADMIN) " + CC1 + "/aunsubmit <item_name>: " + CC2 + "Unsubmits the Item Listed\n";
+        String Aunsubmit2 = CC3 + "(ADMIN) " + CC1 + "/aunsubmit <player_name> <item_name>: " + CC2 + "Unsubmits the Item Listed From the Specific Player's Personal List\n";
+        String Aunsubmit = Aunsubmit1 + Aunsubmit2;
 
-        String Mlist = CC1 + "/mlist: " + CC2 + "Lists the Mobs You Have Found\n\n";
-        String Mprog = CC1 + "/mprog: " + CC2 + "Displays the Total Mob Progress\n\n";
+        String Mlist1 = CC1 + "/mlist: " + CC2 + "Lists the Mobs You Have Killed\n";
+        String Mlist2 = CC1 + "/mlist <player_name>: " + CC2 + "Lists the Personal Mobs a Specific Player Has Killed\n";
+        String Mlist3 = CC1 + "/mself: " + CC2 + "Lists the Personal Mobs You Have Killed\n\n";
+        String Mlist = Mlist1 + Mlist2 + Mlist3;
+        String Mprog1 = CC1 + "/mprog: " + CC2 + "Displays the Total Mob Progress\n";
+        String Mprog2 = CC1 + "/mprog <player_name>: " + CC2 + "Displays the Total Mob Progress of a Specific Player's Personal List\n\n";
+        String Mprog = Mprog1 + Mprog2;
         String Mplayer = CC1 + "/mplayer <player_name>: " + CC2 + "Displays the Score of a Player\n\n";
-        String Mcheck = CC1 + "/mcheck <item_name>: " + CC2 + "Displays Whether a Mob Has Been Killed or Not\n\n";
+        String Mcheck1 = CC1 + "/mcheck <mob_name>: " + CC2 + "Displays Whether a Mob Has Been Killed or Not\n";
+        String Mcheck2 = CC1 + "/mcheck <mob_name> <player_name>: " + CC2 + "Displays Whether a Mob Has Been Killed or Not in a Players Personal List\n\n";
+        String Mcheck = Mcheck1 + Mcheck2;
+        String Msettings = CC1 + "/msettings " + CC2 + "Displays the Settings of the Plugin\n\n";
         String Mhelp = CC1 + "/mhelp: " + CC2 + "Displays This Help Message\n\n";
-        String Msettings = CC3 + "(ADMIN) " + CC1 + "/msettings " + CC2 + "Displays the Settings of the Plugin\n\n";
         String Mreset = CC3 + "(ADMIN) " + CC1 + "/mreset: " + CC2 + "Resets the MobData Upon a Server Reset\n\n";
-        String Mconfig = CC3 + "(ADMIN) " + CC1 + "/mconfig file <file_name>: " + CC2 + "Swaps the File the MobList is Derived From\n\n";
-        String Mtoggle = CC3 + "(ADMIN)" + CC1 + "/mtoggle: " + CC2 + "Enables/Disables the mob functionality of the plugin\n\n";
-        String Msubmit = CC3 + "(ADMIN) " + CC1 + "/msubmit <item_name> <player_name (optional)>: " + CC2 + "Submits the Mob Listed as the Player Listed\n\n";
-        String Munsubmit = CC3 + "(ADMIN) " + CC1 + "/munsubmit <item_name>: " + CC2 + "Unsubmits the Mob Listed\n";
+        String Msubmit1 = CC3 + "(ADMIN) " + CC1 + "/msubmit <mob_name>: " + CC2 + "Submits the Mob Listed as ADMIN\n";
+        String Msubmit2 = CC3 + "(ADMIN) " + CC1 + "/msubmit <mob_name> <player_name>: " + CC2 + "Submits the Mob Listed as the Player Listed\n";
+        String Msubmit3 = CC3 + "(ADMIN) " + CC1 + "/msubmit <player_name> <mob_name>: " + CC2 + "Submits the Mob Listed in the Specific Player's Personal List\n";
+        String Msubmit4 = CC3 + "(ADMIN) " + CC1 + "/msubmit personal <player_name> <mob_name>: " + CC2 + "Same as Above\n\n";
+        String Msubmit = Msubmit1 + Msubmit2 + Msubmit3 + Msubmit4;
+        String Munsubmit1 = CC3 + "(ADMIN) " + CC1 + "/munsubmit <mob_name>: " + CC2 + "Unsubmits the Mob Listed\n";
+        String Munsubmit2 = CC3 + "(ADMIN) " + CC1 + "/munsubmit <player_name> <mob_name>: " + CC2 + "Unsubmits the Mob Listed From the Specific Player's Personal List\n";
+        String Munsubmit = Munsubmit1 + Munsubmit2;
 
-        help_string = b + Alist + b + Asend + b + Aprog + b + Aplayer + b + Acheck + b + Ahelp + b;
-        admin_help_string = help_string + Asettings + b + Areset + b + Aconfig + b + Atoggle + b + Asubmit + b + Aunsubmit + b;
-        mob_help_string = b + Mlist + b + Mprog + b + Mplayer + b + Mcheck + b + Mhelp + b;
-        admin_mob_help_string = mob_help_string + Msettings + b + Mreset + b + Mconfig + b + Mtoggle + b + Msubmit + b + Munsubmit + b;
+        help_string = b + Alist + b + Asend + b + Aprog + b + Aplayer + b + Acheck + b + Asettings + b + Ahelp + b;
+        admin_help_string = help_string + Areset + b + Asubmit + b + Aunsubmit + b;
+        mob_help_string = b + Mlist + b + Mprog + b + Mplayer + b + Mcheck + b + Msettings + b + Mhelp + b;
+        admin_mob_help_string = mob_help_string + Mreset + b + Msubmit + b + Munsubmit + b;
 
-        help_string = help_string + d + b;
-        admin_help_string = admin_help_string + d + b;
-        mob_help_string = mob_help_string + d + b;
-        admin_mob_help_string = admin_mob_help_string + d + b;
+        help_string = t + help_string + d + b;
+        admin_help_string = t + admin_help_string + d + b;
+        mob_help_string = t + mob_help_string + d + b;
+        admin_mob_help_string = t + admin_mob_help_string + d + b;
     }
 
     //Initialize the setting string
@@ -772,20 +814,20 @@ public class commands {
         str_player = Data.general_player ? "True" :  "False";
         str_settings = Data.general_settings ? "True" :  "False";
 
-        String p1 = Lang.dom +""+ ChatColor.BOLD + "Items Toggled: " + Lang.sec +""+ ChatColor.BOLD + str_item;
-        String p2 = Lang.dom +""+ ChatColor.BOLD + "Mobs Toggled: " + Lang.sec +""+ ChatColor.BOLD + str_mob;
-        String p3 = Lang.dom + "Item File: " + Lang.sec + Data.item_file;
-        String p4 = Lang.dom + "Mob File: " + Lang.sec + Data.mob_file;
-        String p5 = Lang.dom + "Subtraction: " + Lang.sec + str_sub;
-        String p6 = Lang.dom + "Auto Collection: " + Lang.sec + str_auto;
-        String p7 = Lang.dom + "Global List: " + Lang.sec + str_global;
-        String p8 = Lang.dom + "Personal Lists: " + Lang.sec + str_personal;
-        String p9 = Lang.dom + "Other Lists: " + Lang.sec + str_others;
-        String p10 = Lang.dom + "List Priority: " + Lang.sec + str_priority;
-        String p11 = Lang.dom + "Progress Command: " + Lang.sec + str_progress;
-        String p12 = Lang.dom + "Check Command: " + Lang.sec + str_check;
-        String p13 = Lang.dom + "Player Command: " + Lang.sec + str_player;
-        String p14 = Lang.dom + "Settings Command: " + Lang.sec + str_settings;
+        String p1 = Lang.colorDom +""+ ChatColor.BOLD + "Items Toggled: " + Lang.colorSec +""+ ChatColor.BOLD + str_item;
+        String p2 = Lang.colorDom +""+ ChatColor.BOLD + "Mobs Toggled: " + Lang.colorSec +""+ ChatColor.BOLD + str_mob;
+        String p3 = Lang.colorDom + "Item File: " + Lang.colorSec + Data.item_file;
+        String p4 = Lang.colorDom + "Mob File: " + Lang.colorSec + Data.mob_file;
+        String p5 = Lang.colorDom + "Subtraction: " + Lang.colorSec + str_sub;
+        String p6 = Lang.colorDom + "Auto Collection: " + Lang.colorSec + str_auto;
+        String p7 = Lang.colorDom + "Global List: " + Lang.colorSec + str_global;
+        String p8 = Lang.colorDom + "Personal Lists: " + Lang.colorSec + str_personal;
+        String p9 = Lang.colorDom + "Other Lists: " + Lang.colorSec + str_others;
+        String p10 = Lang.colorDom + "List Priority: " + Lang.colorSec + str_priority;
+        String p11 = Lang.colorDom + "Progress Command: " + Lang.colorSec + str_progress;
+        String p12 = Lang.colorDom + "Check Command: " + Lang.colorSec + str_check;
+        String p13 = Lang.colorDom + "Player Command: " + Lang.colorSec + str_player;
+        String p14 = Lang.colorDom + "Settings Command: " + Lang.colorSec + str_settings;
 
         String general = p7 + "\n" + p8 + "\n" + p9 + "\n" + p10 + "\n" + p11 + "\n" + p12 + "\n" + p13 + "\n" + p14;
 

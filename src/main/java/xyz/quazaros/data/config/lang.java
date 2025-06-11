@@ -44,6 +44,10 @@ public class lang {
     public String nextPage;
     public String filterItems;
     public String leaderboard;
+    public String menuItemFound;
+    public String menuItemNotFound;
+    public String byPlayer;
+    public String atTime;
 
     public String congrats;
     public String allItems;
@@ -51,16 +55,20 @@ public class lang {
     public String completeItemSuffix;
     public String completeMobSuffix;
 
-    public ChatColor good;
-    public ChatColor bad;
-    public ChatColor dom;
-    public ChatColor sec;
+    public final ChatColor colorGood;
+    public final ChatColor colorBad;
+    public final ChatColor colorDom;
+    public final ChatColor colorSec;
+    public final ChatColor colorHigh;
+    public final ChatColor colorWar;
 
     public lang() {
-        good = ChatColor.GREEN;
-        bad = ChatColor.RED;
-        dom = ChatColor.LIGHT_PURPLE;
-        sec = ChatColor.AQUA;
+        colorGood = ChatColor.GREEN;
+        colorBad = ChatColor.RED;
+        colorDom = ChatColor.LIGHT_PURPLE;
+        colorSec = ChatColor.AQUA;
+        colorHigh = ChatColor.GOLD;
+        colorWar = ChatColor.DARK_RED;
     }
 
     public void initialize(YamlConfiguration config) {
@@ -104,6 +112,10 @@ public class lang {
         progress = config.getString("gui.progress");
         filterItems = config.getString("gui.filterItems");
         leaderboard = config.getString("gui.leaderboard");
+        menuItemFound = config.getString("gui.menuItemFound");
+        menuItemNotFound = config.getString("gui.menuItemNotFound");
+        byPlayer = config.getString("gui.byPlayer");
+        atTime = config.getString("gui.atTime");
 
         congrats = config.getString("completed.congrats");
         allItems = config.getString("completed.allItems");

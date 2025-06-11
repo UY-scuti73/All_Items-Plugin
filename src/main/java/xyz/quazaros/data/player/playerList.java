@@ -99,14 +99,14 @@ public class playerList {
             if (players.size() == 0) {
                 temp.add("No Players");
             } else if (players.size() == 1) {
-                temp.add(main.getPlugin().lang.dom + "1: " + players.get(0).name + " - " + players.get(0).score);
+                temp.add(main.getPlugin().lang.colorDom + "1: " + players.get(0).name + " - " + players.get(0).score);
             } else if (players.size() == 2) {
                 if (players.get(0).score > players.get(1).score) {
-                    temp.add(main.getPlugin().lang.dom + "1: " + players.get(0).name + " - " + players.get(0).score);
-                    temp.add(main.getPlugin().lang.dom + "2: " + players.get(1).name + " - " + players.get(1).score);
+                    temp.add(main.getPlugin().lang.colorDom + "1: " + players.get(0).name + " - " + players.get(0).score);
+                    temp.add(main.getPlugin().lang.colorDom + "2: " + players.get(1).name + " - " + players.get(1).score);
                 } else {
-                    temp.add(main.getPlugin().lang.dom + "1: " + players.get(1).name + " - " + players.get(1).score);
-                    temp.add(main.getPlugin().lang.dom + "2: " + players.get(0).name + " - " + players.get(0).score);
+                    temp.add(main.getPlugin().lang.colorDom + "1: " + players.get(1).name + " - " + players.get(1).score);
+                    temp.add(main.getPlugin().lang.colorDom + "2: " + players.get(0).name + " - " + players.get(0).score);
                 }
             } else {
                 ArrayList<player> temp_player_list = new ArrayList<>();
@@ -117,7 +117,7 @@ public class playerList {
                 for (int i = 0; i < 3; i++) {
                     if (temp_player_list.size() == 1) {
                         temp_player = temp_player_list.get(0);
-                        temp.add(main.getPlugin().lang.dom + Integer.toString(i+1) + ": " + temp_player.name + " - " + temp_player.score);
+                        temp.add(main.getPlugin().lang.colorDom + Integer.toString(i+1) + ": " + temp_player.name + " - " + temp_player.score);
                         break;
                     }
                     if (temp_player_list.get(0).score > temp_player_list.get(1).score) {
@@ -130,7 +130,7 @@ public class playerList {
                             temp_player = temp_player_list.get(j);
                         }
                     }
-                    temp.add(main.getPlugin().lang.dom + Integer.toString(i+1) + ": " + temp_player.name + " - " + temp_player.score);
+                    temp.add(main.getPlugin().lang.colorDom + Integer.toString(i+1) + ": " + temp_player.name + " - " + temp_player.score);
                     temp_player_list.remove(temp_player);
                 }
             }
@@ -138,14 +138,14 @@ public class playerList {
             if (players.size() == 0) {
                 temp.add("No Players");
             } else if (players.size() == 1) {
-                temp.add(main.getPlugin().lang.dom + "1: " + players.get(0).name + " - " + players.get(0).mobScore);
+                temp.add(main.getPlugin().lang.colorDom + "1: " + players.get(0).name + " - " + players.get(0).mobScore);
             } else if (players.size() == 2) {
                 if (players.get(0).mobScore > players.get(1).mobScore) {
-                    temp.add(main.getPlugin().lang.dom + "1: " + players.get(0).name + " - " + players.get(0).mobScore);
-                    temp.add(main.getPlugin().lang.dom + "2: " + players.get(1).name + " - " + players.get(1).mobScore);
+                    temp.add(main.getPlugin().lang.colorDom + "1: " + players.get(0).name + " - " + players.get(0).mobScore);
+                    temp.add(main.getPlugin().lang.colorDom + "2: " + players.get(1).name + " - " + players.get(1).mobScore);
                 } else {
-                    temp.add(main.getPlugin().lang.dom + "1: " + players.get(1).name + " - " + players.get(1).mobScore);
-                    temp.add(main.getPlugin().lang.dom + "2: " + players.get(0).name + " - " + players.get(0).mobScore);
+                    temp.add(main.getPlugin().lang.colorDom + "1: " + players.get(1).name + " - " + players.get(1).mobScore);
+                    temp.add(main.getPlugin().lang.colorDom + "2: " + players.get(0).name + " - " + players.get(0).mobScore);
                 }
             } else {
                 ArrayList<player> temp_player_list = new ArrayList<>();
@@ -156,7 +156,7 @@ public class playerList {
                 for (int i = 0; i < 3; i++) {
                     if (temp_player_list.size() == 1) {
                         temp_player = temp_player_list.get(0);
-                        temp.add(main.getPlugin().lang.dom + Integer.toString(i+1) + ": " + temp_player.name + " - " + temp_player.mobScore);
+                        temp.add(main.getPlugin().lang.colorDom + Integer.toString(i+1) + ": " + temp_player.name + " - " + temp_player.mobScore);
                         break;
                     }
                     if (players.get(0).mobScore > players.get(1).mobScore) {
@@ -169,7 +169,7 @@ public class playerList {
                             temp_player = temp_player_list.get(j);
                         }
                     }
-                    temp.add(main.getPlugin().lang.dom + Integer.toString(i) + ": " + temp_player.name + " - " + temp_player.mobScore);
+                    temp.add(main.getPlugin().lang.colorDom + Integer.toString(i) + ": " + temp_player.name + " - " + temp_player.mobScore);
                     temp_player_list.remove(temp_player);
                 }
             }
