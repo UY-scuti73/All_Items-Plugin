@@ -11,8 +11,6 @@ public class player {
     public int itemPerScore;
     public int mobPerScore;
     public int invItt;
-    public boolean sorted;
-    public boolean mobs;
     public itemList item_list;
     public itemList mob_list;
     public inventory inv;
@@ -25,8 +23,7 @@ public class player {
         mobPerScore = 0;
 
         invItt = 0;
-        sorted = false;
-        mobs = false;
+
         item_list = new itemList(main.getPlugin().emptyItemList, true);
         mob_list = new itemList(main.getPlugin().emptyMobList, true);
         inv = new inventory();

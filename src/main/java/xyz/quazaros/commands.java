@@ -33,6 +33,9 @@ public class commands {
     String item_settings;
     String mob_settings;
 
+    //Which list to prioritize
+    boolean list_priority_public;
+
     public commands() {
         Main = main.getPlugin();
         Lang = Main.lang;
@@ -45,6 +48,11 @@ public class commands {
     public void initialize() {
         initialize_help_string();
         initialize_setting_string();
+
+        config Config = main.getPlugin().data;
+        if (Config.general_global && !Config.general_others) {list_priority_public = true;}
+        else if (Config.general_others && !Config.general_global) {list_priority_public = false;}
+        else {list_priority_public = !Config.general_listPriority;}
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -371,8 +379,6 @@ public class commands {
             return false;
         }
         pl.invItt = 0;
-        pl.sorted = false;
-        pl.mobs = mob;
         Main.player_list.initialize_score();
 
         player targetPlayer = null;
@@ -424,6 +430,7 @@ public class commands {
             }
         }
 
+        pl.inv.is_sorted = false;
         pl.inv.set_inventory(tempList, temp);
         p.openInventory(pl.inv.inventory_list.get(0));
         return true;
@@ -553,8 +560,19 @@ public class commands {
             return;
         }
 
+        Main.player_list.initialize_score();
+
         if (args.length == 0) {
-            p.sendMessage(Lang.colorBad + Lang.enterPlayer);
+            if (!Main.data.general_global && !Main.data.general_others) {
+                p.sendMessage(Lang.colorBad + Lang.commandDisabled);
+                return;
+            }
+
+            player pl = Main.player_list.get_player_from_string(p.getName());
+            pl.invItt = 0;
+
+            pl.inv.set_players(mob, list_priority_public);
+            p.openInventory(pl.inv.inventory_list.get(pl.invItt));
             return;
         }
 
@@ -563,13 +581,12 @@ public class commands {
             return;
         }
 
-        Main.player_list.initialize_score();
-
         player tempPlayer = Main.player_list.get_player_from_string(args[0]);
         if (tempPlayer == null) {
             p.sendMessage(Lang.colorBad + Lang.playerNotFound);
         } else {
-            p.sendMessage(Lang.colorDom + tempPlayer.name + ": " + Lang.colorSec + tempPlayer.score);
+            if (!mob) {p.sendMessage(Lang.colorDom + tempPlayer.name + ": " + Lang.colorSec + tempPlayer.score);}
+            else {p.sendMessage(Lang.colorDom + tempPlayer.name + ": " + Lang.colorSec + tempPlayer.mobScore);}
         }
     }
 
@@ -744,7 +761,9 @@ public class commands {
         String Aprog1 = CC1 + "/aprog: " + CC2 + "Displays the Total Item Progress\n";
         String Aprog2 = CC1 + "/aprog <player_name>: " + CC2 + "Displays the Total Item Progress of a Players Personal List\n\n";
         String Aprog = Aprog1 + Aprog2;
-        String Aplayer = CC1 + "/aplayer <player_name>: " + CC2 + "Displays the Score of a Player\n\n";
+        String Aplayer1 = CC1 + "/aplayer: " + CC2 + "Displays a List of All Players and Their Score\n";
+        String Aplayer2 = CC1 + "/aplayer <player_name>: " + CC2 + "Displays the Score of a Player\n\n";
+        String Aplayer = Aplayer1 + Aplayer2;
         String Acheck1 = CC1 + "/acheck <item_name>: " + CC2 + "Displays Whether an Item Has Been Obtained or Not\n";
         String Acheck2 = CC1 + "/acheck <item_name> <player_name>: " + CC2 + "Displays Whether an Item Has Been Obtained or Not in a Players Personal List\n\n";
         String Acheck = Acheck1 + Acheck2;
@@ -767,7 +786,9 @@ public class commands {
         String Mprog1 = CC1 + "/mprog: " + CC2 + "Displays the Total Mob Progress\n";
         String Mprog2 = CC1 + "/mprog <player_name>: " + CC2 + "Displays the Total Mob Progress of a Specific Player's Personal List\n\n";
         String Mprog = Mprog1 + Mprog2;
-        String Mplayer = CC1 + "/mplayer <player_name>: " + CC2 + "Displays the Score of a Player\n\n";
+        String Mplayer1 = CC1 + "/mplayer: " + CC2 + "Displays a List of All Players and Their Score\n";
+        String Mplayer2 = CC1 + "/mplayer <player_name>: " + CC2 + "Displays the Score of a Player\n\n";
+        String Mplayer = Mplayer1 + Mplayer2;
         String Mcheck1 = CC1 + "/mcheck <mob_name>: " + CC2 + "Displays Whether a Mob Has Been Killed or Not\n";
         String Mcheck2 = CC1 + "/mcheck <mob_name> <player_name>: " + CC2 + "Displays Whether a Mob Has Been Killed or Not in a Players Personal List\n\n";
         String Mcheck = Mcheck1 + Mcheck2;

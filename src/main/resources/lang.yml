@@ -45,6 +45,12 @@ gui:
   menuItemNotFound: "Not Found"
   foundBy: "By"
   foundAt: "At"
+  mainButton: "Main"
+  personalButton: "Personal"
+  playerList: "Item Player List"
+  mobPlayerList: "Mob Player List"
+  personalPlayerList: "Item Personal Player List"
+  mobPersonalPlayerList: "Mob Personal Player List"
 
 completed:
   congrats: "CONGRATULATIONS"

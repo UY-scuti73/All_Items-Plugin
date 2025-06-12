@@ -1,8 +1,8 @@
 package xyz.quazaros.data.player;
 
 public class playerSort implements Comparable<playerSort>{
-    String name;
-    int score;
+    public String name;
+    public int score;
 
     public playerSort(String name, int score) {
         this.name = name;

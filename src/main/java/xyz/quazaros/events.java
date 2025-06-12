@@ -36,7 +36,7 @@ public class events {
                         pl.invItt = pl.inv.size - 1;
                     }
 
-                    if (!pl.sorted) {
+                    if (!pl.inv.is_sorted) {
                         p.openInventory(pl.inv.inventory_list.get(pl.invItt));
                     } else {
                         p.openInventory(pl.inv.sorted_list.get(pl.invItt));
@@ -53,7 +53,7 @@ public class events {
                         pl.invItt = 0;
                     }
 
-                    if (!pl.sorted) {
+                    if (!pl.inv.is_sorted) {
                         p.openInventory(pl.inv.inventory_list.get(pl.invItt));
                     } else {
                         p.openInventory(pl.inv.sorted_list.get(pl.invItt));
@@ -63,14 +63,29 @@ public class events {
                 }
                 //Handles what happens when the sort button is presses
                 case 47: {
-                    pl.invItt = 0;
-                    pl.sorted = !pl.sorted;
-                    if (pl.sorted) {
-                        p.openInventory(pl.inv.sorted_list.get(0));
-                    } else {
-                        p.openInventory(pl.inv.inventory_list.get(0));
+                    if (!pl.inv.is_playerList) {
+                        pl.invItt = 0;
+                        pl.inv.is_sorted = !pl.inv.is_sorted;
+                        if (pl.inv.is_sorted) {
+                            p.openInventory(pl.inv.sorted_list.get(0));
+                        } else {
+                            p.openInventory(pl.inv.inventory_list.get(0));
+                        }
                     }
+
                     break;
+                }
+                //Handles the flip for the player list
+                case 49: {
+                    if (pl.inv.is_playerList && pl.inv.add_flip) {
+                        pl.invItt = 0;
+                        if (pl.inv.is_public) {
+                            pl.inv.set_players(pl.inv.is_mob, false);
+                        } else {
+                            pl.inv.set_players(pl.inv.is_mob, true);
+                        }
+                        p.openInventory(pl.inv.inventory_list.get(pl.invItt));
+                    }
                 }
             }
         }

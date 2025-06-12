@@ -48,6 +48,12 @@ public class lang {
     public String menuItemNotFound;
     public String byPlayer;
     public String atTime;
+    public String mainButton;
+    public String personalButton;
+    public String playerList;
+    public String mobPlayerList;
+    public String personalPlayerList;
+    public String mobPersonalPlayerList;
 
     public String congrats;
     public String allItems;
@@ -116,6 +122,12 @@ public class lang {
         menuItemNotFound = config.getString("gui.menuItemNotFound");
         byPlayer = config.getString("gui.foundBy");
         atTime = config.getString("gui.foundAt");
+        mainButton = config.getString("gui.mainButton");
+        personalButton = config.getString("gui.personalButton");
+        playerList = config.getString("gui.playerList");
+        mobPlayerList = config.getString("gui.mobPlayerList");
+        personalPlayerList = config.getString("gui.personalPlayerList");
+        mobPersonalPlayerList = config.getString("gui.mobPersonalPlayerList");
 
         congrats = config.getString("completed.congrats");
         allItems = config.getString("completed.allItems");

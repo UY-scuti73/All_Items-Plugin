@@ -86,10 +86,8 @@ public class playerList {
         player_names = temp;
     }
 
-    //Gets the top 3 players for the leaderboard
-    public ArrayList<String> leaderboard(boolean mob, boolean personal) {
-        ArrayList<String> temp = new ArrayList<>();
-
+    //Sorts the player list by score
+    public ArrayList<playerSort> sort_players(boolean mob, boolean personal) {
         ArrayList<playerSort> plSort = new ArrayList<>();
 
         //Regardless of the settings it will set up a player sort object with the right name and score
@@ -102,11 +100,20 @@ public class playerList {
                 plSort.add(new playerSort(pl.name, pl.mobScore));
             } else if (mob && personal) {
                 plSort.add(new playerSort(pl.name, pl.mobPerScore));
-            } else {return temp;}
+            } else {return null;}
         }
 
         //Sorts the objects
         Collections.sort(plSort);
+
+        return plSort;
+    }
+
+    //Gets the top 3 players for the leaderboard
+    public ArrayList<String> leaderboard(boolean mob, boolean personal) {
+        ArrayList<String> temp = new ArrayList<>();
+
+        ArrayList<playerSort> plSort = sort_players(mob, personal);
 
         //Adds everything to the string list
         String str;
@@ -119,92 +126,5 @@ public class playerList {
 
         return temp;
     }
-
-    /*
-    //Gets the top 3 players for the leaderboard
-    public ArrayList<String> leaderboard(boolean is_mob) {
-        ArrayList<String> temp = new ArrayList<>();
-
-        if (!is_mob) {
-            if (players.size() == 0) {
-                temp.add("No Players");
-            } else if (players.size() == 1) {
-                temp.add(main.getPlugin().lang.colorDom + "1: " + players.get(0).name + " - " + players.get(0).score);
-            } else if (players.size() == 2) {
-                if (players.get(0).score > players.get(1).score) {
-                    temp.add(main.getPlugin().lang.colorDom + "1: " + players.get(0).name + " - " + players.get(0).score);
-                    temp.add(main.getPlugin().lang.colorDom + "2: " + players.get(1).name + " - " + players.get(1).score);
-                } else {
-                    temp.add(main.getPlugin().lang.colorDom + "1: " + players.get(1).name + " - " + players.get(1).score);
-                    temp.add(main.getPlugin().lang.colorDom + "2: " + players.get(0).name + " - " + players.get(0).score);
-                }
-            } else {
-                ArrayList<player> temp_player_list = new ArrayList<>();
-                for (player p : players) {
-                    temp_player_list.add(p);
-                }
-                player temp_player;
-                for (int i = 0; i < 3; i++) {
-                    if (temp_player_list.size() == 1) {
-                        temp_player = temp_player_list.get(0);
-                        temp.add(main.getPlugin().lang.colorDom + Integer.toString(i+1) + ": " + temp_player.name + " - " + temp_player.score);
-                        break;
-                    }
-                    if (temp_player_list.get(0).score > temp_player_list.get(1).score) {
-                        temp_player = temp_player_list.get(0);
-                    } else {
-                        temp_player = temp_player_list.get(1);
-                    }
-                    for (int j = 2; j < temp_player_list.size(); j++) {
-                        if (temp_player_list.get(j).score > temp_player.score) {
-                            temp_player = temp_player_list.get(j);
-                        }
-                    }
-                    temp.add(main.getPlugin().lang.colorDom + Integer.toString(i+1) + ": " + temp_player.name + " - " + temp_player.score);
-                    temp_player_list.remove(temp_player);
-                }
-            }
-        } else {
-            if (players.size() == 0) {
-                temp.add("No Players");
-            } else if (players.size() == 1) {
-                temp.add(main.getPlugin().lang.colorDom + "1: " + players.get(0).name + " - " + players.get(0).mobScore);
-            } else if (players.size() == 2) {
-                if (players.get(0).mobScore > players.get(1).mobScore) {
-                    temp.add(main.getPlugin().lang.colorDom + "1: " + players.get(0).name + " - " + players.get(0).mobScore);
-                    temp.add(main.getPlugin().lang.colorDom + "2: " + players.get(1).name + " - " + players.get(1).mobScore);
-                } else {
-                    temp.add(main.getPlugin().lang.colorDom + "1: " + players.get(1).name + " - " + players.get(1).mobScore);
-                    temp.add(main.getPlugin().lang.colorDom + "2: " + players.get(0).name + " - " + players.get(0).mobScore);
-                }
-            } else {
-                ArrayList<player> temp_player_list = new ArrayList<>();
-                for (player p : players) {
-                    temp_player_list.add(p);
-                }
-                player temp_player;
-                for (int i = 0; i < 3; i++) {
-                    if (temp_player_list.size() == 1) {
-                        temp_player = temp_player_list.get(0);
-                        temp.add(main.getPlugin().lang.colorDom + Integer.toString(i+1) + ": " + temp_player.name + " - " + temp_player.mobScore);
-                        break;
-                    }
-                    if (players.get(0).mobScore > players.get(1).mobScore) {
-                        temp_player = temp_player_list.get(0);
-                    } else {
-                        temp_player = temp_player_list.get(1);
-                    }
-                    for (int j = 2; j < temp_player_list.size() - 2; j++) {
-                        if (temp_player_list.get(j).mobScore > temp_player.mobScore) {
-                            temp_player = temp_player_list.get(j);
-                        }
-                    }
-                    temp.add(main.getPlugin().lang.colorDom + Integer.toString(i) + ": " + temp_player.name + " - " + temp_player.mobScore);
-                    temp_player_list.remove(temp_player);
-                }
-            }
-        }
-        return temp;
-    }*/
 }
 
