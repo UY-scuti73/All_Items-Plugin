@@ -221,18 +221,9 @@ public class inventory {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) head.getItemMeta();
 
-        //getPlayerSafe logic
-        OfflinePlayer matched = null;
-        for (OfflinePlayer offline : Bukkit.getOfflinePlayers()) {
-            if (offline.getName() != null && offline.getName().equalsIgnoreCase(pl.name)) {
-                matched = offline;
-                break;
-            }
-        }
-
-        // Only set owning player if they've played before
-        if (matched != null && matched.hasPlayedBefore()) {
-            meta.setOwningPlayer(matched);
+        OfflinePlayer player = getPlayerSafe(pl.name);
+        if (player != null && player.hasPlayedBefore()) {
+            meta.setOwningPlayer(player);
         }
 
         meta.setDisplayName(main.getPlugin().lang.colorDom + pl.name);
@@ -249,14 +240,5 @@ public class inventory {
             }
         }
         return null;
-    }
-
-    private ItemMeta glint(ItemMeta item_meta, boolean setGlint) {
-        try {
-            Method glintMethod = item_meta.getClass().getMethod("setEnchantmentGlintOverride", Boolean.class);
-            glintMethod.setAccessible(true);
-            glintMethod.invoke(item_meta, setGlint);
-        } catch (NoSuchMethodException ignored) {} catch (Exception e) {e.printStackTrace();}
-        return item_meta;
     }
 }
