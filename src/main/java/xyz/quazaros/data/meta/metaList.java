@@ -21,11 +21,10 @@ public class metaList {
     public ArrayList<enchantments> enchantment_list;
     public ArrayList<ArrayList<enchantments>> main_enchantment_list;
     public ArrayList<potions> potion_list;
+    //public ArrayList<instruments> instruments_list;
 
     ArrayList<String> items_init;
     ArrayList<String> mobs_init;
-
-    int version;
 
     public metaList(ArrayList<String> items_init_p, ArrayList<String> mobs_init_p) {
         File = main.getPlugin().file;
@@ -35,8 +34,7 @@ public class metaList {
         enchantment_list = new ArrayList<>();
         main_enchantment_list = new ArrayList<>();
         potion_list = new ArrayList<>();
-
-        version = get_version();
+        //instruments_list = new ArrayList<>();
 
         items_init = items_init_p;
         mobs_init = mobs_init_p;
@@ -81,7 +79,21 @@ public class metaList {
         for (PotionType p : PotionType.values()) {
             potion_list.add(new potions(p.name().toLowerCase()));
         }
+
         null_remove_potions();
+
+        for (potions p : potion_list) {
+            p.name = change_potion_names(p.name);
+        }
+    }
+
+    private String change_potion_names(String name) {
+        if (name.equalsIgnoreCase("jump")) {name = "leaping";}
+        if (name.equalsIgnoreCase("instant_heal")) {name = "healing";}
+        if (name.equalsIgnoreCase("instant_damage")) {name = "harming";}
+        if (name.equalsIgnoreCase("regen")) {name = "regeneration";}
+        if (name.equalsIgnoreCase("speed")) {name = "swiftness";}
+        return name;
     }
 
     private void set_enchants(String enchant, int lvl) {
@@ -119,36 +131,36 @@ public class metaList {
         for (potions i : potion_list) {
             //Potions
             temp = new item("potion");
-            temp.set_name("potion_of_"+i.name);
+            temp.set_name("potion_of_" + i.name);
             potion_meta = (PotionMeta) temp.item_meta;
-            main.getPlugin().version.setPotionMeta(potion_meta, i);
+            main.getPlugin().version.setPotionMeta(potion_meta, i.effect.get(0));
             temp.item_stack.setItemMeta(potion_meta);
             temp.item_meta = potion_meta;
             items.add(temp);
 
             //Splash Potions
             temp = new item("splash_potion");
-            temp.set_name("splash_potion_of_"+i.name);
+            temp.set_name("splash_potion_of_" + i.name);
             potion_meta = (PotionMeta) temp.item_meta;
-            main.getPlugin().version.setPotionMeta(potion_meta, i);
+            main.getPlugin().version.setPotionMeta(potion_meta, i.effect.get(0));
             temp.item_stack.setItemMeta(potion_meta);
             temp.item_meta = potion_meta;
             items.add(temp);
 
             //Splash Potions
             temp = new item("lingering_potion");
-            temp.set_name("lingering_potion_of_"+i.name);
+            temp.set_name("lingering_potion_of_" + i.name);
             potion_meta = (PotionMeta) temp.item_meta;
-            main.getPlugin().version.setPotionMeta(potion_meta, i);
+            main.getPlugin().version.setPotionMeta(potion_meta, i.effect.get(0));
             temp.item_stack.setItemMeta(potion_meta);
             temp.item_meta = potion_meta;
             items.add(temp);
 
             //Tipped Arrows
             temp = new item("tipped_arrow");
-            temp.set_name("tipped_arrow_of_"+i.name);
+            temp.set_name("tipped_arrow_of_" + i.name);
             potion_meta = (PotionMeta) temp.item_meta;
-            main.getPlugin().version.setPotionMeta(potion_meta, i);
+            main.getPlugin().version.setPotionMeta(potion_meta, i.effect.get(0));
             temp.item_stack.setItemMeta(potion_meta);
             temp.item_meta = potion_meta;
             items.add(temp);
@@ -198,27 +210,6 @@ public class metaList {
         for (int i=0; i<mobs.size(); i++) {
             mobs.get(i).set_name(mobs.get(i).item_name.substring(0, mobs.get(i).item_name.length()-10));
         }
-    }
-
-    //Gets the version of minecraft
-    public int get_version() {
-        String version = Bukkit.getVersion();
-        int start = 0;
-        int stop = 0;
-        for (int i=0; i < version.length(); i++) {
-            if (version.charAt(i) == '.') {
-                start = i;
-                break;
-            }
-        }
-        for (int i=start+1; i < version.length(); i++) {
-            if (version.charAt(i) == ')' || version.charAt(i) == '.') {
-                stop = i;
-                break;
-            }
-        }
-        version = version.substring(start+1, stop);
-        return Integer.parseInt(version);
     }
 }
 
