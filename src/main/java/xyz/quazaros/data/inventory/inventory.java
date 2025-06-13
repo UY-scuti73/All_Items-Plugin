@@ -221,9 +221,18 @@ public class inventory {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) head.getItemMeta();
 
-        OfflinePlayer player = getPlayerSafe(pl.name);
-        if (player != null && player.hasPlayedBefore()) {
-            meta.setOwningPlayer(player);
+        //getPlayerSafe logic
+        OfflinePlayer matched = null;
+        for (OfflinePlayer offline : Bukkit.getOfflinePlayers()) {
+            if (offline.getName() != null && offline.getName().equalsIgnoreCase(pl.name)) {
+                matched = offline;
+                break;
+            }
+        }
+
+        // Only set owning player if they've played before
+        if (matched != null && matched.hasPlayedBefore()) {
+            meta.setOwningPlayer(matched);
         }
 
         meta.setDisplayName(main.getPlugin().lang.colorDom + pl.name);
