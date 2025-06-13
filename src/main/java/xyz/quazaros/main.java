@@ -29,6 +29,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
     public metaList meta_list;
     public config data;
     public lang lang;
+    public version version;
     public playerList player_list;
     public itemList emptyItemList;
     public itemList emptyMobList;
@@ -53,6 +54,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         plugin = this;
         getServer().getPluginManager().registerEvents(this, this);
 
+        version = new version();
         data = new config();
         lang = new lang();
         file = new file();

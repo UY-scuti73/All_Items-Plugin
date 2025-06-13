@@ -15,6 +15,7 @@ import xyz.quazaros.data.player.playerList;
 import xyz.quazaros.data.player.playerSort;
 import xyz.quazaros.main;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -45,7 +46,7 @@ public class inventory {
 
     public inventory() {
         item_arrow = Material.ARROW;
-        item_leaderboard = Material.OAK_HANGING_SIGN;
+        item_leaderboard = main.getPlugin().version.tryMaterials("oak_hanging_sign", "oak_sign");
         item_progress = Material.DIAMOND;
         item_sort = Material.HOPPER;
         item_flip = Material.OAK_DOOR;
@@ -159,7 +160,7 @@ public class inventory {
         ItemMeta leaderboardM = leaderboard.getItemMeta();
         leaderboardM.setDisplayName(Lang.colorSec + Lang.progress);
         leaderboardM.setLore(Arrays.asList(Lang.colorDom + progPercent));
-        leaderboardM.setEnchantmentGlintOverride(true);
+        main.getPlugin().version.setGlint(leaderboardM, true);
         leaderboard.setItemMeta(leaderboardM);
 
         ItemMeta playersM = players.getItemMeta();
@@ -239,5 +240,23 @@ public class inventory {
         head.setItemMeta(meta);
 
         return head;
+    }
+
+    private OfflinePlayer getPlayerSafe(String name) {
+        for (OfflinePlayer offline : Bukkit.getOfflinePlayers()) {
+            if (offline.getName() != null && offline.getName().equalsIgnoreCase(name)) {
+                return offline;
+            }
+        }
+        return null;
+    }
+
+    private ItemMeta glint(ItemMeta item_meta, boolean setGlint) {
+        try {
+            Method glintMethod = item_meta.getClass().getMethod("setEnchantmentGlintOverride", Boolean.class);
+            glintMethod.setAccessible(true);
+            glintMethod.invoke(item_meta, setGlint);
+        } catch (NoSuchMethodException ignored) {} catch (Exception e) {e.printStackTrace();}
+        return item_meta;
     }
 }
