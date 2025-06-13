@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.quazaros.main;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class item {
@@ -40,7 +41,7 @@ public class item {
             item_meta = item_stack.getItemMeta();
             item_meta.setDisplayName(main.getPlugin().lang.colorBad + item_display_name);
             item_lore.add(main.getPlugin().lang.colorSec + main.getPlugin().lang.menuItemNotFound);
-            item_meta.setEnchantmentGlintOverride(false);
+            main.getPlugin().version.setGlint(item_meta, false);
             item_meta.setLore(item_lore);
             item_stack.setItemMeta(item_meta);
         }
@@ -65,7 +66,7 @@ public class item {
             item_meta = item_stack.getItemMeta();
             item_meta.setDisplayName(main.getPlugin().lang.colorBad + item_display_name);
             item_lore.add(main.getPlugin().lang.colorSec + main.getPlugin().lang.menuItemNotFound);
-            item_meta.setEnchantmentGlintOverride(false);
+            main.getPlugin().version.setGlint(item_meta, false);
             item_meta.setLore(item_lore);
             item_stack.setItemMeta(item_meta);
         }
@@ -80,7 +81,7 @@ public class item {
         item_lore.add(main.getPlugin().lang.colorSec + main.getPlugin().lang.byPlayer + " " + item_founder);
         item_lore.add(main.getPlugin().lang.colorSec + main.getPlugin().lang.atTime + " " + item_time);
         item_meta.setLore(item_lore);
-        item_meta.setEnchantmentGlintOverride(true);
+        main.getPlugin().version.setGlint(item_meta, true);
         item_stack.setItemMeta(item_meta);
         item_data.submit(item_name, p, time);
         isFound = true;
@@ -92,7 +93,7 @@ public class item {
         item_lore.set(0, main.getPlugin().lang.colorSec + main.getPlugin().lang.menuItemFound);
         item_lore.add(main.getPlugin().lang.colorSec + main.getPlugin().lang.atTime + " " + item_time);
         item_meta.setLore(item_lore);
-        item_meta.setEnchantmentGlintOverride(true);
+        main.getPlugin().version.setGlint(item_meta, true);
         item_stack.setItemMeta(item_meta);
         item_data.submit(item_name, "", time);
         isFound = true;
@@ -107,7 +108,7 @@ public class item {
         item_meta.setDisplayName(main.getPlugin().lang.colorGood + item_display_name);
         item_lore = empty;
         item_meta.setLore(item_lore);
-        item_meta.setEnchantmentGlintOverride(false);
+        main.getPlugin().version.setGlint(item_meta, false);
         item_stack.setItemMeta(item_meta);
         item_data.unsubmit();
         isFound = false;
@@ -131,7 +132,7 @@ public class item {
         item_stack = new ItemStack(item_type, 1);
         item_meta = item_stack.getItemMeta();
         item_meta.setDisplayName(main.getPlugin().lang.colorBad + item_display_name);
-        item_meta.setEnchantmentGlintOverride(false);
+        main.getPlugin().version.setGlint(item_meta, false);
         item_stack.setItemMeta(item_meta);
 
         item_data.set_name(s);

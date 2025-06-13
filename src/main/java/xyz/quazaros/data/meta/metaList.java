@@ -1,10 +1,8 @@
 package xyz.quazaros.data.meta;
 
 import org.bukkit.Bukkit;
-import org.bukkit.MusicInstrument;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.MusicInstrumentMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionType;
 import xyz.quazaros.data.items.item;
@@ -23,7 +21,6 @@ public class metaList {
     public ArrayList<enchantments> enchantment_list;
     public ArrayList<ArrayList<enchantments>> main_enchantment_list;
     public ArrayList<potions> potion_list;
-    public ArrayList<instruments> instrument_list;
 
     ArrayList<String> items_init;
     ArrayList<String> mobs_init;
@@ -38,7 +35,6 @@ public class metaList {
         enchantment_list = new ArrayList<>();
         main_enchantment_list = new ArrayList<>();
         potion_list = new ArrayList<>();
-        instrument_list = new ArrayList<>();
 
         version = get_version();
 
@@ -47,7 +43,6 @@ public class metaList {
 
         initialize_enchantedBooks();
         initialize_potions();
-        initialize_horns();
         initialize_items();
         initialize_mobs();
     }
@@ -89,18 +84,10 @@ public class metaList {
         null_remove_potions();
     }
 
-    private void initialize_horns() {
-        String str;
-        for (MusicInstrument i : MusicInstrument.values()) {
-            str = i.getKey().getKey();
-            instrument_list.add(new instruments(str.substring(0, str.length() - 10), i));
-        }
-    }
-
     private void set_enchants(String enchant, int lvl) {
         for (Enchantment e : Enchantment.values()) {
-            String s = e.toString().substring(27, e.toString().length()-1);
-            if (enchant.equalsIgnoreCase(s)) {
+            String key = e.getKey().getKey();
+            if (enchant.equalsIgnoreCase(key)) {
                 if (lvl == 1) {
                     enchantment_list.add(new enchantments(enchant, e, 1));
                 } else {
@@ -134,7 +121,7 @@ public class metaList {
             temp = new item("potion");
             temp.set_name("potion_of_"+i.name);
             potion_meta = (PotionMeta) temp.item_meta;
-            potion_meta.setBasePotionType(i.effect.get(0));
+            main.getPlugin().version.setPotionMeta(potion_meta, i);
             temp.item_stack.setItemMeta(potion_meta);
             temp.item_meta = potion_meta;
             items.add(temp);
@@ -143,7 +130,7 @@ public class metaList {
             temp = new item("splash_potion");
             temp.set_name("splash_potion_of_"+i.name);
             potion_meta = (PotionMeta) temp.item_meta;
-            potion_meta.setBasePotionType(i.effect.get(0));
+            main.getPlugin().version.setPotionMeta(potion_meta, i);
             temp.item_stack.setItemMeta(potion_meta);
             temp.item_meta = potion_meta;
             items.add(temp);
@@ -152,7 +139,7 @@ public class metaList {
             temp = new item("lingering_potion");
             temp.set_name("lingering_potion_of_"+i.name);
             potion_meta = (PotionMeta) temp.item_meta;
-            potion_meta.setBasePotionType(i.effect.get(0));
+            main.getPlugin().version.setPotionMeta(potion_meta, i);
             temp.item_stack.setItemMeta(potion_meta);
             temp.item_meta = potion_meta;
             items.add(temp);
@@ -161,22 +148,13 @@ public class metaList {
             temp = new item("tipped_arrow");
             temp.set_name("tipped_arrow_of_"+i.name);
             potion_meta = (PotionMeta) temp.item_meta;
-            potion_meta.setBasePotionType(i.effect.get(0));
+            main.getPlugin().version.setPotionMeta(potion_meta, i);
             temp.item_stack.setItemMeta(potion_meta);
             temp.item_meta = potion_meta;
             items.add(temp);
         }
         //Goat Horns
-        MusicInstrumentMeta instrument_meta;
-        for (instruments i : instrument_list) {
-            temp = new item("goat_horn");
-            temp.set_name(i.name);
-            instrument_meta = (MusicInstrumentMeta) temp.item_meta;
-            instrument_meta.setInstrument(i.instrument);
-            temp.item_stack.setItemMeta(instrument_meta);
-            temp.item_meta = instrument_meta;
-            items.add(temp);
-        }
+        main.getPlugin().version.initializeHorns(items);
     }
 
     //Removes the null items in the list

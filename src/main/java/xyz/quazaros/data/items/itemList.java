@@ -178,7 +178,7 @@ public class itemList {
             if (!items.get(tippedArrow_index).isFound) {
                 Index_List.add(tippedArrow_index);
             }
-        } else if (current_item.getType().equals(Material.GOAT_HORN)) {
+        } else if (main.getPlugin().version.checkItem(current_item.getType(), "goat_horn")) {
             if (!items.get(goatHorn_index).isFound) {
                 Index_List.add(goatHorn_index);
             }
@@ -223,24 +223,16 @@ public class itemList {
                 for (potions e : meta_list.potion_list) {
                     for (PotionType effect : e.effect) {
                         //If the current item has the same potion effect as the current effect, and the name of the potion effect is in the name of items[i], and the item type is the right potion
-                        if (currentItemMeta.getBasePotionType().equals(effect) && items.get(i).item_name.contains(e.name) && items.get(i).item_type.equals(current_item.getType())) {
+                        if (main.getPlugin().version.getPotionMeta(currentItemMeta).equals(effect) && items.get(i).item_name.contains(e.name) && items.get(i).item_type.equals(current_item.getType())) {
                             Index_List.add(i);
                         }
                     }
                 }
             }
         //Checks if the item is a goat horn
-        } else if (current_item.getType().equals(Material.GOAT_HORN)) {
+        } else if (main.getPlugin().version.checkItem(current_item.getType(), "goat_horn")) {
             Index_List.add(goatHorn_index);
-            MusicInstrumentMeta currentItemMeta = (MusicInstrumentMeta) current_item.getItemMeta();
-            for (int i = 0; i < items.size(); i++) {
-                for (instruments e : meta_list.instrument_list) {
-                    //Checks if the instrument is the same, and the name is the same as items[i]
-                    if (currentItemMeta.getInstrument().equals(e.instrument) && items.get(i).item_name.equals(e.name)) {
-                        Index_List.add(i);
-                    }
-                }
-            }
+            main.getPlugin().version.getHorn(current_item, items, Index_List);
         //Checks for any other item
         } else {
             for (int i=0; i<items.size(); i++) {

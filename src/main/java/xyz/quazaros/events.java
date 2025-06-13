@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import xyz.quazaros.data.items.itemList;
 import xyz.quazaros.data.player.player;
 
@@ -105,18 +106,30 @@ public class events {
             String message_personal = pl.item_list.check_items(tempStack, p.getDisplayName(), true);
             String message = Main.data.general_listPriority ? message_personal : message_main;
             if (message.endsWith(Main.lang.itemSubmitted)) {
-                if (Main.data.item_subtraction) {
-                    if (tempStack.getAmount() <= 1) {
-                        e.getItem().setItemStack(new ItemStack(Material.AIR));
-                    } else {
-                        e.getItem().setItemStack(new ItemStack(tempStack.getType(), tempStack.getAmount() - 1));
+                Bukkit.getScheduler().runTaskLater(main.getPlugin(), () -> {
+                    ItemStack found = findMatchingItem(p.getInventory(), tempStack);
+                    if (found != null) {
+                        if (found.getAmount() <= 1) {
+                            p.getInventory().remove(found);
+                        } else {
+                            found.setAmount(found.getAmount() - 1);
+                        }
                     }
-                }
-                p.sendMessage(message);
+                    p.sendMessage(message);
+                    checkCompleted(false, null);
+                    checkCompleted(false, pl);
+                }, 1L);
             }
-            checkCompleted(false, null);
-            checkCompleted(false, pl);
         }
+    }
+
+    private ItemStack findMatchingItem(PlayerInventory inv, ItemStack toMatch) {
+        for (ItemStack item : inv.getContents()) {
+            if (item != null && item.isSimilar(toMatch)) {
+                return item;
+            }
+        }
+        return null;
     }
 
     public void mobDies(EntityDeathEvent e) {
