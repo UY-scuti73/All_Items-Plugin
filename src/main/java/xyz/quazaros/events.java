@@ -115,7 +115,7 @@ public class events {
                             found.setAmount(found.getAmount() - 1);
                         }
                     }
-                    p.sendMessage(message);
+                    announce_collection(message, p, false);
                     checkCompleted(false, null);
                     checkCompleted(false, pl);
                 }, 1L);
@@ -166,7 +166,7 @@ public class events {
 
             String message = Main.data.general_listPriority ? message_personal : message_main;
             if (!message.isEmpty()) {
-                p.sendMessage(message);
+                announce_collection(message, p, true);
             }
         }
     }
@@ -222,6 +222,17 @@ public class events {
         if (temp.complete()) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.sendTitle(Main.lang.colorHigh + Main.lang.congrats, message);
+            }
+        }
+    }
+
+    public void announce_collection(String s, Player p, boolean mob) {
+        if (Main.data.general_listPriority || !Main.data.general_announceSend) {
+            p.sendMessage(s);
+        } else {
+            if (!mob) {s = s + " " + Main.lang.byPlayer + " " + p.getName();}
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.sendMessage(s);
             }
         }
     }

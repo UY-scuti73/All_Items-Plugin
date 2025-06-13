@@ -10,6 +10,8 @@ general:
   others_lists: true
   list_priority: 0
 
+  announce_send: false
+
   progress: true
   check: true
   player: true
@@ -47,7 +49,9 @@ all_mobs:
 ##########
 
 # "global/personal/others_lists": Allows everyone to see a server-wide list, a personal list, or other personal lists respectively.
-# "list_priority": #Submission message and itemSubtraction (if enabled) takes priority for global list (0) or personal list (1).
+# "list_priority": Submission message and itemSubtraction (if enabled) takes priority for global list (0) or personal list (1).
+
+# "announce_send": Toggles whether a send message is sent to just the player, or the whole server
 
 # "progress/check/player/settings": Enables/Disables the respective commands by non-op players
 

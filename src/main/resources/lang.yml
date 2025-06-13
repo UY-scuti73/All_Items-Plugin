@@ -16,9 +16,13 @@ sendMessages:
     alreadyFoundBy: "Item Already Obtained By"
     subAlreadyFound: "Has Already Been Found"
     subNotFound: "Has Not Yet Been Found"
+
   other:
-    itemSubmitted: "Submitted!"
+    ###############################
+    itemSubmitted: "Submitted"
     itemSubNotInList: "Item Submitted But Is Not In List"
+    #Don't make these two the same#
+
     mobKilled: "Was Killed"
     mobKilledBy: "Was Killed By"
     hasBeenFound: "Has Been Found"

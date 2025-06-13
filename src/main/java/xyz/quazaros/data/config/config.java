@@ -7,6 +7,7 @@ public class config {
     public boolean general_personal;
     public boolean general_others;
     public boolean general_listPriority;
+    public boolean general_announceSend;
     public boolean general_progress;
     public boolean general_check;
     public boolean general_player;
@@ -26,6 +27,7 @@ public class config {
         general_personal = (config.getString("general.personal").equalsIgnoreCase("true"));
         general_others = (config.getString("general.others_lists").equalsIgnoreCase("true"));
         general_listPriority = config.getString("general.list_priority").equalsIgnoreCase("1");
+        general_announceSend = config.getString("general.announce_send").equalsIgnoreCase("true");
         general_progress = config.getString("general.progress").equalsIgnoreCase("true");
         general_check = config.getString("general.check").equalsIgnoreCase("true");
         general_player = config.getString("general.player").equalsIgnoreCase("true");

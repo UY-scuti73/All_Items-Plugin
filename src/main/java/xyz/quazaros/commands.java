@@ -110,7 +110,7 @@ public class commands {
                         p.getInventory().setItemInMainHand(tempItem);
                     }
                 }
-                p.sendMessage(message);
+                Main.events.announce_collection(message, p, false);
             }
             Main.events.checkCompleted(false, null);
             Main.events.checkCompleted(false, pl);
@@ -347,7 +347,7 @@ public class commands {
                 message = Main.data.general_listPriority ? message_personal : message_main;
                 if (message.contains(Lang.colorGood.toString())) {
                     if(message.endsWith(Lang.itemSubmitted)) {
-                        p.sendMessage(message);
+                        Main.events.announce_collection(message, p, false);
                         Main.events.checkCompleted(false, null);
                         Main.events.checkCompleted(false, pl);
                         temp2++;
