@@ -241,13 +241,4 @@ public class inventory {
         }
         return null;
     }
-
-    private ItemMeta glint(ItemMeta item_meta, boolean setGlint) {
-        try {
-            Method glintMethod = item_meta.getClass().getMethod("setEnchantmentGlintOverride", Boolean.class);
-            glintMethod.setAccessible(true);
-            glintMethod.invoke(item_meta, setGlint);
-        } catch (NoSuchMethodException ignored) {} catch (Exception e) {e.printStackTrace();}
-        return item_meta;
-    }
 }
