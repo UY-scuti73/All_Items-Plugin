@@ -105,7 +105,7 @@ public class item {
         empty.add(main.getPlugin().lang.colorSec + main.getPlugin().lang.menuItemNotFound);
         item_founder = "";
         item_time = "";
-        item_meta.setDisplayName(main.getPlugin().lang.colorGood + item_display_name);
+        item_meta.setDisplayName(main.getPlugin().lang.colorBad + item_display_name);
         item_lore = empty;
         item_meta.setLore(item_lore);
         main.getPlugin().version.setGlint(item_meta, false);

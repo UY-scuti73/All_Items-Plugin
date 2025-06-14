@@ -227,7 +227,7 @@ public class events {
     }
 
     public void announce_collection(String s, Player p, boolean mob) {
-        if (Main.data.general_listPriority || !Main.data.general_announceSend) {
+        if (Main.data.general_listPriority || !Main.data.general_announceSend || s.contains(Main.lang.colorBad.toString())) {
             p.sendMessage(s);
         } else {
             if (!mob) {s = s + " " + Main.lang.byPlayer + " " + p.getName();}
