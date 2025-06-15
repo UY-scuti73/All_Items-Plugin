@@ -2,6 +2,7 @@ package xyz.quazaros;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.MusicInstrumentMeta;
@@ -11,14 +12,18 @@ import xyz.quazaros.data.items.item;
 
 import java.lang.reflect.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class version {
 
     double mc_version;
 
+    ArrayList<ItemFlag> itemFlags;
+
     public version() {
         mc_version = get_version();
+        setDefaultFlags();
     }
 
     //Gets the version of minecraft
@@ -169,7 +174,7 @@ public class version {
         }
     }
 
-    public boolean checkItem (Material tempMaterial, String tempString) {
+    public boolean checkItem(Material tempMaterial, String tempString) {
         for (Material m : Material.values()) {
             if (m.toString().equalsIgnoreCase(tempString)) {
                 if (tempMaterial.equals(m)) {
@@ -178,5 +183,19 @@ public class version {
             }
         }
         return false;
+    }
+
+    private void setDefaultFlags() {
+        itemFlags = new ArrayList<>();
+        ArrayList<String> itemFlagNames = new ArrayList<>(Arrays.asList("HIDE_ADDITIONAL_TOOLTIP", "HIDE_ATTRIBUTES", "HIDE_INSTRUMENT", "HIDE_TOOLTIP_DISPLAY", "HIDE_BUNDLE_CONTENTS", "HIDE_OMINOUS_BOTTLE_AMPLIFIER"));
+        for (ItemFlag flag : ItemFlag.values()) {
+            if (itemFlagNames.contains(flag.name())) {
+                itemFlags.add(flag);
+            }
+        }
+    }
+
+    public void addFlags(ItemMeta meta) {
+        meta.addItemFlags(itemFlags.toArray(new ItemFlag[itemFlags.size()]));
     }
 }

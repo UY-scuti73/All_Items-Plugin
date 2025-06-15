@@ -1,6 +1,7 @@
 package xyz.quazaros.data.items;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.quazaros.main;
@@ -41,8 +42,9 @@ public class item {
             item_meta = item_stack.getItemMeta();
             item_meta.setDisplayName(main.getPlugin().lang.colorBad + item_display_name);
             item_lore.add(main.getPlugin().lang.colorSec + main.getPlugin().lang.menuItemNotFound);
-            main.getPlugin().version.setGlint(item_meta, false);
             item_meta.setLore(item_lore);
+            main.getPlugin().version.addFlags(item_meta);
+            main.getPlugin().version.setGlint(item_meta, false);
             item_stack.setItemMeta(item_meta);
         }
     }
@@ -66,8 +68,9 @@ public class item {
             item_meta = item_stack.getItemMeta();
             item_meta.setDisplayName(main.getPlugin().lang.colorBad + item_display_name);
             item_lore.add(main.getPlugin().lang.colorSec + main.getPlugin().lang.menuItemNotFound);
-            main.getPlugin().version.setGlint(item_meta, false);
             item_meta.setLore(item_lore);
+            main.getPlugin().version.addFlags(item_meta);
+            main.getPlugin().version.setGlint(item_meta, false);
             item_stack.setItemMeta(item_meta);
         }
     }
