@@ -100,20 +100,14 @@ public class commands {
             } else if (args.length >= 1 && args[0].equalsIgnoreCase("hotbar")) {
                 inv_check(p.getInventory(), p, 9);
             } else {
-                ItemStack current_item = p.getInventory().getItemInMainHand();
-                String message_main = Main.all_items.check_items(current_item, p.getDisplayName(), false);
-                String message_personal = pl.item_list.check_items(current_item, p.getDisplayName(), false);
-                String message = Main.data.general_listPriority ? message_personal : message_main;
-                if (message.contains(Lang.colorGood.toString())) {
+                boolean sub = Main.events.item_submission(p.getInventory().getItemInMainHand(), p, true);
+                if (sub) {
                     if (Main.data.item_subtraction) {
                         ItemStack tempItem = new ItemStack(p.getInventory().getItemInMainHand().getType(), p.getInventory().getItemInMainHand().getAmount() - 1);
                         p.getInventory().setItemInMainHand(tempItem);
                     }
                 }
-                Main.events.announce_collection(message, p, false);
             }
-            Main.events.checkCompleted(false, null);
-            Main.events.checkCompleted(false, pl);
         }
 
         //Sends the progress of the challenge
@@ -202,8 +196,9 @@ public class commands {
     }
 
     private boolean check_itmes(String command) {
-        if (command.equalsIgnoreCase("alist")
-                || command.equalsIgnoreCase("asend")
+        if (command.equalsIgnoreCase("asend")
+                || command.equalsIgnoreCase("alist")
+                || command.equalsIgnoreCase("aself")
                 || command.equalsIgnoreCase("acheck")
                 || command.equalsIgnoreCase("aplayer")
                 || command.equalsIgnoreCase("aprog")
@@ -211,12 +206,13 @@ public class commands {
                 || command.equalsIgnoreCase("ahelp")
                 || command.equalsIgnoreCase("areset")
                 || command.equalsIgnoreCase("asubmit")
-                || command.equalsIgnoreCase("aunubmit")
+                || command.equalsIgnoreCase("aunsubmit")
         ){return true;} else {return false;}
     }
 
     private boolean check_mobs(String command) {
         if (command.equalsIgnoreCase("mlist")
+                || command.equalsIgnoreCase("mself")
                 || command.equalsIgnoreCase("mcheck")
                 || command.equalsIgnoreCase("mplayer")
                 || command.equalsIgnoreCase("mprog")
@@ -241,7 +237,7 @@ public class commands {
             itemPlusPlayer.addAll(Main.all_items.item_names);
         } else if (command_name.equalsIgnoreCase("msubmit") || command_name.equalsIgnoreCase("munsubmit")) {
             mobPlusPlayer.addAll(Main.player_list.player_names);
-            itemPlusPlayer.addAll(Main.all_mobs.item_names);
+            mobPlusPlayer.addAll(Main.all_mobs.item_names);
         }
 
         if (command_name.equalsIgnoreCase("alist") || command_name.equalsIgnoreCase("mlist")) {
@@ -334,33 +330,20 @@ public class commands {
             }
         }
 
-        player pl = Main.player_list.get_player_from_string(p.getName());
-        String message;
-        String message_main;
-        String message_personal;
-        int temp1 = 0;
-        int temp2 = 0;
+        int temp = 0;
         for (int i = 0; i < size; i++) {
             if (inventory_list.get(i) != null) {
-                message_main = Main.all_items.check_items(inventory_list.get(i), p.getDisplayName(), true);
-                message_personal = pl.item_list.check_items(inventory_list.get(i), p.getDisplayName(), true);
-                message = Main.data.general_listPriority ? message_personal : message_main;
-                if (message.contains(Lang.colorGood.toString())) {
-                    if(message.endsWith(Lang.itemSubmitted)) {
-                        Main.events.announce_collection(message, p, false);
-                        Main.events.checkCompleted(false, null);
-                        Main.events.checkCompleted(false, pl);
-                        temp2++;
-                        if (Main.data.item_subtraction) {
-                            ItemStack tempItem = new ItemStack(p.getInventory().getItem(i).getType(), p.getInventory().getItem(i).getAmount() - 1);
-                            p.getInventory().setItem(i, tempItem);
-                        }
+                boolean sub = Main.events.item_submission(inventory_list.get(i), p, false);
+                if (sub) {
+                    if (Main.data.item_subtraction) {
+                        ItemStack tempItem = new ItemStack(p.getInventory().getItem(i).getType(), p.getInventory().getItem(i).getAmount() - 1);
+                        p.getInventory().setItem(i, tempItem);
                     }
-                    temp1++;
+                    temp++;
                 }
             }
         }
-        if (temp1 == 0 || temp2 == 0) {
+        if (temp == 0) {
             p.sendMessage(Lang.colorBad + Lang.youHaveNoItems);
         }
     }
@@ -468,7 +451,7 @@ public class commands {
             }
         } else {
             if (args[0].equalsIgnoreCase(p.getName()) && !Main.data.general_personal) {
-                p.sendMessage(Lang.commandDisabled);
+                p.sendMessage(Lang.colorBad + Lang.commandDisabled);
                 return;
             } else if (!args[0].equalsIgnoreCase(p.getName()) && !Main.data.general_others) {
                 p.sendMessage(Lang.colorBad + Lang.commandDisabled);
@@ -661,7 +644,7 @@ public class commands {
             pl = Main.player_list.get_player_from_string(args[1]);
             if ( ( !mob && !pl.item_list.item_exists(args[2]) ) || ( mob && !pl.mob_list.item_exists(args[2]) ) ) {
                 if (!mob) {p.sendMessage(Lang.colorBad + Lang.itemNotFound);}
-                else {p.sendMessage(Lang.colorBad + Lang.mobKilled);}
+                else {p.sendMessage(Lang.colorBad + Lang.mobNotFound);}
                 return;
             }
             item = args[2];
@@ -669,8 +652,8 @@ public class commands {
         } else if (args.length >= 2) {
             if ( (!unsub && ( ( ( !mob && !Main.all_items.item_exists(args[0]) ) || ( mob && !Main.all_mobs.item_exists(args[0]) ) ) && !Main.player_list.player_exists(args[0]) ) ) || ( unsub && !Main.player_list.player_exists(args[0]) ) ) {
                 if (!unsub) {
-                    if (!mob) {p.sendMessage(Lang.colorBad + Lang.playerNotFound);}
-                    else {p.sendMessage(Lang.colorBad + Lang.playerNotFound);}
+                    if (!mob) {p.sendMessage(Lang.colorBad + Lang.itemNotFound);}
+                    else {p.sendMessage(Lang.colorBad + Lang.mobNotFound);}
                 } else {
                     p.sendMessage(Lang.colorBad + Lang.playerNotFound);
                 }
@@ -850,7 +833,10 @@ public class commands {
 
         String general = p7 + "\n" + p8 + "\n" + p9 + "\n" + p10 + "\n" + p11 + "\n" + p12 + "\n" + p13 + "\n" + p14;
 
-        item_settings = p1 + "\n" + p2 + "\n" + p3 + "\n" + p5 + "\n" + p6 + "\n" + general;
-        mob_settings = p1 + "\n" + p2 + "\n" + p4 + general;
+        String itemHead = Lang.colorHigh + Lang.itemSettings + ": \n";
+        String mobHead = Lang.colorHigh + Lang.mobSettings + ": \n";
+
+        item_settings = itemHead + p1 + "\n" + p2 + "\n" + p3 + "\n" + p5 + "\n" + p6 + "\n" + general;
+        mob_settings = mobHead + p1 + "\n" + p2 + "\n" + p4 + "\n" + general;
     }
 }

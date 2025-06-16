@@ -22,13 +22,15 @@ public class lang {
     public String itemSubmitted;
     public String itemSubNotInList;
     public String mobKilled;
-    public String mobKilledBy;
+    public String subBy;
     public String alreadyFound;
     public String alreadyFoundBy;
     public String hasBeenFound;
     public String hasBeenFoundBy;
     public String hasNotBeenFound;
     public String progress;
+    public String itemSettings;
+    public String mobSettings;
     public String areset;
     public String mreset;
     public String resetCancel;
@@ -98,10 +100,12 @@ public class lang {
         itemSubmitted = config.getString("sendMessages.other.itemSubmitted");
         itemSubNotInList = config.getString("sendMessages.other.itemSubNotInList");
         mobKilled = config.getString("sendMessages.other.mobKilled");
-        mobKilledBy = config.getString("sendMessages.other.mobKilledBy");
+        subBy = config.getString("sendMessages.other.subBy");
         hasBeenFound = config.getString("sendMessages.other.hasBeenFound");
         hasBeenFoundBy = config.getString("sendMessages.other.hasBeenFoundBy");
         hasNotBeenFound = config.getString("sendMessages.other.hasNotBeenFound");
+        itemSettings = config.getString("sendMessages.other.itemSettings");
+        mobSettings = config.getString("sendMessages.other.mobSettings");
         areset = config.getString("sendMessages.other.areset");
         mreset = config.getString("sendMessages.other.mreset");
         resetCancel = config.getString("sendMessages.other.resetCancel");
@@ -134,5 +138,13 @@ public class lang {
         allMobs = config.getString("completed.allMobs");
         completeItemSuffix = config.getString("completed.personalItemSuffix");
         completeMobSuffix = config.getString("completed.personalMobSuffix");
+
+        check();
+    }
+
+    private void check() {
+        if (itemSubmitted.equals(itemSubNotInList)) {
+            itemSubNotInList += "1";
+        }
     }
 }

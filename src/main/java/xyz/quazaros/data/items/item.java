@@ -77,6 +77,7 @@ public class item {
 
     //Handles what happens when an item is submitted
     public void submit(String p, String time) {
+        if (isFound) {return;}
         item_founder = p;
         item_time = time;
         item_meta.setDisplayName(main.getPlugin().lang.colorGood + item_display_name);
@@ -91,6 +92,7 @@ public class item {
     }
 
     public void submit(String time) {
+        if (isFound) {return;}
         item_time = time;
         item_meta.setDisplayName(main.getPlugin().lang.colorGood + item_display_name);
         item_lore.set(0, main.getPlugin().lang.colorSec + main.getPlugin().lang.menuItemFound);
@@ -104,6 +106,7 @@ public class item {
 
     //Handles what happens when an item is unsubmitted
     public void unsubmit() {
+        if (!isFound) {return;}
         ArrayList<String> empty = new ArrayList<>();
         empty.add(main.getPlugin().lang.colorSec + main.getPlugin().lang.menuItemNotFound);
         item_founder = "";

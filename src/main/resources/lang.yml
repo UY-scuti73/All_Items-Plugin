@@ -1,63 +1,100 @@
 sendMessages:
   error:
+    #Disabled Functionality Commands
     commandDisabled: "Command Has Been Disabled"
     noPermission: "You Don't Have Permission"
     itemDisabled: "Item Functionality has Been Disabled"
     mobDisabled: "Mob Functionality has Been Disabled"
+
+    #Nothing Entered
     enterPlayer: "Please Enter a Player"
     enterItem: "Please Enter an Item"
     enterMob: "Please Enter a Mob"
+
+    #Thing Wasn't Found in The Database
     itemNotFound: "Item Does Not Exist"
     mobNotFound: "Mob Does Not Exist"
     playerNotFound: "Player Does Not Exist"
+
+    #No Item Send Errors
     noItemsFound: "No Items Found"
     youHaveNoItems: "You Don't Have Any Items"
+
+    #Already Found Send Errors
     alreadyFound: "Item Already Obtained"
     alreadyFoundBy: "Item Already Obtained By"
+
+    #Sub/Unsub Errors
     subAlreadyFound: "Has Already Been Found"
     subNotFound: "Has Not Yet Been Found"
 
   other:
-    ###############################
+    #Send Submitted (Don't make these two the same, It Will Add a '1' To The End of 'itemSubNotInList')
     itemSubmitted: "Submitted"
     itemSubNotInList: "Item Submitted But Is Not In List"
-    #Don't make these two the same#
 
+    #Mob Killed
     mobKilled: "Was Killed"
-    mobKilledBy: "Was Killed By"
+
+    #By For Announce Send (Like "Oak Log Submitted *By* B0WSER")
+    subBy: "By"
+
+    #Check Commands
     hasBeenFound: "Has Been Found"
     hasBeenFoundBy: "Has Been Found By"
     hasNotBeenFound: "Has Not Been Found"
+
+    #Setting Headers
+    itemSettings: "Item Settings"
+    mobSettings: "Mob Settings"
+
+    #Reset Messages
     areset: "Items Will Be Reset After a Server Restart. To Cancel Run This Command Again"
     mreset: "Mobs Will Be Reset After a Server Restart. To Cancel Run This Command Again"
     resetCancel: "Reset Cancelled"
+
+    #Sub/Unsub Messages
     submit: "Has Been Submitted"
     unsubmit: "Has Been Unsubmitted"
+
+    #Name for items submitted using submit commands
     admin: "ADMIN"
 
 gui:
+  #Name For The Lists (The Suffix's Will Go After The PlayerName Like "B0WSER Items List")
   itemListMenu: "All Items List"
   mobListMenu: "All Mobs List"
   itemPersonalSuffix: "Items List"
   mobPersonalSuffix: "Mobs List"
-  lastPage: "Last Page"
-  nextPage: "Next Page"
-  progress: "Progress"
-  filterItems: "Filter Items"
-  leaderboard: "Leaderboard"
-  menuItemFound: "Found"
-  menuItemNotFound: "Not Found"
-  foundBy: "By"
-  foundAt: "At"
-  mainButton: "Main"
-  personalButton: "Personal"
+
+  #Name For The Player Lists
   playerList: "Item Player List"
   mobPlayerList: "Mob Player List"
   personalPlayerList: "Item Personal Player List"
   mobPersonalPlayerList: "Mob Personal Player List"
 
+  #Button Names
+  lastPage: "Last Page"
+  nextPage: "Next Page"
+  progress: "Progress"
+  filterItems: "Filter Items"
+  leaderboard: "Leaderboard"
+
+  #Player Menu Button Names (The Door Button)
+  mainButton: "Main"
+  personalButton: "Personal"
+
+  #Item Title And Meta
+  menuItemFound: "Found"
+  menuItemNotFound: "Not Found"
+  foundBy: "By"
+  foundAt: "At"
+
 completed:
+  #Main Messages For The Completion
   congrats: "CONGRATULATIONS"
+
+  #Sub Message For The Completion (Suffix Will Go After The Player Name Like "B0WSER Has Collected All Items")
   allItems: "All Items Have Been Collected"
   allMobs: "All Mobs Have Been Killed"
   personalItemSuffix: "Has Collected All Items"

@@ -97,17 +97,13 @@ public class events {
             return;
         }
 
-        player pl = Main.player_list.get_player_from_string(e.getPlayer().getName());
+        Player p = e.getPlayer();
 
         if (Main.data.item_autoCollect) {
-            Player p = e.getPlayer();
-            ItemStack tempStack = e.getItem().getItemStack();
-            String message_main = Main.all_items.check_items(tempStack, p.getDisplayName(), true);
-            String message_personal = pl.item_list.check_items(tempStack, p.getDisplayName(), true);
-            String message = Main.data.general_listPriority ? message_personal : message_main;
-            if (message.endsWith(Main.lang.itemSubmitted)) {
+            boolean sub = item_submission(e.getItem().getItemStack(), p, false);
+            if (sub) {
                 Bukkit.getScheduler().runTaskLater(main.getPlugin(), () -> {
-                    ItemStack found = findMatchingItem(p.getInventory(), tempStack);
+                    ItemStack found = findMatchingItem(p.getInventory(), e.getItem().getItemStack());
                     if (found != null) {
                         if (found.getAmount() <= 1) {
                             p.getInventory().remove(found);
@@ -115,9 +111,6 @@ public class events {
                             found.setAmount(found.getAmount() - 1);
                         }
                     }
-                    announce_collection(message, p, false);
-                    checkCompleted(false, null);
-                    checkCompleted(false, pl);
                 }, 1L);
             }
         }
@@ -153,20 +146,24 @@ public class events {
             String message_main = "";
             String message_personal = "";
 
-            if (!Main.all_mobs.items.get(temp).isFound && Main.all_mobs.is_in_indexes(temp)) {
-                message_main = Main.lang.colorGood + name + " " + Main.lang.mobKilledBy + " " + p.getName();
+            if (!Main.all_mobs.items.get(temp).isFound) {
+                if (Main.all_mobs.is_in_indexes(temp)) {
+                    message_main = Main.lang.colorGood + name + " " + Main.lang.mobKilled;
+                }
                 Main.all_mobs.items.get(temp).submit(p.getName(), Main.all_mobs.date());
                 checkCompleted(true, null);
             }
-            if (!pl.mob_list.items.get(temp).isFound && pl.mob_list.is_in_indexes(temp)) {
-                message_personal = Main.lang.colorGood + name + " " + Main.lang.mobKilled;
+            if (!pl.mob_list.items.get(temp).isFound) {
+                if (Main.all_mobs.is_in_indexes(temp)) {
+                    message_personal = Main.lang.colorGood + name + " " + Main.lang.mobKilled;
+                }
                 pl.mob_list.items.get(temp).submit(pl.mob_list.date());
                 checkCompleted(true, pl);
             }
 
             String message = Main.data.general_listPriority ? message_personal : message_main;
             if (!message.isEmpty()) {
-                announce_collection(message, p, true);
+                announce_collection(message, p);
             }
         }
     }
@@ -226,11 +223,34 @@ public class events {
         }
     }
 
-    public void announce_collection(String s, Player p, boolean mob) {
-        if (Main.data.general_listPriority || !Main.data.general_announceSend || s.contains(Main.lang.colorBad.toString())) {
+    public boolean item_submission(ItemStack it, Player p, boolean is_asend) {
+        boolean ret = false;
+        player pl = Main.player_list.get_player_from_string(p.getName());
+
+        String message_main = Main.all_items.check_items(it, p.getDisplayName(), !is_asend);
+        String message_personal = pl.item_list.check_items(it, p.getDisplayName(), !is_asend);
+        String message = Main.data.general_listPriority ? message_personal : message_main;
+
+        if (message.contains(Main.lang.colorGood.toString())) {
+            if ( (message.endsWith(Main.lang.itemSubmitted) && !message.contains(Main.lang.itemSubNotInList) ) || is_asend) {
+                ret = true;
+                checkCompleted(false, pl);
+                checkCompleted(false, null);
+            }
+        }
+
+        if (ret || is_asend) {
+            announce_collection(message, p);
+        }
+
+        return ret;
+    }
+
+    public void announce_collection(String s, Player p) {
+        if (!Main.data.general_announceSend || s.contains(Main.lang.colorBad.toString()) || s.contains(Main.lang.itemSubNotInList)) {
             p.sendMessage(s);
         } else {
-            if (!mob) {s = s + " " + Main.lang.byPlayer + " " + p.getName();}
+            s = s + " " + Main.lang.subBy + " " + p.getName();
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.sendMessage(s);
             }
