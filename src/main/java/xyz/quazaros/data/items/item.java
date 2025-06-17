@@ -1,6 +1,8 @@
 package xyz.quazaros.data.items;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -156,5 +158,13 @@ public class item {
         }
         str = str.substring(0, 1).toUpperCase() + str.substring(1, str.length());
         return str;
+    }
+
+    //1.21.6 breaks if the vault spawner doesn't have blockdata
+    private void ifSpawner() {
+        if (!main.getPlugin().version.checkItem(item_type, "trial_spawner")) {return;}
+        if (main.getPlugin().version.get_version() <= 21.5) {return;}
+
+        item_meta = Bukkit.getItemFactory().getItemMeta(item_type);
     }
 }

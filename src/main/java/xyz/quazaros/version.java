@@ -188,6 +188,15 @@ public class version {
         return false;
     }
 
+    public Material checkItemExists(String itemName) {
+        for (Material m : Material.values()) {
+            if (m.toString().equalsIgnoreCase(itemName)) {
+                return m;
+            }
+        }
+        return null;
+    }
+
     private void setDefaultFlags() {
         itemFlags = new ArrayList<>();
         ArrayList<String> itemFlagNames = new ArrayList<>(Arrays.asList("HIDE_ADDITIONAL_TOOLTIP", "HIDE_ATTRIBUTES", "HIDE_INSTRUMENT", "HIDE_TOOLTIP_DISPLAY", "HIDE_BUNDLE_CONTENTS", "HIDE_OMINOUS_BOTTLE_AMPLIFIER"));

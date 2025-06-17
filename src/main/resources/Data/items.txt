@@ -846,6 +846,7 @@ sweet_berries
 turtle_egg
 sniffer_egg
 creaking_heart
+dried_ghast
 dried_kelp_block
 melon
 pumpkin
