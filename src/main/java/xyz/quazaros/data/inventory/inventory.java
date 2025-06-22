@@ -61,7 +61,7 @@ public class inventory {
         ArrayList<item> item_list = itemList.get_sub_items();
         ArrayList<item> sorted_items;
         sorted_items = sort(item_list);
-        size = (item_list.size()/45)+1;
+        size = ( (item_list.size()-1) / 45 ) + 1;
         menuButtons(itemList.progPer());
 
         inventory_list.clear();

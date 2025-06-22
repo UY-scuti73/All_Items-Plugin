@@ -101,7 +101,7 @@ public class events {
 
         if (Main.data.item_autoCollect) {
             boolean sub = item_submission(e.getItem().getItemStack(), p, false);
-            if (sub) {
+            if (sub && Main.data.item_subtraction) {
                 Bukkit.getScheduler().runTaskLater(main.getPlugin(), () -> {
                     ItemStack found = findMatchingItem(p.getInventory(), e.getItem().getItemStack());
                     if (found != null) {
