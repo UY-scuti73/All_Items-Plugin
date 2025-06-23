@@ -15,6 +15,10 @@ public class config {
     public boolean general_mainCompletion;
     public boolean general_personalCompletion;
     public boolean general_autoSave;
+    public String general_mainItemCompletion_command;
+    public String general_mainMobCompletion_command;
+    public String general_personalItemCompletion_command;
+    public String general_personalMobCompletion_command;
     public boolean item_toggle;
     public String item_file;
     public boolean item_subtraction;
@@ -32,8 +36,12 @@ public class config {
         general_check = config.getString("general.check").equalsIgnoreCase("true");
         general_player = config.getString("general.player").equalsIgnoreCase("true");
         general_settings = config.getString("general.settings").equalsIgnoreCase("true");
-        general_mainCompletion = config.getString("general.main_completion").equalsIgnoreCase("true");
-        general_personalCompletion = config.getString("general.personal_completion").equalsIgnoreCase("true");
+        general_mainCompletion = config.getString("general.completion.main_completion").equalsIgnoreCase("true");
+        general_personalCompletion = config.getString("general.completion.personal_completion").equalsIgnoreCase("true");
+        general_mainItemCompletion_command = config.getString("general.completion.main_item_completion_command");
+        general_mainMobCompletion_command = config.getString("general.completion.main_mob_completion_command");
+        general_personalItemCompletion_command = config.getString("general.completion.personal_item_completion_command");
+        general_personalMobCompletion_command = config.getString("general.completion.personal_mob_completion_command");
         general_autoSave = config.getString("general.auto_save").equalsIgnoreCase("true");
         item_toggle = (config.getString("all_items.toggle").equalsIgnoreCase("true"));
         item_file = config.getString("all_items.file");

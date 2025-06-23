@@ -2,6 +2,7 @@ package xyz.quazaros;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -191,36 +192,54 @@ public class events {
     }
 
     public void checkCompleted(boolean is_mob, player pl) {
+        boolean is_personal;
+        String command;
         String message;
         itemList temp;
 
         if (pl == null) {
-            if (!Main.data.general_mainCompletion) {return;}
-
+            is_personal = false;
             if (!is_mob) {
+                command = Main.data.general_mainItemCompletion_command;
                 message = Main.lang.colorGood + Main.lang.allItems;
                 temp = Main.all_items;
             } else {
+                command = Main.data.general_mainMobCompletion_command;
                 message = Main.lang.colorGood + Main.lang.allMobs;
                 temp = Main.all_mobs;
             }
         } else {
-            if (!Main.data.general_personalCompletion) {return;}
-
+            is_personal = true;
             if (!is_mob) {
+                command = Main.data.general_personalItemCompletion_command;
                 message = Main.lang.colorGood + pl.name + " " + Main.lang.completeItemSuffix;
                 temp = pl.item_list;
             } else {
+                command = Main.data.general_personalMobCompletion_command;
                 message = Main.lang.colorGood + pl.name + " " + Main.lang.completeMobSuffix;
                 temp = pl.mob_list;
             }
         }
 
         if (temp.complete()) {
+            System.out.println(command);
+            if (is_personal) {Bukkit.dispatchCommand(Bukkit.getConsoleSender(), modifyCommand(command, pl.name));}
+            else {Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);}
+
+            if (!Main.data.general_personalCompletion && is_personal) {return;}
+            if (!Main.data.general_mainCompletion && !is_personal) {return;}
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.sendTitle(Main.lang.colorHigh + Main.lang.congrats, message);
             }
         }
+    }
+
+    private String modifyCommand(String command, String p) {
+        if (command.contains("<player>")) {
+            System.out.println("test");
+            command = command.replace("<player>", p);
+        }
+        return command;
     }
 
     public boolean item_submission(ItemStack it, Player p, boolean is_asend) {
@@ -234,10 +253,11 @@ public class events {
         if (message.contains(Main.lang.colorGood.toString())) {
             if ( (message.endsWith(Main.lang.itemSubmitted) && !message.contains(Main.lang.itemSubNotInList) ) || is_asend) {
                 ret = true;
-                checkCompleted(false, pl);
-                checkCompleted(false, null);
             }
         }
+
+        checkCompleted(false, pl);
+        checkCompleted(false, null);
 
         if (ret || is_asend) {
             announce_collection(message, p);
