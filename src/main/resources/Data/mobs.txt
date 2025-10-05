@@ -42,6 +42,7 @@ evoker
 vex
 ravager
 iron_golem
+copper_golem
 snow_golem
 zombie
 zombie_villager
