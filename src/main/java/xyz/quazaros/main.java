@@ -67,6 +67,13 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         file.get_data();
 
         commands.initialize();
+
+        player_list.initialize_score();
+
+        //Register PlaceholderAPI placeholders
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new placeHolder().register();
+        }
     }
 
     //Handles what happens when the plugin disables
@@ -79,14 +86,16 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         return plugin;
     }
 
+    //#EVENTS#//
+
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-        return commands.onCommand(sender, command, label, args);
+        return commands.sendCommand(sender, command, label, args);
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
-        return commands.onTabComplete(sender, command, alias, args);
+        return commands.tabComplete(sender, command, alias, args);
     }
 
     //Adds a player to the list when they join if they aren't in already

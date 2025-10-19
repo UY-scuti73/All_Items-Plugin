@@ -99,3 +99,8 @@ completed:
   allMobs: "All Mobs Have Been Killed"
   personalItemSuffix: "Has Collected All Items"
   personalMobSuffix: "Has Killed All Mobs"
+
+placeholderAPI:
+  true: "True"
+  false: "False"
+  notFound: "N/A"

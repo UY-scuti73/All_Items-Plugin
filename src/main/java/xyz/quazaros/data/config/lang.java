@@ -63,6 +63,10 @@ public class lang {
     public String completeItemSuffix;
     public String completeMobSuffix;
 
+    public String placeholderTrue;
+    public String placeholderFalse;
+    public String placeholderNotFound;
+
     public final ChatColor colorGood;
     public final ChatColor colorBad;
     public final ChatColor colorDom;
@@ -138,6 +142,10 @@ public class lang {
         allMobs = config.getString("completed.allMobs");
         completeItemSuffix = config.getString("completed.personalItemSuffix");
         completeMobSuffix = config.getString("completed.personalMobSuffix");
+
+        placeholderTrue = config.getString("placeholderAPI.true");
+        placeholderFalse = config.getString("placeholderAPI.false");
+        placeholderNotFound = config.getString("placeholderAPI.notFound");
 
         check();
     }

@@ -323,7 +323,7 @@ public class itemList {
     }
 
     //Gets the item from the items name
-    private item get_item(String item_name) {
+    public item get_item(String item_name) {
         for (item i : items) {
             if (item_name.equals(i.item_name)) {
                 return i;

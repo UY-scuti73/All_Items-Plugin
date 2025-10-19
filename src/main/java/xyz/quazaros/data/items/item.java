@@ -91,6 +91,7 @@ public class item {
         item_stack.setItemMeta(item_meta);
         item_data.submit(item_name, p, time);
         isFound = true;
+        update();
     }
 
     public void submit(String time) {
@@ -104,6 +105,7 @@ public class item {
         item_stack.setItemMeta(item_meta);
         item_data.submit(item_name, "", time);
         isFound = true;
+        update();
     }
 
     //Handles what happens when an item is unsubmitted
@@ -120,6 +122,7 @@ public class item {
         item_stack.setItemMeta(item_meta);
         item_data.unsubmit();
         isFound = false;
+        update();
     }
 
     //Gets the type of an item
@@ -158,6 +161,11 @@ public class item {
         }
         str = str.substring(0, 1).toUpperCase() + str.substring(1, str.length());
         return str;
+    }
+
+    //Updates the player score
+    private void update() {
+        main.getPlugin().player_list.initialize_score();
     }
 
     //1.21.6 breaks if the vault spawner doesn't have blockdata

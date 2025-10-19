@@ -55,7 +55,7 @@ public class commands {
         else {list_priority_public = !Config.general_listPriority;}
     }
 
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean sendCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
             return true;
         }
@@ -225,7 +225,7 @@ public class commands {
     }
 
     //Adds the tab completions to specific commands
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> tabComplete(CommandSender sender, Command command, String alias, String[] args) {
         Main.player_list.update_player_names();
         String command_name = command.getName();
 
@@ -362,7 +362,6 @@ public class commands {
             return false;
         }
         pl.invItt = 0;
-        Main.player_list.initialize_score();
 
         player targetPlayer = null;
         boolean personal = false;
@@ -542,8 +541,6 @@ public class commands {
             p.sendMessage(Lang.colorBad + Lang.commandDisabled);
             return;
         }
-
-        Main.player_list.initialize_score();
 
         if (args.length == 0) {
             if (!Main.data.general_global && !Main.data.general_others) {

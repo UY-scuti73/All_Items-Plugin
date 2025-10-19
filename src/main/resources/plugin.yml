@@ -1,5 +1,6 @@
 name: All_Items
-version: '${project.version}'
+version: 4.0
+author: BowserTheBoss
 main: xyz.quazaros.main
 api-version: 1.17
 
@@ -127,4 +128,4 @@ permissions:
     description: Will allow players to access the admin commands
     default: op
 
-
+softdepend: ['PlaceholderAPI']
