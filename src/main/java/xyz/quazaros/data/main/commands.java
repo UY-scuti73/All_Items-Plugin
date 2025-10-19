@@ -1,4 +1,4 @@
-package xyz.quazaros;
+package xyz.quazaros.data.main;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -11,6 +11,7 @@ import xyz.quazaros.data.config.lang;
 import xyz.quazaros.data.items.item;
 import xyz.quazaros.data.items.itemList;
 import xyz.quazaros.data.player.player;
+import xyz.quazaros.main;
 
 import java.util.ArrayList;
 import java.util.List;

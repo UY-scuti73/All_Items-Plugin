@@ -1,4 +1,4 @@
-package xyz.quazaros;
+package xyz.quazaros.data.main;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import xyz.quazaros.data.items.itemList;
 import xyz.quazaros.data.player.player;
+import xyz.quazaros.main;
 
 public class events {
     main Main;

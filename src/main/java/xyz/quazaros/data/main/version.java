@@ -1,4 +1,4 @@
-package xyz.quazaros;
+package xyz.quazaros.data.main;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 public class version {
 
-    double mc_version;
+    public double mc_version;
 
     ArrayList<ItemFlag> itemFlags;
 

@@ -1,10 +1,11 @@
-package xyz.quazaros;
+package xyz.quazaros.data.main;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bukkit.configuration.file.YamlConfiguration;
 import xyz.quazaros.data.items.*;
 import xyz.quazaros.data.player.*;
+import xyz.quazaros.main;
 
 import java.io.*;
 import java.util.*;
@@ -41,10 +42,10 @@ public class file {
     ArrayList<String> all;
     ArrayList<String> normal_mobs;
 
-    ArrayList<String> items_init;
-    ArrayList<String> mobs_init;
-    ArrayList<String> all_items_init;
-    ArrayList<String> all_mobs_init;
+    public ArrayList<String> items_init;
+    public ArrayList<String> mobs_init;
+    public ArrayList<String> all_items_init;
+    public ArrayList<String> all_mobs_init;
 
     public file() {
         //Sets up file names

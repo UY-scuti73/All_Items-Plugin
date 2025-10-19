@@ -1,6 +1,5 @@
 package xyz.quazaros;
 
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.event.EventHandler;
@@ -17,6 +16,7 @@ import xyz.quazaros.data.items.*;
 import xyz.quazaros.data.player.*;
 import xyz.quazaros.data.meta.*;
 import xyz.quazaros.data.config.*;
+import xyz.quazaros.data.main.*;
 
 import java.util.List;
 
