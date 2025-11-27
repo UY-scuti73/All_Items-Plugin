@@ -1,6 +1,7 @@
 package xyz.quazaros.data.main;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -104,7 +105,12 @@ public class commands {
                 boolean sub = Main.events.item_submission(p.getInventory().getItemInMainHand(), p, true);
                 if (sub) {
                     if (Main.data.item_subtraction) {
-                        ItemStack tempItem = new ItemStack(p.getInventory().getItemInMainHand().getType(), p.getInventory().getItemInMainHand().getAmount() - 1);
+                        ItemStack tempItem;
+                        if (p.getInventory().getItemInMainHand().getAmount() == 1) {
+                            tempItem = new ItemStack(Material.AIR, 1);
+                        } else {
+                            tempItem = new ItemStack(p.getInventory().getItemInMainHand().getType(), p.getInventory().getItemInMainHand().getAmount() - 1);
+                        }
                         p.getInventory().setItemInMainHand(tempItem);
                     }
                 }
@@ -337,7 +343,12 @@ public class commands {
                 boolean sub = Main.events.item_submission(inventory_list.get(i), p, false);
                 if (sub) {
                     if (Main.data.item_subtraction) {
-                        ItemStack tempItem = new ItemStack(p.getInventory().getItem(i).getType(), p.getInventory().getItem(i).getAmount() - 1);
+                        ItemStack tempItem;
+                        if (p.getInventory().getItem(i).getAmount() == 1) {
+                            tempItem = new ItemStack(Material.AIR, 1);
+                        } else {
+                            tempItem = new ItemStack(p.getInventory().getItem(i).getType(), p.getInventory().getItem(i).getAmount() - 1);
+                        }
                         p.getInventory().setItem(i, tempItem);
                     }
                     temp++;
