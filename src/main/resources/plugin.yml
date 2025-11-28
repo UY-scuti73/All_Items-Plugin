@@ -5,117 +5,12 @@ main: xyz.quazaros.main
 api-version: 1.17
 
 commands:
-  aself:
-    description: Lists the Items You Have Collected
-    usage: /aself
-    permission: all_items.items
-  alist:
-    description: Lists the Items The Server Has Collected
-    usage:
-      -/alist
-      -/alist <player_name>
-    permission: all_items.items
-  mself:
-    description: Lists the Mobs You Have Killed
-    usage: /mself
-    permission: all_items.items
-  mlist:
-    description: Lists the Mobs The Server Has Killed
-    usage:
-      -/mlist
-      -/mlist <player_name>
-    permission: all_items.mobs
-  asend:
-    description: Sends the Item Currently in Your Hand. You Are Also Able to Send Your Hotbar and Inventory
-    usage:
-      -/asend
-      -/asend hotbar
-      -/asend inventory
-    permission: all_items.items
-  aprog:
-    description: Displays the Total/Personal Item Progress
-    usage:
-      -/aprog
-      -/aprog <player_name>
-    permission: all_items.items
-  mprog:
-    description: Displays the Total/Personal Mob Progress
-    usage:
-      -/mprog
-      -/mprog <player_name>
-    permission: all_items.mobs
-  aplayer:
-    description: Displays the Item Score of a Player
-    usage: /aplayer <player_name>
-    permission: all_items.items
-  mplayer:
-    description: Displays the Mob Score of a Player
-    usage: /mplayer <player_name>
-    permission: all_items.mobs
-  acheck:
-    description: Displays Whether or Not an Item Has Been Obtained
-    usage:
-      /acheck <item_name>
-      /acheck <item_name> <player_name>
-    permission: all_items.items
-  mcheck:
-    description: Displays Whether or Not an Item Has Been Obtained
-    usage:
-      /mcheck <item_name>
-      /mcheck <item_name> <player_name>
-    permission: all_items.mobs
-  asettings:
-    description: Displays the Settings of the Plugin
-    usage: /asettings
-    permission: all_items.items
-  msettings:
-    description: Displays the Settings of the Plugin
-    usage: /msettings
-    permission: all_items.mobs
+  aitem:
+    description: Umbrella Command For All Item Related Sub Commands
+  amob:
+    description: Umbrella Command For All Mob Related Sub Commands
   ahelp:
-    description: Displays the Usage of each Item Command in the Plugin
-    usage: /ahelp
-    permission: all_items.items
-  mhelp:
-    description: Displays the Usage of each Mob Command in the Plugin
-    usage: /mhelp
-    permission: all_items.mobs
-  areset:
-    description: (ADMIN) Resets the ItemData After a Server Restart
-    usage: /areset
-    permission: all_items.admin
-  mreset:
-    description: (ADMIN) Resets the MobData After a Server Restart
-    usage: /mreset
-    permission: all_items.admin
-  asubmit:
-     description: (ADMIN) Automatically Submits an Item
-     usage:
-      -/asubmit <item_name>
-      -/asubmit <item_name> <player_name>
-      -/asubmit <player_name> <item_name>
-      -/asubmit personal <player_name> <item_name>
-     permission: all_items.admin
-  aunsubmit:
-    description: (ADMIN) Unsubmits an Item
-    usage:
-      -/aunsubmit <item_name>
-      -/aunsubmit <player_name> <item_name>
-    permission: all_items.admin
-  msubmit:
-    description: (ADMIN) Automatically Submits a Mob
-    usage:
-      -/msubmit <mob_name>
-      -/msubmit <mob_name> <player_name>
-      -/msubmit <player_name> <mob_name>
-      -/msubmit personal <player_name> <mob_name>
-    permission: all_items.admin
-  munsubmit:
-    description: (ADMIN) Unsubmits a Mob
-    usage:
-      -/munsubmit <mob_name>
-      -/munsubmit <player_name> <mob_name>
-    permission: all_items.admin
+    description: Help Command For The Whole Plugin
 
 permissions:
   all_items.items:

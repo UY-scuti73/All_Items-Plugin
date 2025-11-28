@@ -1,24 +1,19 @@
 package xyz.quazaros;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import xyz.quazaros.data.items.*;
-import xyz.quazaros.data.player.*;
-import xyz.quazaros.data.meta.*;
-import xyz.quazaros.data.config.*;
-import xyz.quazaros.data.main.*;
-
-import java.util.List;
+import xyz.quazaros.util.commands.commands;
+import xyz.quazaros.util.commands.tabComplete;
+import xyz.quazaros.util.events.events;
+import xyz.quazaros.util.external.placeHolderAPI.placeHolder;
+import xyz.quazaros.util.files.file;
+import xyz.quazaros.structures.items.*;
+import xyz.quazaros.structures.player.*;
+import xyz.quazaros.util.meta.*;
+import xyz.quazaros.util.files.config.*;
+import xyz.quazaros.util.version.version;
 
 public final class main extends JavaPlugin implements Listener, TabCompleter {
 
@@ -26,7 +21,7 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
 
     public file file;
     public commands commands;
-    public events events;
+    public tabComplete tabComplete;
     public metaList meta_list;
     public config data;
     public lang lang;
@@ -53,7 +48,6 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
     //Handles what happens when the plugin enables
     private void enable() {
         plugin = this;
-        getServer().getPluginManager().registerEvents(this, this);
 
         version = new version();
         data = new config();
@@ -62,11 +56,12 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         meta_list = new metaList(file.all_items_init, file.all_mobs_init);
         player_list = new playerList();
         commands = new commands();
-        events = new events();
+        tabComplete = new tabComplete();
 
         file.get_data();
 
         commands.initialize();
+        tabComplete.setupLists();
 
         player_list.initialize_score();
 
@@ -74,6 +69,10 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new placeHolder().register();
         }
+
+        //Set Up Commands & Events
+        getServer().getPluginManager().registerEvents(new events(), this);
+        commandSetup(new String[]{"aitem", "amob", "ahelp"});
     }
 
     //Handles what happens when the plugin disables
@@ -86,45 +85,11 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
         return plugin;
     }
 
-    //#EVENTS#//
-
-    @Override
-    public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-        return commands.sendCommand(sender, command, label, args);
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
-        return commands.tabComplete(sender, command, alias, args);
-    }
-
-    //Adds a player to the list when they join if they aren't in already
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        events.playerJoin(e);
-    }
-
-    //Handles what happens when a player clickes on a GUI
-    @EventHandler
-    public void guiClickEvent(InventoryClickEvent e) {
-        events.inventoryClick(e);
-    }
-
-    //Handles when a player picks up an item
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void PlayerPickupItemEvent(PlayerPickupItemEvent e) {
-        events.itemPickup(e);
-    }
-
-    //Handles when a player kills a mob
-    @EventHandler
-    public void EntityDeathEvent(EntityDeathEvent e) {
-        events.mobDies(e);
-    }
-
-    //Autosaves the plugin
-    @EventHandler
-    public void onWorldSave(WorldSaveEvent e) {
-        events.autoSave();
+    //Initialized The Commands
+    private void commandSetup(String[] commands) {
+        for (String c : commands) {
+            getCommand(c).setExecutor(getPlugin().commands);
+            getCommand(c).setTabCompleter(getPlugin().tabComplete);
+        }
     }
 }

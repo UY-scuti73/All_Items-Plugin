@@ -10,6 +10,7 @@ sendMessages:
     enterPlayer: "Please Enter a Player"
     enterItem: "Please Enter an Item"
     enterMob: "Please Enter a Mob"
+    enterCommand: "Please Enter a Command"
 
     #Thing Wasn't Found in The Database
     itemNotFound: "Item Does Not Exist"

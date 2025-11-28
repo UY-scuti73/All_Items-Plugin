@@ -6,10 +6,13 @@ mooshroom
 rabbit
 horse
 skeleton_horse
+zombie_horse
 donkey
 mule
 llama
 trader_llama
+camel
+camel_husk
 wolf
 cat
 ocelot
@@ -30,6 +33,8 @@ tropical_fish
 pufferfish
 axolotl
 dolphin
+nautilus
+zombie_nautilus
 squid
 glow_squid
 allay
@@ -51,6 +56,7 @@ drowned
 skeleton
 stray
 bogged
+parched
 wither_skeleton
 creeper
 spider
