@@ -47,11 +47,12 @@ public class settings {
 
         String general = p7 + "\n" + p8 + "\n" + p9 + "\n" + p10 + "\n" + p11 + "\n" + p12 + "\n" + p13 + "\n" + p14;
 
-        String itemHead = Lang.colorHigh + Lang.itemSettings + ": \n";
-        String mobHead = Lang.colorHigh + Lang.mobSettings + ": \n";
+        String b = ChatColor.WHITE + "------------------------------------------------\n";
+        String itemHead = b + Lang.colorHelpTitle + Lang.itemSettings + ": \n" + b;
+        String mobHead = b + Lang.colorHelpTitle + Lang.mobSettings + ": \n" + b;
 
-        item_settings = itemHead + p1 + "\n" + p2 + "\n" + p3 + "\n" + p5 + "\n" + p6 + "\n" + general;
-        mob_settings = mobHead + p1 + "\n" + p2 + "\n" + p4 + "\n" + general;
+        item_settings = itemHead + p1 + "\n" + p2 + "\n" + p3 + "\n" + p5 + "\n" + p6 + "\n" + general + "\n" + b;
+        mob_settings = mobHead + p1 + "\n" + p2 + "\n" + p4 + "\n" + general + "\n" + b;
     }
 
     //Handles setting commands

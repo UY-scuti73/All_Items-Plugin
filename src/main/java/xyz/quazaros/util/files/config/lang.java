@@ -74,6 +74,7 @@ public class lang {
     public final ChatColor colorSec;
     public final ChatColor colorHigh;
     public final ChatColor colorWar;
+    public final ChatColor colorHelpTitle;
 
     public lang() {
         colorGood = ChatColor.GREEN;
@@ -82,6 +83,7 @@ public class lang {
         colorSec = ChatColor.AQUA;
         colorHigh = ChatColor.GOLD;
         colorWar = ChatColor.DARK_RED;
+        colorHelpTitle = ChatColor.DARK_GREEN;
     }
 
     public void initialize(YamlConfiguration config) {

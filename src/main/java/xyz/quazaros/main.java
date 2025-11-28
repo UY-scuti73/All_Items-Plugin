@@ -15,7 +15,7 @@ import xyz.quazaros.util.meta.*;
 import xyz.quazaros.util.files.config.*;
 import xyz.quazaros.util.version.version;
 
-public final class main extends JavaPlugin implements Listener, TabCompleter {
+public final class main extends JavaPlugin {
 
     private static main plugin;
 
@@ -33,6 +33,19 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
     public itemList all_items;
     public itemList all_mobs;
 
+    public main() {
+        plugin = this;
+
+        version = new version();
+        data = new config();
+        lang = new lang();
+        file = new file();
+        meta_list = new metaList();
+        player_list = new playerList();
+        commands = new commands();
+        tabComplete = new tabComplete();
+    }
+
     @Override
     public void onEnable() {
         enable();
@@ -47,17 +60,6 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
 
     //Handles what happens when the plugin enables
     private void enable() {
-        plugin = this;
-
-        version = new version();
-        data = new config();
-        lang = new lang();
-        file = new file();
-        meta_list = new metaList(file.all_items_init, file.all_mobs_init);
-        player_list = new playerList();
-        commands = new commands();
-        tabComplete = new tabComplete();
-
         file.get_data();
 
         commands.initialize();
@@ -70,9 +72,11 @@ public final class main extends JavaPlugin implements Listener, TabCompleter {
             new placeHolder().register();
         }
 
-        //Set Up Commands & Events
+        //Register Commands & Events
         getServer().getPluginManager().registerEvents(new events(), this);
-        commandSetup(new String[]{"aitem", "amob", "ahelp"});
+
+        String[] commandNames = {"aitem", "amob", "ahelp"};
+        commandSetup(commandNames);
     }
 
     //Handles what happens when the plugin disables

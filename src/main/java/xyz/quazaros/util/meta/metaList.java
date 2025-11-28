@@ -27,7 +27,7 @@ public class metaList {
     ArrayList<String> items_init;
     ArrayList<String> mobs_init;
 
-    public metaList(ArrayList<String> items_init_p, ArrayList<String> mobs_init_p) {
+    public metaList() {
         File = main.getPlugin().file;
 
         items = new ArrayList<>();
@@ -37,8 +37,8 @@ public class metaList {
         potion_list = new ArrayList<>();
         //instruments_list = new ArrayList<>();
 
-        items_init = items_init_p;
-        mobs_init = mobs_init_p;
+        items_init = File.all_items_init;
+        mobs_init = File.all_mobs_init;
 
         initialize_enchantedBooks();
         initialize_potions();

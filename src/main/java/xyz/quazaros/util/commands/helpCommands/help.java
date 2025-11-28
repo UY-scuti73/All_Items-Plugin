@@ -2,6 +2,7 @@ package xyz.quazaros.util.commands.helpCommands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import xyz.quazaros.main;
 
 public class help {
 
@@ -15,8 +16,8 @@ public class help {
         ChatColor CC2 = ChatColor.DARK_AQUA;
         ChatColor CC3 = ChatColor.DARK_RED;
         String b = ChatColor.WHITE + "------------------------------------------------\n";
-        String ti = ChatColor.DARK_GREEN + "Item Help Menu:\n";
-        String tm = ChatColor.DARK_GREEN + "Mob Help Menu:\n";
+        String ti = main.getPlugin().lang.colorHelpTitle + "Item Help Menu:\n";
+        String tm = main.getPlugin().lang.colorHelpTitle + "Mob Help Menu:\n";
 
         String Alist1 = CC1 + "list: " + CC2 + "Lists the Items/Mobs You Have Found\n";
         String Alist2 = CC1 + "list <player_name>: " + CC2 + "Lists the Personal Items/Mobs a Player Has Found\n";
@@ -46,9 +47,10 @@ public class help {
         String Aunsubmit1 = CC3 + "(ADMIN) " + CC1 + "unsubmit <item_name>: " + CC2 + "Unsubmits the Item/Mob Listed\n";
         String Aunsubmit2 = CC3 + "(ADMIN) " + CC1 + "unsubmit <player_name> <item_name>: " + CC2 + "Unsubmits the Item/Mob Listed From the Specific Player's Personal List\n";
         String Aunsubmit = Aunsubmit1 + Aunsubmit2;
+        String Aplaceholders = CC3 + "(ADMIN) " + CC1 + "placeholders: " + CC2 + "Placeholder Help Menu\n";
 
         String temp_string = Alist + b + Aprog + b + Aplayer + b + Acheck + b + Asettings + b + Ahelp + b;
-        String temp_admin_string = Areset + b + Asubmit + b + Aunsubmit + b;
+        String temp_admin_string = Areset + b + Asubmit + b + Aunsubmit + b + Aplaceholders + b;
 
         help_string = b + ti + b + Asend + b + temp_string;
         admin_help_string = help_string + temp_admin_string;

@@ -59,6 +59,7 @@ public class tabComplete implements TabCompleter {
         admin.add("submit");
         admin.add("unsubmit");
         admin.add("reset");
+        admin.add("placeholders");
 
         item_commands.add("send");
         item_admin_commands.add("send");

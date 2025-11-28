@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.quazaros.util.commands.helpCommands.help;
 import xyz.quazaros.util.commands.helpCommands.mainHelp;
+import xyz.quazaros.util.commands.helpCommands.placeholderHelp;
 import xyz.quazaros.util.commands.helpCommands.settings;
 import xyz.quazaros.util.files.config.config;
 import xyz.quazaros.util.files.config.lang;
@@ -31,6 +32,7 @@ public class commands implements CommandExecutor {
     help Help;
     settings Settings;
     mainHelp MainHelp;
+    placeholderHelp PlaceholderHelp;
 
     //Which list to prioritize
     boolean list_priority_public;
@@ -47,12 +49,14 @@ public class commands implements CommandExecutor {
         Help = new help();
         Settings = new settings();
         MainHelp = new mainHelp();
+        PlaceholderHelp = new placeholderHelp();
     }
 
     public void initialize() {
         Help.initialize();
         Settings.initialize();
         MainHelp.initialize();
+        PlaceholderHelp.initialize();
 
         config Config = Main.data;
         if (Config.general_global && !Config.general_others) {list_priority_public = true;}
@@ -160,6 +164,11 @@ public class commands implements CommandExecutor {
         //Unsubmits an item from the plugin
         if (command_name.equalsIgnoreCase("unsubmit")) {
             handle_submit(p, args, com_isMob, true);
+        }
+
+        //Prints a help message for placeholders
+        if (command_name.equalsIgnoreCase("placeholders")) {
+            PlaceholderHelp.handle_placeholder(p, com_isMob);
         }
 
         return true;
