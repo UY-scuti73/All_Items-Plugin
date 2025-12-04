@@ -16,6 +16,8 @@ public class tabComplete implements TabCompleter {
 
     //Autofill lists
     List<String> send_list;
+    List<String> timer_commands;
+    List<String> timer_admin_commands;
     List<String> item_commands;
     List<String> item_admin_commands;
     List<String> mob_commands;
@@ -31,6 +33,9 @@ public class tabComplete implements TabCompleter {
 
         send_list = new ArrayList<>();
 
+        timer_commands = new ArrayList<>();
+        timer_admin_commands = new ArrayList<>();
+
         item_commands = new ArrayList<>();
         item_admin_commands = new ArrayList<>();
         mob_commands = new ArrayList<>();
@@ -42,6 +47,19 @@ public class tabComplete implements TabCompleter {
         //Send List
         send_list.add("inventory");
         send_list.add("hotbar");
+
+        //Timer Commands
+        timer_commands.add("get");
+        timer_commands.add("active");
+        timer_commands.add("help");
+
+        timer_admin_commands.addAll(timer_commands);
+        timer_admin_commands.add("start");
+        timer_admin_commands.add("pause");
+        timer_admin_commands.add("stop");
+        timer_admin_commands.add("reset");
+        timer_admin_commands.add("set");
+        timer_admin_commands.add("placeholders");
 
         //Commands
         ArrayList<String> regular = new ArrayList<>();
@@ -82,8 +100,15 @@ public class tabComplete implements TabCompleter {
         if (!(sender instanceof Player)) {return null;}
         Player p = (Player) sender;
 
-        Main.player_list.update_player_names();
         String command_name = command.getName();
+        
+        if (command_name.equals("atime")) {
+            if (args.length == 1) {
+                return p.isOp() ? timer_admin_commands : timer_commands;
+            }
+        }
+
+        Main.player_list.update_player_names();
 
         boolean isMob;
 

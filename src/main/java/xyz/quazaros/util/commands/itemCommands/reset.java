@@ -1,4 +1,4 @@
-package xyz.quazaros.util.commands.staticCommands;
+package xyz.quazaros.util.commands.itemCommands;
 
 import org.bukkit.entity.Player;
 import xyz.quazaros.main;

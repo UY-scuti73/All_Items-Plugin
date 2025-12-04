@@ -8,6 +8,7 @@ public class placeholderHelp {
 
     String item_placeholders;
     String mob_placeholders;
+    String timer_placeholders;
 
     public void initialize() {
         ChatColor CC1 = ChatColor.GOLD;
@@ -16,6 +17,7 @@ public class placeholderHelp {
         String b = ChatColor.WHITE + "------------------------------------------------\n";
         String ti = main.getPlugin().lang.colorHelpTitle + "Item Placeholder Help:\n";
         String tm = main.getPlugin().lang.colorHelpTitle + "Mob Placeholder Help:\n";
+        String tp = main.getPlugin().lang.colorHelpTitle + "Timer Placeholder Help:\n";
 
         String topMessage = CC2 + "The '<>' are NOT needed for PLAYERS, if your name is 'B0WSER', input 'B0WSER' in place of <player> not '<B0WSER>'\n \nThe '{}' ARE needed for ITEMS/MOBS\n";
 
@@ -69,9 +71,14 @@ public class placeholderHelp {
         String Aleaderboard = Leaderboard + Aleaderboard1 + Aleaderboard2 + Aleaderboard3 + Aleaderboard4;
         String Mleaderboard = Leaderboard + Mleaderboard1 + Mleaderboard2 + Mleaderboard3 + Mleaderboard4;
 
+        String TimerT = CC4 + "Timer\n";
+        String Timer1 = CC1 + "%allitems_timertime%" + CC2 + " - Fetches The Timer Time\n";
+        String Timer2 = CC1 + "%allitems_timeractive%" + CC2 + " - Fetches The Timer Activity\n";
+        String Timer = TimerT + Timer1 + Timer2;
 
         item_placeholders = b + ti + b + topMessage + b + Aprog + b + Ascore + b + Acheck + b + Acompleted + b + Aleaderboard + b;
         mob_placeholders = b + tm + b + Mprog + b + Mscore + b + Mcheck + b + Mcompleted + b + Mleaderboard + b;
+        timer_placeholders = b + tp + b + Timer + b;
     }
 
     //Handles placeholder help commands
@@ -83,5 +90,15 @@ public class placeholderHelp {
 
         String message = mob ? mob_placeholders : item_placeholders;
         p.sendMessage(message);
+    }
+
+    //Handles placeholders for timer
+    public void handle_timer(Player p) {
+        if (!p.isOp()) {
+            p.sendMessage(main.getPlugin().lang.colorBad + main.getPlugin().lang.noPermission);
+            return;
+        }
+
+        p.sendMessage(timer_placeholders);
     }
 }

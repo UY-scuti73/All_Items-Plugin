@@ -13,7 +13,11 @@ import xyz.quazaros.structures.items.*;
 import xyz.quazaros.structures.player.*;
 import xyz.quazaros.util.meta.*;
 import xyz.quazaros.util.files.config.*;
+import xyz.quazaros.util.timer.timer;
 import xyz.quazaros.util.version.version;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public final class main extends JavaPlugin {
 
@@ -26,12 +30,15 @@ public final class main extends JavaPlugin {
     public config data;
     public lang lang;
     public version version;
+    public timer timer;
     public playerList player_list;
     public itemList emptyItemList;
     public itemList emptyMobList;
 
     public itemList all_items;
     public itemList all_mobs;
+
+    public ArrayList<String> commandNames;
 
     public main() {
         plugin = this;
@@ -44,11 +51,14 @@ public final class main extends JavaPlugin {
         player_list = new playerList();
         commands = new commands();
         tabComplete = new tabComplete();
+        timer = new timer();
+
+        commandNames = new ArrayList<>(Arrays.asList("aitem", "amob", "atime", "areset", "ahelp"));
     }
 
     @Override
     public void onEnable() {
-        enable();
+        start_up();
         System.out.println("All-Items Plugin Has Started");
     }
 
@@ -59,7 +69,7 @@ public final class main extends JavaPlugin {
     }
 
     //Handles what happens when the plugin enables
-    private void enable() {
+    private void start_up() {
         file.get_data();
 
         commands.initialize();
@@ -67,6 +77,29 @@ public final class main extends JavaPlugin {
 
         player_list.initialize_score();
 
+        timer.startUp();
+
+        initializeSpigot();
+    }
+
+    //Handles what happens when the plugin disables
+    public void save_files(boolean remove) {
+        file.send_data(remove);
+    }
+
+    //Reloads The Plugin
+    public void reset_plugin() {
+        save_files(false);
+        start_up();
+    }
+
+    //Gets the plugin to use for the file path
+    public static main getPlugin(){
+        return plugin;
+    }
+
+    //Registers commands and API's
+    private void initializeSpigot() {
         //Register PlaceholderAPI placeholders
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new placeHolder().register();
@@ -75,22 +108,11 @@ public final class main extends JavaPlugin {
         //Register Commands & Events
         getServer().getPluginManager().registerEvents(new events(), this);
 
-        String[] commandNames = {"aitem", "amob", "ahelp"};
         commandSetup(commandNames);
     }
 
-    //Handles what happens when the plugin disables
-    public void save_files(boolean remove) {
-        file.send_data(remove);
-    }
-
-    //Gets the plugin to use for the file path
-    public static main getPlugin(){
-        return plugin;
-    }
-
     //Initialized The Commands
-    private void commandSetup(String[] commands) {
+    private void commandSetup(ArrayList<String> commands) {
         for (String c : commands) {
             getCommand(c).setExecutor(getPlugin().commands);
             getCommand(c).setTabCompleter(getPlugin().tabComplete);

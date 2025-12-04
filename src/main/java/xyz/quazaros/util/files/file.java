@@ -6,8 +6,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import xyz.quazaros.structures.items.*;
 import xyz.quazaros.structures.player.*;
 import xyz.quazaros.main;
+import xyz.quazaros.util.timer.timer;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 public class file {
@@ -26,6 +29,7 @@ public class file {
     private final File file_normal_mobs;
     private final File file_personal_items;
     private final File file_personal_mobs;
+    private final File file_timer;
     private final File configFile;
     private final File langFile;
 
@@ -66,6 +70,8 @@ public class file {
 
         file_personal_items = new File(path_pre + "/Data/PersonalItems");
         file_personal_mobs = new File(path_pre + "/Data/PersonalMobs");
+
+        file_timer = new File(path_pre + "/Data/timer.txt");
 
         configFile = new File(path_pre + "/config.yml");
         langFile = new File(path_pre + "/lang.yml");
@@ -114,10 +120,14 @@ public class file {
         try {get_players();} catch (IOException e) {throw new RuntimeException(e);}
 
         try {get_items();} catch (IOException e) {throw new RuntimeException(e);}
+
+        try {get_timer();} catch (IOException e) {throw new RuntimeException(e);}
     }
 
     public void send_data(boolean remove) {
         try {send_items(remove);} catch (IOException e) {throw new RuntimeException(e);}
+
+        try {send_timer();} catch (IOException e) {throw new RuntimeException(e);}
     }
 
     //Gets players from the playerList file
@@ -152,6 +162,29 @@ public class file {
         }
         YamlConfiguration langConfig = YamlConfiguration.loadConfiguration(langFile);
         main.getPlugin().lang.initialize(langConfig);
+    }
+
+    //Get data from the timer
+    private void get_timer() throws IOException {
+        if (!file_timer.exists()) {
+            file_timer.createNewFile();
+        } else {
+            List<String> results = Files.readAllLines(file_timer.toPath());
+            if (results.size() >= 2) {
+                main.getPlugin().timer.timerActive = Boolean.parseBoolean(results.get(0));
+                main.getPlugin().timer.timerTime = Integer.parseInt(results.get(1));
+            }
+        }
+    }
+
+    //Send data from the timer
+    private void send_timer() throws IOException {
+        Writer myWriter;
+        myWriter = new FileWriter(file_timer, false);
+
+        myWriter.write(main.getPlugin().timer.timerActive + "\n");
+        myWriter.write(Integer.toString(main.getPlugin().timer.timerTime));
+        myWriter.close();
     }
 
     //Sets up the string list files

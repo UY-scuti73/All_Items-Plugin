@@ -68,6 +68,19 @@ public class lang {
     public String placeholderFalse;
     public String placeholderNotFound;
 
+    public String timerStart;
+    public String timerPause;
+    public String timerStop;
+    public String timerReset;
+    public String timerSet;
+    public String timerGet;
+    public String timerActive;
+    public String timerTrue;
+    public String timerFalse;
+    public String timerNumError;
+
+    public String pluginReset;
+
     public final ChatColor colorGood;
     public final ChatColor colorBad;
     public final ChatColor colorDom;
@@ -150,6 +163,19 @@ public class lang {
         placeholderTrue = config.getString("placeholderAPI.true");
         placeholderFalse = config.getString("placeholderAPI.false");
         placeholderNotFound = config.getString("placeholderAPI.notFound");
+
+        timerStart = config.getString("timer.start");
+        timerPause = config.getString("timer.pause");
+        timerStop = config.getString("timer.stop");
+        timerReset = config.getString("timer.reset");
+        timerSet = config.getString("timer.set");
+        timerGet = config.getString("timer.get");
+        timerActive = config.getString("timer.active");
+        timerTrue = config.getString("timer.activeBool.true");
+        timerFalse = config.getString("timer.activeBool.false");
+        timerNumError = config.getString("timer.error.number");
+
+        pluginReset = config.getString("reset.pluginReset");
 
         check();
     }

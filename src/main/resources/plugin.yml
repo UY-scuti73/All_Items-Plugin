@@ -9,6 +9,10 @@ commands:
     description: Umbrella Command For All Item Related Sub Commands
   amob:
     description: Umbrella Command For All Mob Related Sub Commands
+  atime:
+    description: Command Used To Set Up The Timer
+  areset:
+    description: Resets The Plugin
   ahelp:
     description: Help Command For The Whole Plugin
 

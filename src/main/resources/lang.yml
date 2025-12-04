@@ -105,3 +105,22 @@ placeholderAPI:
   true: "True"
   false: "False"
   notFound: "N/A"
+
+timer:
+  start: "Timer Started"
+  pause: "Timer Paused"
+  stop: "Timer Stopped"
+  reset: "Timer Reset"
+  set: "Timer Set To"
+  get: "Timer Is At"
+  active: "Timer Activity"
+
+  activeBool:
+    true: "True"
+    false: "False"
+
+  error:
+    number: "Please Enter A Number"
+
+reset:
+  pluginReset: "Plugin Has Been Reset"

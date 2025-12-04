@@ -17,9 +17,11 @@ public class mainHelp {
 
         String strA = CC1 + "/aitem: " + CC2 + "All Of The Commands For The Items Section of This Plugin\n";
         String strB = CC1 + "/amob: " + CC2 + "All Of The Commands For The Mobs Section of This Plugin\n";
-        String strC = CC1 + "/ahelp: " + CC2 + "Shows This Message! For More Specific Help Use '/aitem help' or '/amob help'\n";
+        String strC = CC1 + "/atime: " + CC2 + "All Of The Commands For The Time Section of This Plugin\n";
+        String strD = CC1 + "/areset" + CC2 + "Reset The Files For The Plugin\n";
+        String strE = CC1 + "/ahelp: " + CC2 + "Shows This Message! For More Specific Help Use '/aitem help' or '/amob help'\n";
 
-        main_help_string = b + intro + b + strA + strB + strC + b + d + b;
+        main_help_string = b + intro + b + strA + strB + strC + strD + strE + b + d + b;
     }
 
     public void handle_help(Player p) {

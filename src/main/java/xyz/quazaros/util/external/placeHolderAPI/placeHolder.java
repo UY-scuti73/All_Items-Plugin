@@ -152,6 +152,14 @@ public class placeHolder extends PlaceholderExpansion {
             ret = getLeaderboard(false, true, par1, false);
         }
 
+        //Timer
+        if (command.equalsIgnoreCase("timertime")){
+            ret = getTimer(true);
+        }
+        if (command.equalsIgnoreCase("timeractive")){
+            ret = getTimer(false);
+        }
+
         return ret;
     }
 
@@ -274,5 +282,13 @@ public class placeHolder extends PlaceholderExpansion {
         if (placeInt >= plSort.size() || placeInt < 0) {return NA;}
 
         return isName ? plSort.get(placeInt).name : Integer.toString(plSort.get(placeInt).score);
+    }
+
+    private String getTimer(boolean isTime) {
+        if (isTime) {
+            return Integer.toString(Main.timer.timerTime);
+        } else {
+            return Main.timer.timerActive ? Main.lang.placeholderTrue : Main.lang.placeholderFalse;
+        }
     }
 }
