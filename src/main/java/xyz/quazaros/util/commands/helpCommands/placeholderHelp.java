@@ -77,7 +77,7 @@ public class placeholderHelp {
         String Timer = TimerT + Timer1 + Timer2;
 
         item_placeholders = b + ti + b + topMessage + b + Aprog + b + Ascore + b + Acheck + b + Acompleted + b + Aleaderboard + b;
-        mob_placeholders = b + tm + b + Mprog + b + Mscore + b + Mcheck + b + Mcompleted + b + Mleaderboard + b;
+        mob_placeholders = b + tm + b + topMessage + b + Mprog + b + Mscore + b + Mcheck + b + Mcompleted + b + Mleaderboard + b;
         timer_placeholders = b + tp + b + Timer + b;
     }
 

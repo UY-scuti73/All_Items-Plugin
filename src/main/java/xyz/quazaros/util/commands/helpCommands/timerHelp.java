@@ -23,7 +23,7 @@ public class timerHelp {
         String pause = CC3 + "(ADMIN) " + CC1 + "pause: " + CC2 + "Pauses the Timer\n";
         String stop = CC3 + "(ADMIN) " + CC1 + "stop: " + CC2 + "Stops the Timer\n";
         String reset = CC3 + "(ADMIN) " + CC1 + "reset: " + CC2 + "Resets the Timer\n";
-        String set = CC3 + "(ADMIN) " + CC1 + "set: " + CC2 + "Sets the Timer To A Value (Seconds)\n";
+        String set = CC3 + "(ADMIN) " + CC1 + "set <i>: " + CC2 + "Sets the Timer To A Value (Seconds)\n";
 
         timer_help = b + t + b + get + b + active + b + help + b;
         timer_admin_help = timer_help + start + b + pause + b + stop + b + reset + b + set + b;
