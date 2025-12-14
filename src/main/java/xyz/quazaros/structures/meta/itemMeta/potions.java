@@ -1,4 +1,4 @@
-package xyz.quazaros.util.meta.itemMeta;
+package xyz.quazaros.structures.meta.itemMeta;
 
 import org.bukkit.potion.PotionType;
 

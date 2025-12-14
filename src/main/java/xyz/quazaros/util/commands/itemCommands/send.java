@@ -7,7 +7,7 @@ import xyz.quazaros.main;
 
 import java.util.ArrayList;
 
-import static xyz.quazaros.util.events.util.itemSubmission.item_submission;
+import static xyz.quazaros.util.main.mainMethods.itemSubmission.item_submission;
 
 public class send {
     public static void handle_send(Player p, String[] args) {

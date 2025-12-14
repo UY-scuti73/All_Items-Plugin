@@ -1,4 +1,4 @@
-package xyz.quazaros.util.external.placeHolderAPI;
+package xyz.quazaros.extra.external.placeHolderAPI;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;

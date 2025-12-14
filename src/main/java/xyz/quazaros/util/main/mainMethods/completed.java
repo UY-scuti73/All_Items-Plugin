@@ -1,4 +1,4 @@
-package xyz.quazaros.util.events.util;
+package xyz.quazaros.util.main.mainMethods;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

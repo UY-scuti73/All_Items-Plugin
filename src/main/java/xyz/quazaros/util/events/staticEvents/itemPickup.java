@@ -3,7 +3,7 @@ package xyz.quazaros.util.events.staticEvents;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import xyz.quazaros.main;
 
-import static xyz.quazaros.util.events.util.itemSubmission.item_submission;
+import static xyz.quazaros.util.main.mainMethods.itemSubmission.item_submission;
 
 public class itemPickup {
     //Handles When An Item Is Picked Up

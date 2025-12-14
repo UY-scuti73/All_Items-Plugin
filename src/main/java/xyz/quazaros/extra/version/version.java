@@ -1,4 +1,4 @@
-package xyz.quazaros.util.version;
+package xyz.quazaros.extra.version;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

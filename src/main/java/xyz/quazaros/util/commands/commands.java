@@ -20,6 +20,7 @@ import static xyz.quazaros.util.commands.itemCommands.reset.handle_reset;
 import static xyz.quazaros.util.commands.itemCommands.send.handle_send;
 import static xyz.quazaros.util.commands.itemCommands.submit.handle_submit;
 import static xyz.quazaros.util.commands.timeCommands.timeCommands.*;
+import static xyz.quazaros.util.main.initialize.reset;
 
 public class commands implements CommandExecutor {
 
@@ -106,7 +107,7 @@ public class commands implements CommandExecutor {
             p.sendMessage(Main.lang.colorBad + Lang.noPermission);
         }
 
-        Main.reset_plugin();
+        reset();
         p.sendMessage(Main.lang.colorGood + Lang.pluginReset);
     }
 

@@ -12,9 +12,9 @@ import org.bukkit.potion.PotionType;
 
 import xyz.quazaros.util.files.config.lang;
 import xyz.quazaros.main;
-import xyz.quazaros.util.meta.*;
-import xyz.quazaros.util.meta.itemMeta.enchantments;
-import xyz.quazaros.util.meta.itemMeta.potions;
+import xyz.quazaros.structures.meta.*;
+import xyz.quazaros.structures.meta.itemMeta.enchantments;
+import xyz.quazaros.structures.meta.itemMeta.potions;
 
 public class itemList {
     public ArrayList<item> items;

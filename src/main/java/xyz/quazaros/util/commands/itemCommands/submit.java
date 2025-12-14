@@ -7,7 +7,7 @@ import xyz.quazaros.structures.items.itemList;
 import xyz.quazaros.structures.player.player;
 import xyz.quazaros.util.files.config.lang;
 
-import static xyz.quazaros.util.events.util.completed.checkCompleted;
+import static xyz.quazaros.util.main.mainMethods.completed.checkCompleted;
 
 public class submit {
     //Handles submit and unsubmit commands

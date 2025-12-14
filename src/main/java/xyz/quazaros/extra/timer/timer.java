@@ -1,4 +1,4 @@
-package xyz.quazaros.util.timer;
+package xyz.quazaros.extra.timer;
 
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;

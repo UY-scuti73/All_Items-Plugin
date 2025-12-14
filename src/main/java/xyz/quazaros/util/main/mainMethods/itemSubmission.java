@@ -1,4 +1,4 @@
-package xyz.quazaros.util.events.util;
+package xyz.quazaros.util.main.mainMethods;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -7,8 +7,8 @@ import org.bukkit.inventory.PlayerInventory;
 import xyz.quazaros.main;
 import xyz.quazaros.structures.player.player;
 
-import static xyz.quazaros.util.events.util.announceCollection.announce_collection;
-import static xyz.quazaros.util.events.util.completed.checkCompleted;
+import static xyz.quazaros.util.main.mainMethods.announceCollection.announce_collection;
+import static xyz.quazaros.util.main.mainMethods.completed.checkCompleted;
 
 public class itemSubmission {
     public static boolean item_submission(ItemStack it, Player p, boolean is_asend) {

@@ -1,4 +1,4 @@
-package xyz.quazaros.util.meta;
+package xyz.quazaros.structures.meta;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -7,8 +7,8 @@ import org.bukkit.potion.PotionType;
 import xyz.quazaros.structures.items.item;
 import xyz.quazaros.util.files.file;
 import xyz.quazaros.main;
-import xyz.quazaros.util.meta.itemMeta.enchantments;
-import xyz.quazaros.util.meta.itemMeta.potions;
+import xyz.quazaros.structures.meta.itemMeta.enchantments;
+import xyz.quazaros.structures.meta.itemMeta.potions;
 
 import java.util.ArrayList;
 

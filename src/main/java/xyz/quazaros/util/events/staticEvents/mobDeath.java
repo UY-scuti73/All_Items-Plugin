@@ -6,8 +6,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import xyz.quazaros.main;
 import xyz.quazaros.structures.player.player;
 
-import static xyz.quazaros.util.events.util.announceCollection.announce_collection;
-import static xyz.quazaros.util.events.util.completed.checkCompleted;
+import static xyz.quazaros.util.main.mainMethods.announceCollection.announce_collection;
+import static xyz.quazaros.util.main.mainMethods.completed.checkCompleted;
 
 public class mobDeath {
     //Handles When A Mob Dies
