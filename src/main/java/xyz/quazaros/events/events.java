@@ -1,9 +1,11 @@
 package xyz.quazaros.events;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import xyz.quazaros.inventory.inventory;
@@ -47,12 +49,15 @@ public class events implements Listener {
     }
 
     @EventHandler
-    public void PlayerPickupItemEvent(PlayerPickupItemEvent e) {
-        Player p = (Player) e.getPlayer();
+    public void EntityDeathEvent(EntityDeathEvent e) {
+        LivingEntity mob = (LivingEntity) e.getEntity();
+        if (!(mob.getKiller() instanceof Player)) {return;}
 
-        item tempItem = main.getPlugin().ItemList.submitItem(e.getItem().getItemStack());
+        Player p = (Player) mob.getKiller();
+
+        item tempItem = main.getPlugin().ItemList.submitItem(mob.getName());
         if (tempItem == null) {return;}
 
-        p.sendMessage(ChatColor.GREEN + tempItem.item_display_name + " Has Been Submitted");
+        p.sendMessage(ChatColor.GREEN + tempItem.item_display_name + " Has Been Killed");
     }
 }

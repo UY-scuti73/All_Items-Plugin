@@ -16,6 +16,7 @@ public final class main extends JavaPlugin {
     public playerList PlayerList;
     public itemList ItemList;
     public inventory Inventory;
+    public version Version;
 
     public main() {
         plugin = this;
@@ -34,6 +35,7 @@ public final class main extends JavaPlugin {
     }
 
     private void start() {
+        Version = new version();
         File = new file();
         Commands = new commands();
         PlayerList = new playerList();

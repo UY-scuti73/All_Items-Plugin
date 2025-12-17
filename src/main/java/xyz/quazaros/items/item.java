@@ -19,9 +19,9 @@ public class item {
 
     public ItemStack item;
 
-    public item(Material material) {
-        item_type = material;
-        item_name = material.toString().toLowerCase();
+    public item(String mob, Material type) {
+        item_type = type;
+        item_name = mob;
         item_display_name = camel_case(item_name);
         isFound = false;
 
@@ -29,36 +29,6 @@ public class item {
         ItemMeta item_meta = item.getItemMeta();
         item_meta.setDisplayName(ChatColor.RED + item_display_name);
         item_meta.setEnchantmentGlintOverride(false);
-        item.setItemMeta(item_meta);
-    }
-
-    public void setEnchant(Enchantment enchantment) {
-        item_name = enchantment.getKey().getKey();
-        item_display_name = camel_case(item_name);
-
-        EnchantmentStorageMeta item_meta = (EnchantmentStorageMeta) item.getItemMeta();
-        item_meta.setDisplayName(ChatColor.RED + item_display_name);
-        item_meta.addStoredEnchant(enchantment, enchantment.getMaxLevel(), true);
-        item.setItemMeta(item_meta);
-    }
-
-    public void setPotion(PotionType potion) {
-        item_name = potion.toString().toLowerCase();
-        item_display_name = camel_case(item_name);
-
-        PotionMeta item_meta = (PotionMeta) item.getItemMeta();
-        item_meta.setDisplayName(ChatColor.RED + item_display_name);
-        item_meta.setBasePotionType(potion);
-        item.setItemMeta(item_meta);
-    }
-
-    public void setInstrument(MusicInstrument instrument) {
-        item_name = instrument.getKey().getKey();
-        item_display_name = camel_case(item_name);
-
-        MusicInstrumentMeta item_meta = (MusicInstrumentMeta) item.getItemMeta();
-        item_meta.setDisplayName(ChatColor.RED + item_display_name);
-        item_meta.setInstrument(instrument);
         item.setItemMeta(item_meta);
     }
 

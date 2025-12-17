@@ -20,7 +20,7 @@ public class file {
 
     public static ArrayList<String> retrieveStringList() {
         ArrayList<String> temp = new ArrayList<>();
-        try (InputStream inputStream = main.class.getClassLoader().getResourceAsStream("Data/items.txt")) {
+        try (InputStream inputStream = main.class.getClassLoader().getResourceAsStream("Data/mobs.txt")) {
             if (inputStream != null) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 String line;
