@@ -1,41 +1,21 @@
 package xyz.quazaros;
 
 import org.bukkit.plugin.java.JavaPlugin;
-
-import xyz.quazaros.util.commands.commands;
-import xyz.quazaros.util.commands.tabComplete;
-import xyz.quazaros.util.files.file;
-import xyz.quazaros.structures.items.*;
-import xyz.quazaros.structures.player.*;
-import xyz.quazaros.structures.meta.*;
-import xyz.quazaros.util.files.config.*;
-import xyz.quazaros.extra.timer.timer;
-import xyz.quazaros.extra.version.version;
-
-import java.util.ArrayList;
-
-import static xyz.quazaros.util.main.initialize.*;
+import xyz.quazaros.events.commands;
+import xyz.quazaros.events.events;
+import xyz.quazaros.inventory.inventory;
+import xyz.quazaros.items.itemList;
+import xyz.quazaros.player.playerList;
 
 public final class main extends JavaPlugin {
 
     private static main plugin;
 
-    public file file;
-    public commands commands;
-    public tabComplete tabComplete;
-    public metaList meta_list;
-    public config data;
-    public lang lang;
-    public version version;
-    public timer timer;
-    public playerList player_list;
-    public itemList emptyItemList;
-    public itemList emptyMobList;
-
-    public itemList all_items;
-    public itemList all_mobs;
-
-    public ArrayList<String> commandNames;
+    public file File;
+    public commands Commands;
+    public playerList PlayerList;
+    public itemList ItemList;
+    public inventory Inventory;
 
     public main() {
         plugin = this;
@@ -51,6 +31,23 @@ public final class main extends JavaPlugin {
     public void onDisable() {
         stop();
         System.out.println("All-Items Plugin Has Stopped");
+    }
+
+    private void start() {
+        File = new file();
+        Commands = new commands();
+        PlayerList = new playerList();
+        ItemList = new itemList();
+        Inventory = new inventory();
+
+        File.get();
+
+        getServer().getPluginManager().registerEvents(new events(), getPlugin());
+        getCommand("alist").setExecutor(Commands);
+    }
+
+    private void stop() {
+        File.send();
     }
 
     //Gets the plugin to use for the file path
