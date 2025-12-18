@@ -1,21 +1,16 @@
 package xyz.quazaros;
 
+import org.bukkit.entity.Boss;
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.quazaros.events.commands;
-import xyz.quazaros.events.events;
-import xyz.quazaros.inventory.inventory;
 import xyz.quazaros.items.itemList;
-import xyz.quazaros.player.playerList;
 
 public final class main extends JavaPlugin {
 
     private static main plugin;
 
     public file File;
-    public commands Commands;
-    public playerList PlayerList;
     public itemList ItemList;
-    public inventory Inventory;
+    public bossbar BossBar;
 
     public main() {
         plugin = this;
@@ -34,20 +29,21 @@ public final class main extends JavaPlugin {
     }
 
     private void start() {
-        File = new file();
-        Commands = new commands();
-        PlayerList = new playerList();
         ItemList = new itemList();
-        Inventory = new inventory();
+        File = new file();
+        BossBar = new bossbar();
 
         File.get();
 
+        BossBar.updateBossBar();
+        BossBar.updatePlayers();
+
         getServer().getPluginManager().registerEvents(new events(), getPlugin());
-        getCommand("alist").setExecutor(Commands);
     }
 
     private void stop() {
         File.send();
+        BossBar.removeBossBar();
     }
 
     //Gets the plugin to use for the file path
