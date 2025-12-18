@@ -1316,9 +1316,9 @@ channeling
 lunge_3
 density_5
 breach_4
+wind_burst_3
 binding_curse
 vanishing_curse
-wind_burst_3
 potion_of_thick
 potion_of_mundane
 potion_of_awkward
