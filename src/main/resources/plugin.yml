@@ -3,7 +3,3 @@ version: 1.0
 author: BowserTheBoss
 main: xyz.quazaros.main
 api-version: 1.20.5
-
-commands:
-  alist:
-    description: Lists The Items Collected
