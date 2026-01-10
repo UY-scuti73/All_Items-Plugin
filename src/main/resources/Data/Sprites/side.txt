@@ -1,0 +1,3 @@
+oak_log
+birch_log
+spruce_log

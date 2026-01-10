@@ -9,6 +9,7 @@ import xyz.quazaros.util.files.config.config;
 import xyz.quazaros.util.files.config.lang;
 import xyz.quazaros.structures.player.player;
 import xyz.quazaros.main;
+import xyz.quazaros.util.main.mainVariables;
 
 import java.util.Arrays;
 
@@ -24,7 +25,7 @@ import static xyz.quazaros.util.main.initialize.reset;
 
 public class commands implements CommandExecutor {
 
-    main Main;
+    mainVariables Main;
     lang Lang;
 
     help Help;
@@ -42,7 +43,7 @@ public class commands implements CommandExecutor {
     }
 
     public commands() {
-        Main = main.getPlugin();
+        Main = main.getPlugin().variables;
         Lang = Main.lang;
 
         Help = new help();

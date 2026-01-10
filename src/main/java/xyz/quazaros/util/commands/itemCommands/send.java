@@ -42,7 +42,7 @@ public class send {
         }
 
         if (temp == 0) {
-            p.sendMessage(main.getPlugin().lang.colorBad + main.getPlugin().lang.youHaveNoItems);
+            p.sendMessage(main.getPlugin().variables.lang.colorBad + main.getPlugin().variables.lang.youHaveNoItems);
         }
     }
 }

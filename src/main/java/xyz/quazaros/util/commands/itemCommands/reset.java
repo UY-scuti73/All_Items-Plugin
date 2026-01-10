@@ -3,11 +3,12 @@ package xyz.quazaros.util.commands.itemCommands;
 import org.bukkit.entity.Player;
 import xyz.quazaros.main;
 import xyz.quazaros.util.files.config.lang;
+import xyz.quazaros.util.main.mainVariables;
 
 public class reset {
     //Handles reset commands
     public static void handle_reset(Player p, boolean mob) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
         lang Lang = Main.lang;
 
         if(p.isOp()) {

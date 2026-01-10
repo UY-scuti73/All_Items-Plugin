@@ -13,7 +13,7 @@ public class mainHelp {
         String b = ChatColor.WHITE + "------------------------------------------------\n";
         String d = ChatColor.LIGHT_PURPLE + "Join The Discord: " + ChatColor.AQUA +""+ ChatColor.UNDERLINE + "https://discord.gg/zHzFgWX8KW\n";
 
-        String intro = main.getPlugin().lang.colorHelpTitle + "All Items Help Menu:\n";
+        String intro = main.getPlugin().variables.lang.colorHelpTitle + "All Items Help Menu:\n";
 
         String strA = CC1 + "/aitem: " + CC2 + "All Of The Commands For The Items Section of This Plugin\n";
         String strB = CC1 + "/amob: " + CC2 + "All Of The Commands For The Mobs Section of This Plugin\n";

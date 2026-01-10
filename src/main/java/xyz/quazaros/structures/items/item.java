@@ -1,5 +1,6 @@
 package xyz.quazaros.structures.items;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -8,10 +9,13 @@ import xyz.quazaros.main;
 
 import java.util.ArrayList;
 
+import static xyz.quazaros.structures.items.itemSprite.getSprite;
+
 public class item {
     public Material item_type;
     public String item_name;
     public String item_display_name;
+    public String item_sprite;
     public String item_founder;
     public String item_time;
     public ArrayList<String> item_lore;
@@ -29,6 +33,7 @@ public class item {
         if (!item_type.isAir()) {
             item_name = name;
             item_display_name = camel_case(name);
+            item_sprite = getSprite(item_type);
             item_founder = "";
             item_time = "";
             item_lore = new ArrayList<>();
@@ -39,12 +44,13 @@ public class item {
 
             item_stack = new ItemStack(item_type, 1);
             item_meta = item_stack.getItemMeta();
-            item_meta.setDisplayName(main.getPlugin().lang.colorBad + item_display_name);
-            item_lore.add(main.getPlugin().lang.colorSec + main.getPlugin().lang.menuItemNotFound);
+            item_lore.add(main.getPlugin().variables.lang.colorSec + main.getPlugin().variables.lang.menuItemNotFound);
             item_meta.setLore(item_lore);
-            main.getPlugin().version.addFlags(item_meta);
-            main.getPlugin().version.setGlint(item_meta, false);
+            main.getPlugin().variables.version.addFlags(item_meta);
+            main.getPlugin().variables.version.setGlint(item_meta, false);
             item_stack.setItemMeta(item_meta);
+
+            setDisplayName();
         }
     }
 
@@ -55,6 +61,7 @@ public class item {
         if (!item_type.isAir()) {
             item_name = item.item_name;
             item_display_name = camel_case(item_name);
+            item_sprite = getSprite(item_type);
             item_founder = "";
             item_time = "";
             item_lore = new ArrayList<>();
@@ -65,12 +72,13 @@ public class item {
 
             item_stack = new ItemStack(item.item_stack);
             item_meta = item_stack.getItemMeta();
-            item_meta.setDisplayName(main.getPlugin().lang.colorBad + item_display_name);
-            item_lore.add(main.getPlugin().lang.colorSec + main.getPlugin().lang.menuItemNotFound);
+            item_lore.add(main.getPlugin().variables.lang.colorSec + main.getPlugin().variables.lang.menuItemNotFound);
             item_meta.setLore(item_lore);
-            main.getPlugin().version.addFlags(item_meta);
-            main.getPlugin().version.setGlint(item_meta, false);
+            main.getPlugin().variables.version.addFlags(item_meta);
+            main.getPlugin().variables.version.setGlint(item_meta, false);
             item_stack.setItemMeta(item_meta);
+
+            setDisplayName();
         }
     }
 
@@ -79,12 +87,12 @@ public class item {
         if (isFound) {return;}
         item_founder = p;
         item_time = time;
-        item_meta.setDisplayName(main.getPlugin().lang.colorGood + item_display_name);
-        item_lore.set(0, main.getPlugin().lang.colorSec + main.getPlugin().lang.menuItemFound);
-        item_lore.add(main.getPlugin().lang.colorSec + main.getPlugin().lang.byPlayer + " " + item_founder);
-        item_lore.add(main.getPlugin().lang.colorSec + main.getPlugin().lang.atTime + " " + item_time);
+        item_meta.setDisplayName(main.getPlugin().variables.lang.colorGood + item_display_name);
+        item_lore.set(0, main.getPlugin().variables.lang.colorSec + main.getPlugin().variables.lang.menuItemFound);
+        item_lore.add(main.getPlugin().variables.lang.colorSec + main.getPlugin().variables.lang.byPlayer + " " + item_founder);
+        item_lore.add(main.getPlugin().variables.lang.colorSec + main.getPlugin().variables.lang.atTime + " " + item_time);
         item_meta.setLore(item_lore);
-        main.getPlugin().version.setGlint(item_meta, true);
+        main.getPlugin().variables.version.setGlint(item_meta, true);
         item_stack.setItemMeta(item_meta);
         item_data.submit(item_name, p, time);
         isFound = true;
@@ -94,11 +102,11 @@ public class item {
     public void submit(String time) {
         if (isFound) {return;}
         item_time = time;
-        item_meta.setDisplayName(main.getPlugin().lang.colorGood + item_display_name);
-        item_lore.set(0, main.getPlugin().lang.colorSec + main.getPlugin().lang.menuItemFound);
-        item_lore.add(main.getPlugin().lang.colorSec + main.getPlugin().lang.atTime + " " + item_time);
+        item_meta.setDisplayName(main.getPlugin().variables.lang.colorGood + item_display_name);
+        item_lore.set(0, main.getPlugin().variables.lang.colorSec + main.getPlugin().variables.lang.menuItemFound);
+        item_lore.add(main.getPlugin().variables.lang.colorSec + main.getPlugin().variables.lang.atTime + " " + item_time);
         item_meta.setLore(item_lore);
-        main.getPlugin().version.setGlint(item_meta, true);
+        main.getPlugin().variables.version.setGlint(item_meta, true);
         item_stack.setItemMeta(item_meta);
         item_data.submit(item_name, "", time);
         isFound = true;
@@ -109,17 +117,43 @@ public class item {
     public void unsubmit() {
         if (!isFound) {return;}
         ArrayList<String> empty = new ArrayList<>();
-        empty.add(main.getPlugin().lang.colorSec + main.getPlugin().lang.menuItemNotFound);
+        empty.add(main.getPlugin().variables.lang.colorSec + main.getPlugin().variables.lang.menuItemNotFound);
         item_founder = "";
         item_time = "";
-        item_meta.setDisplayName(main.getPlugin().lang.colorBad + item_display_name);
+        item_meta.setDisplayName(main.getPlugin().variables.lang.colorBad + item_display_name);
         item_lore = empty;
         item_meta.setLore(item_lore);
-        main.getPlugin().version.setGlint(item_meta, false);
+        main.getPlugin().variables.version.setGlint(item_meta, false);
         item_stack.setItemMeta(item_meta);
         item_data.unsubmit();
         isFound = false;
         update();
+    }
+
+    private void setDisplayName() {
+
+        //if (item_name == null) {return;}
+
+        //String nbt = "{display:{Name:'" + item_sprite + "'}}";
+        //System.out.println(nbt);
+
+        //nbt = "{display:{Name:'{\"type\":\"object\",\"item\":\"lingering_potion\"}'}}";
+        //String nbt = "{display:{Name:\"{\\\"text\\\":\\\"My Super Sword\\\"}\"}}";
+
+        /*String name = item_type.toString().toLowerCase();
+        String nbt = "{Item:{id:\"" + name + "\",components:{\"minecraft:custom_name\":{text:\"TEST\"}}}}";
+        String command = "/summon item 0 300 0 " + nbt;
+        System.out.println(command);
+
+
+        String nbt = "{Item:{id:\"" + "diamond" + "\",components:{\"minecraft:custom_name\":{text:\"TEST\"}}}}";
+        String command = "summon cow 0 300 0";
+        System.out.println(command);
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "say Hello world!");
+
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);*/
+
+        //item_meta.setDisplayName(main.getPlugin().variables.lang.colorBad + item_display_name + item_sprite);
     }
 
     //Gets the type of an item
@@ -139,8 +173,8 @@ public class item {
 
         item_stack = new ItemStack(item_type, 1);
         item_meta = item_stack.getItemMeta();
-        item_meta.setDisplayName(main.getPlugin().lang.colorBad + item_display_name);
-        main.getPlugin().version.setGlint(item_meta, false);
+        item_meta.setDisplayName(main.getPlugin().variables.lang.colorBad + item_display_name);
+        main.getPlugin().variables.version.setGlint(item_meta, false);
         item_stack.setItemMeta(item_meta);
 
         item_data.set_name(s);
@@ -162,13 +196,13 @@ public class item {
 
     //Updates the player score
     private void update() {
-        main.getPlugin().player_list.initialize_score();
+        main.getPlugin().variables.player_list.initialize_score();
     }
 
     //1.21.6 breaks if the vault spawner doesn't have blockdata
     private void ifSpawner() {
-        if (!main.getPlugin().version.checkItem(item_type, "trial_spawner")) {return;}
-        if (main.getPlugin().version.get_version() <= 21.5) {return;}
+        if (!main.getPlugin().variables.version.checkItem(item_type, "trial_spawner")) {return;}
+        if (main.getPlugin().variables.version.get_version() <= 21.5) {return;}
 
         item_meta = Bukkit.getItemFactory().getItemMeta(item_type);
     }

@@ -1,6 +1,7 @@
 package xyz.quazaros.util.main;
 
 import xyz.quazaros.main;
+import xyz.quazaros.structures.items.itemSprite;
 import xyz.quazaros.structures.player.playerList;
 import xyz.quazaros.util.commands.commands;
 import xyz.quazaros.util.commands.tabComplete;
@@ -20,8 +21,6 @@ import static org.bukkit.Bukkit.getServer;
 
 public class initialize {
 
-    static main Main = main.getPlugin();
-
     public static void start() {
         initializeNew();
         initializeData();
@@ -39,6 +38,9 @@ public class initialize {
     }
 
     public static void initializeNew() {
+        main.getPlugin().variables = new mainVariables();
+        mainVariables Main = main.getPlugin().variables;
+
         Main.version = new version();
         Main.data = new config();
         Main.lang = new lang();
@@ -48,11 +50,14 @@ public class initialize {
         Main.commands = new commands();
         Main.tabComplete = new tabComplete();
         Main.timer = new timer();
+        Main.sprite = new itemSprite();
 
         Main.commandNames = new ArrayList<>(Arrays.asList("aitem", "amob", "atime", "areset", "ahelp"));
     }
 
     private static void initializeData() {
+        mainVariables Main = main.getPlugin().variables;
+
         Main.file.get_data();
 
         Main.commands.initialize();
@@ -64,18 +69,20 @@ public class initialize {
     }
 
     public static void save_files(boolean remove) {
-        Main.file.send_data(remove);
+        main.getPlugin().variables.file.send_data(remove);
     }
 
     //Registers commands and API's
     private static void initializeSpigot() {
+        mainVariables Main = main.getPlugin().variables;
+
         //Register PlaceholderAPI placeholders
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new placeHolder().register();
         }
 
         //Register Commands & Events
-        getServer().getPluginManager().registerEvents(new events(), Main);
+        getServer().getPluginManager().registerEvents(new events(), main.getPlugin());
 
         commandSetup(Main.commandNames);
     }
@@ -83,8 +90,8 @@ public class initialize {
     //Initialize The Commands
     private static void commandSetup(ArrayList<String> commands) {
         for (String c : commands) {
-            Main.getCommand(c).setExecutor(Main.commands);
-            Main.getCommand(c).setTabCompleter(Main.tabComplete);
+            main.getPlugin().getCommand(c).setExecutor(main.getPlugin().variables.commands);
+            main.getPlugin().getCommand(c).setTabCompleter(main.getPlugin().variables.tabComplete);
         }
     }
 

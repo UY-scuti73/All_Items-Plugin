@@ -6,17 +6,18 @@ import org.jetbrains.annotations.NotNull;
 import xyz.quazaros.structures.player.player;
 import xyz.quazaros.structures.player.playerSort;
 import xyz.quazaros.main;
+import xyz.quazaros.util.main.mainVariables;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class placeHolder extends PlaceholderExpansion {
 
-    main Main;
+    mainVariables Main;
     String NA;
 
     public placeHolder() {
-        Main = main.getPlugin();
+        Main = main.getPlugin().variables;
         NA = Main.lang.placeholderNotFound;
     }
 

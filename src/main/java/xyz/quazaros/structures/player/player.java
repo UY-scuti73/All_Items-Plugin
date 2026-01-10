@@ -24,8 +24,8 @@ public class player {
 
         invItt = 0;
 
-        item_list = new itemList(main.getPlugin().emptyItemList, true);
-        mob_list = new itemList(main.getPlugin().emptyMobList, true);
+        item_list = new itemList(main.getPlugin().variables.emptyItemList, true);
+        mob_list = new itemList(main.getPlugin().variables.emptyMobList, true);
         inv = new inventory();
     }
 }

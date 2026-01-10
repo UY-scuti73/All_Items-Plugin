@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import xyz.quazaros.main;
+import xyz.quazaros.util.main.mainVariables;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class tabComplete implements TabCompleter {
 
-    main Main;
+    mainVariables Main;
 
     //Autofill lists
     List<String> send_list;
@@ -29,7 +30,7 @@ public class tabComplete implements TabCompleter {
     }
 
     public tabComplete() {
-        Main = main.getPlugin();
+        Main = main.getPlugin().variables;
 
         send_list = new ArrayList<>();
 

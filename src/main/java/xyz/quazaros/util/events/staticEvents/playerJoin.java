@@ -5,11 +5,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import xyz.quazaros.main;
 import xyz.quazaros.structures.player.player;
+import xyz.quazaros.util.main.mainVariables;
 
 public class playerJoin {
     //Handles When A Player Joins
     public static void handle_playerJoin(PlayerJoinEvent e) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
         Player p = e.getPlayer();
 
         int temp=0;
@@ -27,7 +28,7 @@ public class playerJoin {
     private static void set_permissions(Player player) {
         // Deprecated //
 
-        main Main = new main();
+        main Main = main.getPlugin();
 
         player.addAttachment(Main, "all_items.items", false);
         player.addAttachment(Main, "all_items.mobs", false);
@@ -38,10 +39,10 @@ public class playerJoin {
             return;
         }
 
-        if (Main.data.item_toggle) {
+        if (Main.variables.data.item_toggle) {
             player.addAttachment(Main, "all_items.items", true);
         }
-        if (Main.data.mob_toggle) {
+        if (Main.variables.data.mob_toggle) {
             player.addAttachment(Main, "all_items.mobs", true);
         }
     }

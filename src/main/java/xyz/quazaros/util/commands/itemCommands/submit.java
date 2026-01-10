@@ -6,13 +6,14 @@ import xyz.quazaros.structures.items.item;
 import xyz.quazaros.structures.items.itemList;
 import xyz.quazaros.structures.player.player;
 import xyz.quazaros.util.files.config.lang;
+import xyz.quazaros.util.main.mainVariables;
 
 import static xyz.quazaros.util.main.mainMethods.completed.checkCompleted;
 
 public class submit {
     //Handles submit and unsubmit commands
     public static void handle_submit(Player p, String[] args, boolean mob, boolean unsub) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
         lang Lang = Main.lang;
 
         if (!p.isOp()) {

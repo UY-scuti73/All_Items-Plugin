@@ -5,11 +5,12 @@ import org.bukkit.entity.Player;
 import xyz.quazaros.main;
 import xyz.quazaros.structures.items.itemList;
 import xyz.quazaros.structures.player.player;
+import xyz.quazaros.util.main.mainVariables;
 
 public class completed {
     //Checks If A List Has Been Completed
     public static void checkCompleted(boolean is_mob, player pl) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
 
         boolean is_personal;
         String command;
@@ -41,10 +42,9 @@ public class completed {
         }
 
         if (temp.complete()) {
-            System.out.println(command);
             if (is_personal) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), modifyCommand(command, pl.name));}
-            else {Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);}
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), modifyCommand(command, pl.name));
+            } else {Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);}
 
             if (!Main.data.general_personalCompletion && is_personal) {return;}
             if (!Main.data.general_mainCompletion && !is_personal) {return;}

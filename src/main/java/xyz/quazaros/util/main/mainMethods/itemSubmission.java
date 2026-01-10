@@ -6,13 +6,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import xyz.quazaros.main;
 import xyz.quazaros.structures.player.player;
+import xyz.quazaros.util.main.mainVariables;
 
 import static xyz.quazaros.util.main.mainMethods.announceCollection.announce_collection;
 import static xyz.quazaros.util.main.mainMethods.completed.checkCompleted;
 
 public class itemSubmission {
     public static boolean item_submission(ItemStack it, Player p, boolean is_asend) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
 
         boolean sub = false;
         player pl = Main.player_list.get_player_from_string(p.getName());

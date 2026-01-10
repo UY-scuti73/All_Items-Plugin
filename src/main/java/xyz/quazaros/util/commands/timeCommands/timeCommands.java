@@ -2,10 +2,11 @@ package xyz.quazaros.util.commands.timeCommands;
 
 import org.bukkit.entity.Player;
 import xyz.quazaros.main;
+import xyz.quazaros.util.main.mainVariables;
 
 public class timeCommands {
     static public void timeStart(Player p) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
 
         if (!p.isOp()) {
             p.sendMessage(Main.lang.colorBad + Main.lang.noPermission);
@@ -18,7 +19,7 @@ public class timeCommands {
     }
 
     static public void timePause(Player p) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
 
         if (!p.isOp()) {
             p.sendMessage(Main.lang.colorBad + Main.lang.noPermission);
@@ -31,7 +32,7 @@ public class timeCommands {
     }
 
     static public void timeStop(Player p) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
 
         if (!p.isOp()) {
             p.sendMessage(Main.lang.colorBad + Main.lang.noPermission);
@@ -44,7 +45,7 @@ public class timeCommands {
     }
 
     static public void timeReset(Player p) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
 
         if (!p.isOp()) {
             p.sendMessage(Main.lang.colorBad + Main.lang.noPermission);
@@ -57,7 +58,7 @@ public class timeCommands {
     }
 
     static public void timeSet(Player p, String[] args) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
 
         if (!p.isOp()) {
             p.sendMessage(Main.lang.colorBad + Main.lang.noPermission);
@@ -75,7 +76,7 @@ public class timeCommands {
     }
 
     static public void timeGet(Player p) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
 
         int curTime = Main.timer.getTimer();
 
@@ -83,7 +84,7 @@ public class timeCommands {
     }
 
     static public void timeActive(Player p) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
 
         boolean isActive = Main.timer.getActive();
         String suffix = isActive ? Main.lang.timerTrue : Main.lang.timerFalse;

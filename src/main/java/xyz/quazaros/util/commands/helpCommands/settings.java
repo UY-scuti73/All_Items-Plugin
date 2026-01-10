@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import xyz.quazaros.main;
 import xyz.quazaros.util.files.config.config;
 import xyz.quazaros.util.files.config.lang;
+import xyz.quazaros.util.main.mainVariables;
 
 public class settings {
 
@@ -12,8 +13,8 @@ public class settings {
     String mob_settings;
 
     public void initialize() {
-        config Data = main.getPlugin().data;
-        lang Lang = main.getPlugin().lang;
+        config Data = main.getPlugin().variables.data;
+        lang Lang = main.getPlugin().variables.lang;
 
         String str_item, str_mob, str_sub, str_auto, str_global, str_personal, str_others, str_priority, str_progress, str_check, str_player, str_settings;
 
@@ -57,7 +58,7 @@ public class settings {
 
     //Handles setting commands
     public void handle_settings(Player p, boolean mob) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
         lang Lang = Main.lang;
 
         if (!Main.data.general_settings) {

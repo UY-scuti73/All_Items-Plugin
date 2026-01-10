@@ -1,15 +1,17 @@
 package xyz.quazaros.util.commands.itemCommands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import xyz.quazaros.main;
 import xyz.quazaros.structures.items.item;
 import xyz.quazaros.structures.items.itemList;
 import xyz.quazaros.util.files.config.lang;
+import xyz.quazaros.util.main.mainVariables;
 
 public class check {
     //Handles check commands
     public static void handle_check(Player p, String[] args, boolean mob) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
         lang Lang = Main.lang;
 
         if (!Main.data.general_check) {
@@ -75,6 +77,7 @@ public class check {
         }
 
         item tempItem = tempList.items.get(temp);
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw B0WSER " + tempItem.item_sprite);
 
         if (tempItem.isFound) {
             if (is_public) {p.sendMessage(Lang.colorGood + tempItem.item_display_name + " " + Lang.hasBeenFoundBy + " " + tempItem.item_founder);}

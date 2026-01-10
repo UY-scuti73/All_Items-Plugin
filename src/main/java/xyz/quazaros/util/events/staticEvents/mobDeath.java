@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDeathEvent;
 import xyz.quazaros.main;
 import xyz.quazaros.structures.player.player;
+import xyz.quazaros.util.main.mainVariables;
 
 import static xyz.quazaros.util.main.mainMethods.announceCollection.announce_collection;
 import static xyz.quazaros.util.main.mainMethods.completed.checkCompleted;
@@ -12,7 +13,7 @@ import static xyz.quazaros.util.main.mainMethods.completed.checkCompleted;
 public class mobDeath {
     //Handles When A Mob Dies
     public static void handle_mobDies(EntityDeathEvent e) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
 
         if (!Main.data.mob_toggle) {
             return;

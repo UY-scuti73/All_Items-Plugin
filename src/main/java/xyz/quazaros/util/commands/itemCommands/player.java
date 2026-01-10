@@ -3,11 +3,12 @@ package xyz.quazaros.util.commands.itemCommands;
 import org.bukkit.entity.Player;
 import xyz.quazaros.main;
 import xyz.quazaros.util.files.config.lang;
+import xyz.quazaros.util.main.mainVariables;
 
 public class player {
     //Handles player commands
     public static void handle_player(Player p, String[] args, boolean mob, boolean list_priority_public) {
-        main Main = main.getPlugin();
+        mainVariables Main = main.getPlugin().variables;
         lang Lang = Main.lang;
 
         if (!Main.data.general_player) {
