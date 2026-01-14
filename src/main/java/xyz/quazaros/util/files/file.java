@@ -11,6 +11,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class file {
     public List<String> file_list;
     public List<String> mob_file_list;
@@ -112,8 +114,8 @@ public class file {
 
         try {string_list_setup();} catch (IOException e) {throw new RuntimeException(e);}
 
-        main.getPlugin().variables.emptyItemList = new itemList(false, item_string_list);
-        main.getPlugin().variables.emptyMobList = new itemList(true, mob_string_list);
+        getVariables().emptyItemList = new itemList(false, item_string_list);
+        getVariables().emptyMobList = new itemList(true, mob_string_list);
 
         try {get_players();} catch (IOException e) {throw new RuntimeException(e);}
 
@@ -130,7 +132,7 @@ public class file {
 
     //Gets players from the playerList file
     private void get_players() throws IOException {
-        playerList player_list = main.getPlugin().variables.player_list;
+        playerList player_list = getVariables().player_list;
 
         if (file_player.exists()) {
             Scanner myScanner = new Scanner(file_player);
@@ -153,13 +155,13 @@ public class file {
             main.getPlugin().saveResource("config.yml", false);
         }
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        main.getPlugin().variables.data.initialize(config);
+        getVariables().data.initialize(config);
 
         if (!langFile.exists()) {
             main.getPlugin().saveResource("lang.yml", false);
         }
         YamlConfiguration langConfig = YamlConfiguration.loadConfiguration(langFile);
-        main.getPlugin().variables.lang.initialize(langConfig);
+        getVariables().lang.initialize(langConfig);
     }
 
     //Get data from the timer
@@ -169,8 +171,8 @@ public class file {
         } else {
             List<String> results = Files.readAllLines(file_timer.toPath());
             if (results.size() >= 2) {
-                main.getPlugin().variables.timer.timerActive = Boolean.parseBoolean(results.get(0));
-                main.getPlugin().variables.timer.timerTime = Integer.parseInt(results.get(1));
+                getVariables().timer.timerActive = Boolean.parseBoolean(results.get(0));
+                getVariables().timer.timerTime = Integer.parseInt(results.get(1));
             }
         }
     }
@@ -180,8 +182,8 @@ public class file {
         Writer myWriter;
         myWriter = new FileWriter(file_timer, false);
 
-        myWriter.write(main.getPlugin().variables.timer.timerActive + "\n");
-        myWriter.write(Integer.toString(main.getPlugin().variables.timer.timerTime));
+        myWriter.write(getVariables().timer.timerActive + "\n");
+        myWriter.write(Integer.toString(getVariables().timer.timerTime));
         myWriter.close();
     }
 
@@ -225,16 +227,16 @@ public class file {
             myWriter.close();
         }
 
-        item_string_list = get_item_from_list(main.getPlugin().variables.data.item_file, false);
-        mob_string_list = get_item_from_list(main.getPlugin().variables.data.mob_file, true);
+        item_string_list = get_item_from_list(getVariables().data.item_file, false);
+        mob_string_list = get_item_from_list(getVariables().data.mob_file, true);
     }
 
     //Gets data upon starting the server
     private void get_items() throws IOException {
-        main.getPlugin().variables.all_items = new itemList(main.getPlugin().variables.emptyItemList, false);
-        main.getPlugin().variables.all_mobs = new itemList(main.getPlugin().variables.emptyMobList, false);
-        itemList all_items = main.getPlugin().variables.all_items;
-        itemList all_mobs = main.getPlugin().variables.all_mobs;
+        getVariables().all_items = new itemList(getVariables().emptyItemList, false);
+        getVariables().all_mobs = new itemList(getVariables().emptyMobList, false);
+        itemList all_items = getVariables().all_items;
+        itemList all_mobs = getVariables().all_mobs;
 
         Gson gson = new GsonBuilder().setLenient().create();
         Reader myReader;
@@ -288,7 +290,7 @@ public class file {
         }
 
         File tempFile;
-        for (player pl : main.getPlugin().variables.player_list.players) {
+        for (player pl : getVariables().player_list.players) {
             tempFile = new File(path_pre + "/Data/PersonalItems/" + pl.name + ".json");
             if (tempFile.exists()) {
                 myReader = new FileReader(tempFile);
@@ -352,9 +354,9 @@ public class file {
         boolean item_delete = remove && reset;
         boolean mob_delete = remove && mob_reset;
 
-        itemList items = main.getPlugin().variables.all_items;
-        itemList mobs = main.getPlugin().variables.all_mobs;
-        playerList players = main.getPlugin().variables.player_list;
+        itemList items = getVariables().all_items;
+        itemList mobs = getVariables().all_mobs;
+        playerList players = getVariables().player_list;
 
         ArrayList<itemData> item_data_list = new ArrayList<>();
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();

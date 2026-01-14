@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class playerList {
     public ArrayList<player> players;
     public List<String> player_names;
@@ -47,8 +49,8 @@ public class playerList {
 
     //Initializes the score of every player in the list
     public void initialize_score() {
-        itemList all_items = main.getPlugin().variables.all_items;
-        itemList all_mobs = main.getPlugin().variables.all_mobs;
+        itemList all_items = getVariables().all_items;
+        itemList all_mobs = getVariables().all_mobs;
 
         for (int i=0; i<players.size(); i++) {
             players.get(i).score = 0;
@@ -117,7 +119,7 @@ public class playerList {
 
         //Adds everything to the string list
         String str;
-        ChatColor color = main.getPlugin().variables.lang.colorDom;
+        ChatColor color = getVariables().lang.colorDom;
         for (int i=0; i<plSort.size(); i++) {
             if (i >= 3) {break;}
             str = color + Integer.toString(i+1) + ": " + plSort.get(i).name + " - " + plSort.get(i).score;

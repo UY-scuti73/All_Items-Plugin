@@ -12,6 +12,8 @@ import xyz.quazaros.structures.meta.itemMeta.potions;
 
 import java.util.ArrayList;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class metaList {
 
     file File;
@@ -28,7 +30,7 @@ public class metaList {
     ArrayList<String> mobs_init;
 
     public metaList() {
-        File = main.getPlugin().variables.file;
+        File = getVariables().file;
 
         items = new ArrayList<>();
         mobs = new ArrayList<>();
@@ -134,7 +136,7 @@ public class metaList {
             temp = new item("potion");
             temp.set_name("potion_of_" + i.name);
             potion_meta = (PotionMeta) temp.item_meta;
-            main.getPlugin().variables.version.setPotionMeta(potion_meta, i.effect.get(0));
+            getVariables().version.setPotionMeta(potion_meta, i.effect.get(0));
             temp.item_stack.setItemMeta(potion_meta);
             temp.item_meta = potion_meta;
             items.add(temp);
@@ -143,7 +145,7 @@ public class metaList {
             temp = new item("splash_potion");
             temp.set_name("splash_potion_of_" + i.name);
             potion_meta = (PotionMeta) temp.item_meta;
-            main.getPlugin().variables.version.setPotionMeta(potion_meta, i.effect.get(0));
+            getVariables().version.setPotionMeta(potion_meta, i.effect.get(0));
             temp.item_stack.setItemMeta(potion_meta);
             temp.item_meta = potion_meta;
             items.add(temp);
@@ -152,7 +154,7 @@ public class metaList {
             temp = new item("lingering_potion");
             temp.set_name("lingering_potion_of_" + i.name);
             potion_meta = (PotionMeta) temp.item_meta;
-            main.getPlugin().variables.version.setPotionMeta(potion_meta, i.effect.get(0));
+            getVariables().version.setPotionMeta(potion_meta, i.effect.get(0));
             temp.item_stack.setItemMeta(potion_meta);
             temp.item_meta = potion_meta;
             items.add(temp);
@@ -161,13 +163,13 @@ public class metaList {
             temp = new item("tipped_arrow");
             temp.set_name("tipped_arrow_of_" + i.name);
             potion_meta = (PotionMeta) temp.item_meta;
-            main.getPlugin().variables.version.setPotionMeta(potion_meta, i.effect.get(0));
+            getVariables().version.setPotionMeta(potion_meta, i.effect.get(0));
             temp.item_stack.setItemMeta(potion_meta);
             temp.item_meta = potion_meta;
             items.add(temp);
         }
         //Goat Horns
-        main.getPlugin().variables.version.initializeHorns(items);
+        getVariables().version.initializeHorns(items);
     }
 
     //Removes the null items in the list

@@ -4,6 +4,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import xyz.quazaros.main;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class placeholderHelp {
 
     String item_placeholders;
@@ -15,9 +17,9 @@ public class placeholderHelp {
         ChatColor CC2 = ChatColor.DARK_AQUA;
         ChatColor CC4 = ChatColor.DARK_PURPLE;
         String b = ChatColor.WHITE + "------------------------------------------------\n";
-        String ti = main.getPlugin().variables.lang.colorHelpTitle + "Item Placeholder Help:\n";
-        String tm = main.getPlugin().variables.lang.colorHelpTitle + "Mob Placeholder Help:\n";
-        String tp = main.getPlugin().variables.lang.colorHelpTitle + "Timer Placeholder Help:\n";
+        String ti = getVariables().lang.colorHelpTitle + "Item Placeholder Help:\n";
+        String tm = getVariables().lang.colorHelpTitle + "Mob Placeholder Help:\n";
+        String tp = getVariables().lang.colorHelpTitle + "Timer Placeholder Help:\n";
 
         String topMessage = CC2 + "The '<>' are NOT needed for PLAYERS, if your name is 'B0WSER', input 'B0WSER' in place of <player> not '<B0WSER>'\n \nThe '{}' ARE needed for ITEMS/MOBS\n";
 
@@ -84,7 +86,7 @@ public class placeholderHelp {
     //Handles placeholder help commands
     public void handle_placeholder(Player p, boolean mob) {
         if (!p.isOp()) {
-            p.sendMessage(main.getPlugin().variables.lang.colorBad + main.getPlugin().variables.lang.noPermission);
+            p.sendMessage(getVariables().lang.colorBad + getVariables().lang.noPermission);
             return;
         }
 
@@ -95,7 +97,7 @@ public class placeholderHelp {
     //Handles placeholders for timer
     public void handle_timer(Player p) {
         if (!p.isOp()) {
-            p.sendMessage(main.getPlugin().variables.lang.colorBad + main.getPlugin().variables.lang.noPermission);
+            p.sendMessage(getVariables().lang.colorBad + getVariables().lang.noPermission);
             return;
         }
 

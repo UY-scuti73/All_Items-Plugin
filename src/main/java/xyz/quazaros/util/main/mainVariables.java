@@ -2,6 +2,7 @@ package xyz.quazaros.util.main;
 
 import xyz.quazaros.extra.timer.timer;
 import xyz.quazaros.extra.version.version;
+import xyz.quazaros.main;
 import xyz.quazaros.structures.items.itemList;
 import xyz.quazaros.structures.items.itemSprite;
 import xyz.quazaros.structures.meta.metaList;
@@ -32,4 +33,8 @@ public class mainVariables {
     public itemList all_mobs;
 
     public ArrayList<String> commandNames;
+
+    public static mainVariables getVariables() {
+        return main.getPlugin().variables;
+    };
 }

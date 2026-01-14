@@ -18,6 +18,8 @@ import xyz.quazaros.main;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class inventory {
     public ArrayList<Inventory> inventory_list = new ArrayList<>();
     public ArrayList<Inventory> sorted_list = new ArrayList<>();
@@ -45,7 +47,7 @@ public class inventory {
 
     public inventory() {
         item_arrow = Material.ARROW;
-        item_leaderboard = main.getPlugin().variables.version.tryMaterials("oak_hanging_sign", "oak_sign");
+        item_leaderboard = getVariables().version.tryMaterials("oak_hanging_sign", "oak_sign");
         item_progress = Material.DIAMOND;
         item_sort = Material.HOPPER;
         item_flip = Material.OAK_DOOR;
@@ -93,7 +95,7 @@ public class inventory {
     }
 
     public void set_players(boolean mob, boolean public_p) {
-        playerList player_list = main.getPlugin().variables.player_list;
+        playerList player_list = getVariables().player_list;
         ArrayList<playerSort> plSort = player_list.sort_players(mob, !public_p);
 
         is_mob = mob;
@@ -102,7 +104,7 @@ public class inventory {
         is_sorted = false;
 
         String text;
-        lang Lang = main.getPlugin().variables.lang;
+        lang Lang = getVariables().lang;
         if (!is_mob) {
             text = is_public ? Lang.playerList : Lang.personalPlayerList;
         } else {
@@ -115,7 +117,7 @@ public class inventory {
         inventory_list.clear();
         sorted_list.clear();
 
-        add_flip = ((!is_public && main.getPlugin().variables.data.general_global) || (is_public && main.getPlugin().variables.data.general_others));
+        add_flip = ((!is_public && getVariables().data.general_global) || (is_public && getVariables().data.general_others));
 
         for (int i = 0; i<size ; i++){
             inventory_list.add(Bukkit.createInventory(null, 9 * 6, ChatColor.DARK_GREEN + text + " " + (i+1)));
@@ -136,7 +138,7 @@ public class inventory {
 
     //Sets the menu buttons in the alist menu
     public void menuButtons(String progPercent) {
-        lang Lang = main.getPlugin().variables.lang;
+        lang Lang = getVariables().lang;
 
         forward = new ItemStack(item_arrow);
         back = new ItemStack(item_arrow);
@@ -159,29 +161,29 @@ public class inventory {
         ItemMeta leaderboardM = leaderboard.getItemMeta();
         leaderboardM.setDisplayName(Lang.colorSec + Lang.progress);
         leaderboardM.setLore(Arrays.asList(Lang.colorDom + progPercent));
-        main.getPlugin().variables.version.setGlint(leaderboardM, true);
+        getVariables().version.setGlint(leaderboardM, true);
         leaderboard.setItemMeta(leaderboardM);
 
         ItemMeta playersM = players.getItemMeta();
         playersM.setDisplayName(Lang.colorSec + Lang.leaderboard);
         if (!is_mob) {
             if (is_public) {
-                playersM.setLore(main.getPlugin().variables.player_list.leaderboard(false, false));
+                playersM.setLore(getVariables().player_list.leaderboard(false, false));
             } else {
-                playersM.setLore(main.getPlugin().variables.player_list.leaderboard(false, true));
+                playersM.setLore(getVariables().player_list.leaderboard(false, true));
             }
         } else {
             if (is_public) {
-                playersM.setLore(main.getPlugin().variables.player_list.leaderboard(true, false));
+                playersM.setLore(getVariables().player_list.leaderboard(true, false));
             } else {
-                playersM.setLore(main.getPlugin().variables.player_list.leaderboard(true, true));
+                playersM.setLore(getVariables().player_list.leaderboard(true, true));
             }
         }
         players.setItemMeta(playersM);
     }
 
     private void menuButtons() {
-        lang Lang = main.getPlugin().variables.lang;
+        lang Lang = getVariables().lang;
 
         forward = new ItemStack(item_arrow);
         back = new ItemStack(item_arrow);
@@ -225,8 +227,8 @@ public class inventory {
             meta.setOwningPlayer(player);
         }
 
-        meta.setDisplayName(main.getPlugin().variables.lang.colorDom + pl.name);
-        meta.setLore(Arrays.asList(main.getPlugin().variables.lang.colorSec + "Score: " + pl.score));
+        meta.setDisplayName(getVariables().lang.colorDom + pl.name);
+        meta.setLore(Arrays.asList(getVariables().lang.colorSec + "Score: " + pl.score));
         head.setItemMeta(meta);
 
         return head;

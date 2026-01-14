@@ -19,6 +19,8 @@ general:
 
   auto_save: true
 
+  sprites: true
+
   completion:
     main_completion: true
     personal_completion: true
@@ -60,6 +62,8 @@ all_mobs:
 # "announce_send": Toggles whether a send message is sent to just the player, or the whole server
 
 # "progress/check/player/settings": Enables/Disables the respective commands by non-op players
+
+# "sprites": Enables Sprites for all items in the menu or some commands
 
 # "main_completion/personal_completion": Sends a completion message to all players if enabled for the main lists or personal lists respectively.
 # "completion_commands": Sends a command from the server when the lists are completed. To reference the player that completed their personal list use "<player>" instead of @s.

@@ -7,10 +7,12 @@ import xyz.quazaros.main;
 import xyz.quazaros.structures.player.player;
 import xyz.quazaros.util.main.mainVariables;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class playerJoin {
     //Handles When A Player Joins
     public static void handle_playerJoin(PlayerJoinEvent e) {
-        mainVariables Main = main.getPlugin().variables;
+        mainVariables Main = getVariables();
         Player p = e.getPlayer();
 
         int temp=0;

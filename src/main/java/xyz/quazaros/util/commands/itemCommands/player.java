@@ -5,10 +5,12 @@ import xyz.quazaros.main;
 import xyz.quazaros.util.files.config.lang;
 import xyz.quazaros.util.main.mainVariables;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class player {
     //Handles player commands
     public static void handle_player(Player p, String[] args, boolean mob, boolean list_priority_public) {
-        mainVariables Main = main.getPlugin().variables;
+        mainVariables Main = getVariables();
         lang Lang = Main.lang;
 
         if (!Main.data.general_player) {

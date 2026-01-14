@@ -16,6 +16,8 @@ import xyz.quazaros.structures.meta.*;
 import xyz.quazaros.structures.meta.itemMeta.enchantments;
 import xyz.quazaros.structures.meta.itemMeta.potions;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class itemList {
     public ArrayList<item> items;
     public ArrayList<Integer> indexes;
@@ -65,7 +67,7 @@ public class itemList {
 
         indexes = new ArrayList<>(item_list.indexes);
         item_names = new ArrayList<>(item_list.item_names);
-        meta_list = main.getPlugin().variables.meta_list;
+        meta_list = getVariables().meta_list;
 
         enchantedBook_index = item_list.enchantedBook_index;
         potion_index = item_list.potion_index;
@@ -79,7 +81,7 @@ public class itemList {
         items = new ArrayList<item>();
         indexes = new ArrayList<>();
         item_names = new ArrayList<>();
-        meta_list = main.getPlugin().variables.meta_list;
+        meta_list = getVariables().meta_list;
     }
 
     //Upon first starting the plugin this will initialize all the items
@@ -180,7 +182,7 @@ public class itemList {
             if (!items.get(tippedArrow_index).isFound) {
                 Index_List.add(tippedArrow_index);
             }
-        } else if (main.getPlugin().variables.version.checkItem(current_item.getType(), "goat_horn")) {
+        } else if (getVariables().version.checkItem(current_item.getType(), "goat_horn")) {
             if (!items.get(goatHorn_index).isFound) {
                 Index_List.add(goatHorn_index);
             }
@@ -225,16 +227,16 @@ public class itemList {
                 for (potions e : meta_list.potion_list) {
                     for (PotionType effect : e.effect) {
                         //If the current item has the same potion effect as the current effect, and the name of the potion effect is in the name of items[i], and the item type is the right potion
-                        if (main.getPlugin().variables.version.getPotionMeta(currentItemMeta).equals(effect) && items.get(i).item_name.contains(e.name) && items.get(i).item_type.equals(current_item.getType())) {
+                        if (getVariables().version.getPotionMeta(currentItemMeta).equals(effect) && items.get(i).item_name.contains(e.name) && items.get(i).item_type.equals(current_item.getType())) {
                             Index_List.add(i);
                         }
                     }
                 }
             }
         //Checks if the item is a goat horn
-        } else if (main.getPlugin().variables.version.checkItem(current_item.getType(), "goat_horn")) {
+        } else if (getVariables().version.checkItem(current_item.getType(), "goat_horn")) {
             Index_List.add(goatHorn_index);
-            main.getPlugin().variables.version.getHorn(current_item, items, Index_List);
+            getVariables().version.getHorn(current_item, items, Index_List);
         //Checks for any other item
         } else {
             for (int i=0; i<items.size(); i++) {
@@ -251,10 +253,10 @@ public class itemList {
         ArrayList<Integer> Index_List = get_index(current_item);
 
         if (Index_List.size() == 0) {
-            return main.getPlugin().variables.lang.colorBad + main.getPlugin().variables.lang.noItemsFound;
+            return getVariables().lang.colorBad + getVariables().lang.noItemsFound;
         }
         if (Index_List.get(0) == -1) {
-            return main.getPlugin().variables.lang.colorBad + main.getPlugin().variables.lang.enterItem;
+            return getVariables().lang.colorBad + getVariables().lang.enterItem;
         }
 
         String temp = "";
@@ -301,7 +303,7 @@ public class itemList {
 
     //Handles what happens when an item is about to be submitted
     public String generate_string(int temp) {
-        lang Lang = main.getPlugin().variables.lang;
+        lang Lang = getVariables().lang;
         if (!items.get(temp).isFound) {
             if (is_in_indexes(temp)) {
                 return Lang.colorGood + items.get(temp).item_display_name + " " + Lang.itemSubmitted;

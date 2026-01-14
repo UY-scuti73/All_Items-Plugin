@@ -5,11 +5,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import xyz.quazaros.main;
 import xyz.quazaros.structures.player.player;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class inventoryClick {
     //Handles When The Inventory Is Clicked
     public static void handle_inventoryClick(InventoryClickEvent e) {
         Player p = (Player) e.getWhoClicked();
-        player pl = main.getPlugin().variables.player_list.get_player_from_string(p.getName());
+        player pl = getVariables().player_list.get_player_from_string(p.getName());
 
         if(pl.inv.inventory_list.contains(e.getInventory()) || pl.inv.sorted_list.contains(e.getInventory())) {
 

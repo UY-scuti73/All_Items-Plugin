@@ -9,11 +9,12 @@ import xyz.quazaros.util.main.mainVariables;
 
 import static xyz.quazaros.util.main.mainMethods.announceCollection.announce_collection;
 import static xyz.quazaros.util.main.mainMethods.completed.checkCompleted;
+import static xyz.quazaros.util.main.mainVariables.getVariables;
 
 public class mobDeath {
     //Handles When A Mob Dies
     public static void handle_mobDies(EntityDeathEvent e) {
-        mainVariables Main = main.getPlugin().variables;
+        mainVariables Main = getVariables();
 
         if (!Main.data.mob_toggle) {
             return;

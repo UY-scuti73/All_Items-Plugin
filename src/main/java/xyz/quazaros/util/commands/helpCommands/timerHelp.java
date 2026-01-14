@@ -4,6 +4,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import xyz.quazaros.main;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class timerHelp {
     public String timer_help;
     public String timer_admin_help;
@@ -13,7 +15,7 @@ public class timerHelp {
         ChatColor CC2 = ChatColor.DARK_AQUA;
         ChatColor CC3 = ChatColor.DARK_RED;
         String b = ChatColor.WHITE + "------------------------------------------------\n";
-        String t = main.getPlugin().variables.lang.colorHelpTitle + "Timer Help Menu:\n";
+        String t = getVariables().lang.colorHelpTitle + "Timer Help Menu:\n";
 
         String get = CC1 + "get: " + CC2 + "Gets the Current Time (Seconds)\n";
         String active = CC1 + "active: " + CC2 + "Returns Whether or Not The Timer is Active\n";

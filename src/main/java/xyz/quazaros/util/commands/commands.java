@@ -22,6 +22,7 @@ import static xyz.quazaros.util.commands.itemCommands.send.handle_send;
 import static xyz.quazaros.util.commands.itemCommands.submit.handle_submit;
 import static xyz.quazaros.util.commands.timeCommands.timeCommands.*;
 import static xyz.quazaros.util.main.initialize.reset;
+import static xyz.quazaros.util.main.mainVariables.getVariables;
 
 public class commands implements CommandExecutor {
 
@@ -43,7 +44,7 @@ public class commands implements CommandExecutor {
     }
 
     public commands() {
-        Main = main.getPlugin().variables;
+        Main = getVariables();
         Lang = Main.lang;
 
         Help = new help();

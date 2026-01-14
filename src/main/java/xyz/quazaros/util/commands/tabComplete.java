@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class tabComplete implements TabCompleter {
 
     mainVariables Main;
@@ -30,7 +32,7 @@ public class tabComplete implements TabCompleter {
     }
 
     public tabComplete() {
-        Main = main.getPlugin().variables;
+        Main = getVariables();
 
         send_list = new ArrayList<>();
 

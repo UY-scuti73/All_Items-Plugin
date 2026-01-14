@@ -7,10 +7,12 @@ import xyz.quazaros.structures.items.itemList;
 import xyz.quazaros.structures.player.player;
 import xyz.quazaros.util.main.mainVariables;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class completed {
     //Checks If A List Has Been Completed
     public static void checkCompleted(boolean is_mob, player pl) {
-        mainVariables Main = main.getPlugin().variables;
+        mainVariables Main = getVariables();
 
         boolean is_personal;
         String command;

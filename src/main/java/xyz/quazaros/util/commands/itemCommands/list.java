@@ -7,18 +7,20 @@ import xyz.quazaros.structures.player.player;
 import xyz.quazaros.util.files.config.lang;
 import xyz.quazaros.util.main.mainVariables;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class list {
     //Returns a string depending on the outcome of list_setup
     public static void handle_list(boolean mob, boolean self, Player p, player pl, String[] args) {
         boolean playerFound = list_setup(mob, self, p, pl, args);
         if (!playerFound) {
-            p.sendMessage(main.getPlugin().variables.lang.colorBad + main.getPlugin().variables.lang.playerNotFound);
+            p.sendMessage(getVariables().lang.colorBad + getVariables().lang.playerNotFound);
         }
     }
 
     //Handles what happens with lists
     private static boolean list_setup(boolean mob, boolean self, Player p, player pl, String[] args) {
-        mainVariables Main = main.getPlugin().variables;
+        mainVariables Main = getVariables();
         lang Lang = Main.lang;
 
         if (!Main.player_list.player_exists(p.getName())) {

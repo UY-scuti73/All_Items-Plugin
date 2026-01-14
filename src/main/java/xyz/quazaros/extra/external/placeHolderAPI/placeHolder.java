@@ -11,13 +11,15 @@ import xyz.quazaros.util.main.mainVariables;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class placeHolder extends PlaceholderExpansion {
 
     mainVariables Main;
     String NA;
 
     public placeHolder() {
-        Main = main.getPlugin().variables;
+        Main = getVariables();
         NA = Main.lang.placeholderNotFound;
     }
 

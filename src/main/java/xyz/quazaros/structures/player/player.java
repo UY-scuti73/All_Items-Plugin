@@ -4,6 +4,8 @@ import xyz.quazaros.structures.items.itemList;
 import xyz.quazaros.structures.inventory.inventory;
 import xyz.quazaros.main;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class player {
     public String name;
     public int score;
@@ -24,8 +26,8 @@ public class player {
 
         invItt = 0;
 
-        item_list = new itemList(main.getPlugin().variables.emptyItemList, true);
-        mob_list = new itemList(main.getPlugin().variables.emptyMobList, true);
+        item_list = new itemList(getVariables().emptyItemList, true);
+        mob_list = new itemList(getVariables().emptyMobList, true);
         inv = new inventory();
     }
 }

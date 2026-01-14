@@ -2,16 +2,21 @@ package xyz.quazaros.util.commands.itemCommands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import xyz.quazaros.main;
 import xyz.quazaros.structures.items.item;
 import xyz.quazaros.structures.items.itemList;
 import xyz.quazaros.util.files.config.lang;
 import xyz.quazaros.util.main.mainVariables;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class check {
     //Handles check commands
     public static void handle_check(Player p, String[] args, boolean mob) {
-        mainVariables Main = main.getPlugin().variables;
+        test(p);
+
+        mainVariables Main = getVariables();
         lang Lang = Main.lang;
 
         if (!Main.data.general_check) {
@@ -85,5 +90,11 @@ public class check {
         } else {
             p.sendMessage(Lang.colorBad + tempItem.item_display_name + " " + Lang.hasNotBeenFound);
         }
+    }
+
+    private static void test(Player p) {
+        ItemStack temp = p.getInventory().getItemInMainHand();
+        p.sendMessage(temp.getItemMeta().getDisplayName());
+        System.out.println(temp.getItemMeta().getDisplayName());
     }
 }

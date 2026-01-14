@@ -9,11 +9,12 @@ import xyz.quazaros.util.files.config.lang;
 import xyz.quazaros.util.main.mainVariables;
 
 import static xyz.quazaros.util.main.mainMethods.completed.checkCompleted;
+import static xyz.quazaros.util.main.mainVariables.getVariables;
 
 public class submit {
     //Handles submit and unsubmit commands
     public static void handle_submit(Player p, String[] args, boolean mob, boolean unsub) {
-        mainVariables Main = main.getPlugin().variables;
+        mainVariables Main = getVariables();
         lang Lang = Main.lang;
 
         if (!p.isOp()) {

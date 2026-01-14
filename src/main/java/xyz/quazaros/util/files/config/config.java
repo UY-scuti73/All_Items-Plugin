@@ -19,6 +19,7 @@ public class config {
     public String general_mainMobCompletion_command;
     public String general_personalItemCompletion_command;
     public String general_personalMobCompletion_command;
+    public boolean general_sprites;
     public boolean item_toggle;
     public String item_file;
     public boolean item_subtraction;
@@ -43,6 +44,7 @@ public class config {
         general_personalItemCompletion_command = config.getString("general.completion.personal_item_completion_command");
         general_personalMobCompletion_command = config.getString("general.completion.personal_mob_completion_command");
         general_autoSave = config.getString("general.auto_save").equalsIgnoreCase("true");
+        general_sprites = config.getString("general.sprites").equalsIgnoreCase("true");
         item_toggle = (config.getString("all_items.toggle").equalsIgnoreCase("true"));
         item_file = config.getString("all_items.file");
         item_subtraction = (config.getString("all_items.subtraction").equalsIgnoreCase("true"));

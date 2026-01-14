@@ -5,10 +5,12 @@ import xyz.quazaros.main;
 import xyz.quazaros.util.files.config.lang;
 import xyz.quazaros.util.main.mainVariables;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class reset {
     //Handles reset commands
     public static void handle_reset(Player p, boolean mob) {
-        mainVariables Main = main.getPlugin().variables;
+        mainVariables Main = getVariables();
         lang Lang = Main.lang;
 
         if(p.isOp()) {

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.bukkit.Bukkit.getServer;
+import static xyz.quazaros.util.main.mainVariables.getVariables;
 
 public class initialize {
 
@@ -39,7 +40,7 @@ public class initialize {
 
     public static void initializeNew() {
         main.getPlugin().variables = new mainVariables();
-        mainVariables Main = main.getPlugin().variables;
+        mainVariables Main = getVariables();
 
         Main.version = new version();
         Main.data = new config();
@@ -56,7 +57,7 @@ public class initialize {
     }
 
     private static void initializeData() {
-        mainVariables Main = main.getPlugin().variables;
+        mainVariables Main = getVariables();
 
         Main.file.get_data();
 
@@ -69,12 +70,12 @@ public class initialize {
     }
 
     public static void save_files(boolean remove) {
-        main.getPlugin().variables.file.send_data(remove);
+        getVariables().file.send_data(remove);
     }
 
     //Registers commands and API's
     private static void initializeSpigot() {
-        mainVariables Main = main.getPlugin().variables;
+        mainVariables Main = getVariables();
 
         //Register PlaceholderAPI placeholders
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -90,8 +91,8 @@ public class initialize {
     //Initialize The Commands
     private static void commandSetup(ArrayList<String> commands) {
         for (String c : commands) {
-            main.getPlugin().getCommand(c).setExecutor(main.getPlugin().variables.commands);
-            main.getPlugin().getCommand(c).setTabCompleter(main.getPlugin().variables.tabComplete);
+            main.getPlugin().getCommand(c).setExecutor(getVariables().commands);
+            main.getPlugin().getCommand(c).setTabCompleter(getVariables().tabComplete);
         }
     }
 

@@ -8,6 +8,7 @@ import xyz.quazaros.main;
 import java.util.ArrayList;
 
 import static xyz.quazaros.util.main.mainMethods.itemSubmission.item_submission;
+import static xyz.quazaros.util.main.mainVariables.getVariables;
 
 public class send {
     public static void handle_send(Player p, String[] args) {
@@ -42,7 +43,7 @@ public class send {
         }
 
         if (temp == 0) {
-            p.sendMessage(main.getPlugin().variables.lang.colorBad + main.getPlugin().variables.lang.youHaveNoItems);
+            p.sendMessage(getVariables().lang.colorBad + getVariables().lang.youHaveNoItems);
         }
     }
 }

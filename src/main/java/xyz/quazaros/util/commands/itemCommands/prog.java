@@ -6,10 +6,12 @@ import xyz.quazaros.structures.items.itemList;
 import xyz.quazaros.util.files.config.lang;
 import xyz.quazaros.util.main.mainVariables;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class prog {
     //Handles progress commands
     public static void handle_prog(Player p, String[] args, boolean mob) {
-        mainVariables Main = main.getPlugin().variables;
+        mainVariables Main = getVariables();
         lang Lang = Main.lang;
 
         if (!Main.data.general_progress) {

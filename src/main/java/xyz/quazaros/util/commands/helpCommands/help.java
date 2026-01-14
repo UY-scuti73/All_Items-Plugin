@@ -4,6 +4,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import xyz.quazaros.main;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class help {
 
     String help_string;
@@ -16,8 +18,8 @@ public class help {
         ChatColor CC2 = ChatColor.DARK_AQUA;
         ChatColor CC3 = ChatColor.DARK_RED;
         String b = ChatColor.WHITE + "------------------------------------------------\n";
-        String ti = main.getPlugin().variables.lang.colorHelpTitle + "Item Help Menu:\n";
-        String tm = main.getPlugin().variables.lang.colorHelpTitle + "Mob Help Menu:\n";
+        String ti = getVariables().lang.colorHelpTitle + "Item Help Menu:\n";
+        String tm = getVariables().lang.colorHelpTitle + "Mob Help Menu:\n";
 
         String Alist1 = CC1 + "list: " + CC2 + "Lists the Items/Mobs You Have Found\n";
         String Alist2 = CC1 + "list <player_name>: " + CC2 + "Lists the Personal Items/Mobs a Player Has Found\n";

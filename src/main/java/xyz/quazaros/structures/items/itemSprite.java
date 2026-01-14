@@ -7,6 +7,8 @@ import xyz.quazaros.main;
 
 import java.util.ArrayList;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class itemSprite {
     ArrayList<String> side_sprites;
 
@@ -18,13 +20,13 @@ public class itemSprite {
     }
 
     public void initialize() {
-        side_sprites = main.getPlugin().variables.file.get_from_file("Sprites/side.txt");
+        side_sprites = getVariables().file.get_from_file("Sprites/side.txt");
     }
 
     public static String getSprite(Material material) {
-        String text = material.isItem() ? "item": "block";
+        String text = material.isItem() ? "item": "sprite";
         String name = material.name().toLowerCase();
 
-        return "{\"type\":\"object\",\"sprite\":\"minecraft:" + text + "/" + name + "\",\"atlas\":\"minecraft:" + text + "s\"}";
+        return "{\"color\":\"white\",\"type\":\"object\",\"sprite\":\"minecraft:" + text + "/" + name + "\",\"atlas\":\"minecraft:" + text + "s\"}";
     }
 }

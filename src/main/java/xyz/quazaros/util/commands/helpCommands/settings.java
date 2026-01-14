@@ -7,14 +7,16 @@ import xyz.quazaros.util.files.config.config;
 import xyz.quazaros.util.files.config.lang;
 import xyz.quazaros.util.main.mainVariables;
 
+import static xyz.quazaros.util.main.mainVariables.getVariables;
+
 public class settings {
 
     String item_settings;
     String mob_settings;
 
     public void initialize() {
-        config Data = main.getPlugin().variables.data;
-        lang Lang = main.getPlugin().variables.lang;
+        config Data = getVariables().data;
+        lang Lang = getVariables().lang;
 
         String str_item, str_mob, str_sub, str_auto, str_global, str_personal, str_others, str_priority, str_progress, str_check, str_player, str_settings;
 
@@ -58,7 +60,7 @@ public class settings {
 
     //Handles setting commands
     public void handle_settings(Player p, boolean mob) {
-        mainVariables Main = main.getPlugin().variables;
+        mainVariables Main = getVariables();
         lang Lang = Main.lang;
 
         if (!Main.data.general_settings) {
