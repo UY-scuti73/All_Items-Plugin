@@ -1,6 +1,7 @@
 package xyz.quazaros.util.commands.itemCommands;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import xyz.quazaros.main;
@@ -9,13 +10,12 @@ import xyz.quazaros.structures.items.itemList;
 import xyz.quazaros.util.files.config.lang;
 import xyz.quazaros.util.main.mainVariables;
 
+import static xyz.quazaros.extra.sprites.conversions.toNBT;
 import static xyz.quazaros.util.main.mainVariables.getVariables;
 
 public class check {
     //Handles check commands
     public static void handle_check(Player p, String[] args, boolean mob) {
-        test(p);
-
         mainVariables Main = getVariables();
         lang Lang = Main.lang;
 
@@ -82,19 +82,20 @@ public class check {
         }
 
         item tempItem = tempList.items.get(temp);
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw B0WSER " + tempItem.item_sprite);
 
         if (tempItem.isFound) {
-            if (is_public) {p.sendMessage(Lang.colorGood + tempItem.item_display_name + " " + Lang.hasBeenFoundBy + " " + tempItem.item_founder);}
-            else {p.sendMessage(Lang.colorGood + tempItem.item_display_name + " " + Lang.hasBeenFound);}
+            if (is_public) {sendMessage(p, tempItem, Lang.hasBeenFoundBy + " " + tempItem.item_founder, true);}
+            else {sendMessage(p, tempItem, Lang.hasBeenFound, true);}
         } else {
-            p.sendMessage(Lang.colorBad + tempItem.item_display_name + " " + Lang.hasNotBeenFound);
+            sendMessage(p, tempItem, Lang.hasNotBeenFound, false);
         }
     }
 
-    private static void test(Player p) {
-        ItemStack temp = p.getInventory().getItemInMainHand();
-        p.sendMessage(temp.getItemMeta().getDisplayName());
-        System.out.println(temp.getItemMeta().getDisplayName());
+    private static void sendMessage(Player p, item tempItem, String suffix, boolean isFound) {
+        String tempColor = isFound ? getVariables().lang.colorGoodStr : getVariables().lang.colorBadStr;
+        String text = toNBT(tempColor, tempItem.item_display_name, tempItem.item_sprite, suffix);
+        String command = "tellraw " + p.getName() + " " + text;
+        System.out.println(command);
+        Bukkit.dispatchCommand(p, command);
     }
 }

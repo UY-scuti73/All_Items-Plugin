@@ -4,7 +4,7 @@ import xyz.quazaros.extra.timer.timer;
 import xyz.quazaros.extra.version.version;
 import xyz.quazaros.main;
 import xyz.quazaros.structures.items.itemList;
-import xyz.quazaros.structures.items.itemSprite;
+import xyz.quazaros.extra.sprites.itemSprite;
 import xyz.quazaros.structures.meta.metaList;
 import xyz.quazaros.structures.player.playerList;
 import xyz.quazaros.util.commands.commands;

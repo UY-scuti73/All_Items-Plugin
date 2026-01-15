@@ -1,16 +1,14 @@
 package xyz.quazaros.structures.items;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import xyz.quazaros.main;
 
 import java.util.ArrayList;
 
-import static xyz.quazaros.structures.items.itemSprite.getSprite;
+import static xyz.quazaros.extra.sprites.conversions.toNBT;
 import static xyz.quazaros.util.main.mainVariables.getVariables;
 
 public class item {
@@ -37,6 +35,7 @@ public class item {
     public item(item item) {
         item_type = item.item_type;
         item_stack = item.item_stack.clone();
+        item_sprite = item.item_sprite;
         item_abs(item.item_name, true);
     }
 
@@ -49,7 +48,9 @@ public class item {
 
         item_name = name;
         item_display_name = camel_case(name);
-        item_sprite = getSprite(item_type);
+
+        if (!hasStack) {item_sprite = getVariables().sprite.getSprite(item_type);}
+
         item_founder = "";
         item_time = "";
         item_lore = new ArrayList<>();
@@ -83,7 +84,6 @@ public class item {
         item_founder = p;
 
         item_lore = new ArrayList<>();
-        System.out.println(p);
         item_lore.add(getVariables().lang.colorSec + getVariables().lang.menuItemFound);
         if (!item_founder.isEmpty()) {item_lore.add(getVariables().lang.colorSec + getVariables().lang.byPlayer + " " + item_founder);}
         item_lore.add(getVariables().lang.colorSec + getVariables().lang.atTime + " " + item_time);
@@ -113,15 +113,21 @@ public class item {
 
     private void setupItemMeta(boolean found) {
         String tempColor = found ? getVariables().lang.colorGoodStr : getVariables().lang.colorBadStr;
+        ChatColor tempChatColor = found ? getVariables().lang.colorGood : getVariables().lang.colorBad;
 
-        String nbt =
-                item_type.name().toLowerCase() + "[custom_name=[{\"color\":\"" + tempColor +
-                "\",\"text\":\"" + item_display_name + " \"}," + item_sprite + "]]";
+        if (getVariables().data.general_sprites) {
+            String nbt =
+                    item_type.name().toLowerCase() + "[custom_name=" +
+                            toNBT(tempColor, item_display_name, item_sprite, null) + "]";
 
-        //Sets up the sprite
-        item_stack = Bukkit.getUnsafe().modifyItemStack(item_stack, nbt);
+            //Sets up the sprite
+            item_stack = Bukkit.getUnsafe().modifyItemStack(item_stack, nbt);
+            item_meta = item_stack.getItemMeta();
+        } else {
+            item_meta = item_stack.getItemMeta();
+            item_meta.setDisplayName(tempChatColor + item_display_name);
+        }
 
-        item_meta = item_stack.getItemMeta();
         item_meta.setLore(item_lore);
         getVariables().version.addFlags(item_meta);
         getVariables().version.setGlint(item_meta, found);

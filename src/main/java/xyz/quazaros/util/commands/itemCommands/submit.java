@@ -1,5 +1,7 @@
 package xyz.quazaros.util.commands.itemCommands;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import xyz.quazaros.main;
 import xyz.quazaros.structures.items.item;
@@ -8,6 +10,7 @@ import xyz.quazaros.structures.player.player;
 import xyz.quazaros.util.files.config.lang;
 import xyz.quazaros.util.main.mainVariables;
 
+import static xyz.quazaros.extra.sprites.conversions.toNBT;
 import static xyz.quazaros.util.main.mainMethods.completed.checkCompleted;
 import static xyz.quazaros.util.main.mainVariables.getVariables;
 
@@ -100,23 +103,29 @@ public class submit {
         item tempItem = tempList.items.get(temp);
 
         if (!unsub && tempItem.isFound) {
-            p.sendMessage(Lang.colorBad + tempItem.item_display_name + " " + Lang.subAlreadyFound);
+            sendMessage(Lang.colorBadStr, tempItem, Lang.subAlreadyFound, p);
             return;
         } else if (unsub && !tempItem.isFound) {
-            p.sendMessage(Lang.colorBad + tempItem.item_display_name + " " + Lang.subNotFound);
+            sendMessage(Lang.colorBadStr, tempItem, Lang.subNotFound, p);
             return;
         }
 
         if (!unsub) {
             String targetText = targetPlayer.isEmpty() ? Lang.colorWar + Lang.admin : targetPlayer;
             tempItem.submit(targetText, tempList.date());
-            p.sendMessage(Lang.colorGood + tempItem.item_display_name + " " + Lang.submit);
+            sendMessage(Lang.colorGoodStr, tempItem, Lang.submit, p);
             checkCompleted(mob, null);
             checkCompleted(mob, pl);
         } else {
             tempItem.unsubmit();
-            p.sendMessage(Lang.colorGood + tempItem.item_display_name + " " + Lang.unsubmit);
+            sendMessage(Lang.colorGoodStr, tempItem, Lang.unsubmit, p);
             tempList.completed = false;
         }
+    }
+
+    private static void sendMessage(String color, item tempItem, String suffix, Player p) {
+        String message = toNBT(color, tempItem.item_display_name, tempItem.item_sprite, suffix);
+        String command = "tellraw " + p.getName() + " " + message;
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
     }
 }

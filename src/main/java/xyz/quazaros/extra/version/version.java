@@ -50,6 +50,10 @@ public class version {
         return ver;
     }
 
+    public boolean readyForSprites() {
+        return mc_version >= 21.9;
+    }
+
     public void setGlint(ItemMeta item_meta, boolean setGlint) {
         if (mc_version >= 20.5) {
             item_meta.setEnchantmentGlintOverride(setGlint);

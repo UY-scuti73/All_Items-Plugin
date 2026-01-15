@@ -5,9 +5,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import xyz.quazaros.main;
+import xyz.quazaros.structures.items.item;
 import xyz.quazaros.structures.player.player;
 import xyz.quazaros.util.main.mainVariables;
 
+import static xyz.quazaros.extra.sprites.conversions.toNBT;
 import static xyz.quazaros.util.main.mainMethods.announceCollection.announce_collection;
 import static xyz.quazaros.util.main.mainMethods.completed.checkCompleted;
 import static xyz.quazaros.util.main.mainVariables.getVariables;
@@ -31,6 +33,9 @@ public class itemSubmission {
 
         checkCompleted(false, pl);
         checkCompleted(false, null);
+
+        item tempItem = Main.all_items.get_item(it);
+        message = toNBT(Main.lang.colorGoodStr, message, tempItem.item_sprite, null);
 
         if (sub || is_asend) {
             announce_collection(message, p);

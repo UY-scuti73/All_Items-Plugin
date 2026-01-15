@@ -157,6 +157,8 @@ public class file {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         getVariables().data.initialize(config);
 
+        if (!getVariables().version.readyForSprites()) {getVariables().data.general_sprites = false;}
+
         if (!langFile.exists()) {
             main.getPlugin().saveResource("lang.yml", false);
         }

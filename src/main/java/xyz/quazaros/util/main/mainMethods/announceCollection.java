@@ -13,12 +13,17 @@ public class announceCollection {
         mainVariables Main = getVariables();
 
         if (!Main.data.general_announceSend || s.contains(Main.lang.colorBad.toString()) || s.contains(Main.lang.itemSubNotInList)) {
-            p.sendMessage(s);
+            sendMessage(s, p);
         } else {
             s = s + " " + Main.lang.subBy + " " + p.getName();
             for (Player player : Bukkit.getOnlinePlayers()) {
-                player.sendMessage(s);
+                sendMessage(s, player);
             }
         }
+    }
+
+    private static void sendMessage(String message, Player p) {
+        String command = "tellraw " + p.getName() + " " + message;
+        Bukkit.dispatchCommand(p, command);
     }
 }

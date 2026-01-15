@@ -161,7 +161,7 @@ public class itemList {
     }
 
     //This will get the index of the item to submit
-    private ArrayList<Integer> get_index(ItemStack current_item) {
+    public ArrayList<Integer> get_index(ItemStack current_item) {
         ArrayList<Integer> Index_List = new ArrayList<>();
         if (current_item.getType().equals(Material.ENCHANTED_BOOK)) {
             Index_List.add(enchantedBook_index);
@@ -334,6 +334,13 @@ public class itemList {
             }
         }
         return null;
+    }
+
+    //Gets the item from the itemStack
+    public item get_item(ItemStack tempItem) {
+        int index = get_index(tempItem).get(0);
+        if (index == -1) {return null;}
+        return items.get(index);
     }
 
     //Check if the index is a part of the main list

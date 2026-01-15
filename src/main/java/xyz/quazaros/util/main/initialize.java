@@ -1,7 +1,7 @@
 package xyz.quazaros.util.main;
 
 import xyz.quazaros.main;
-import xyz.quazaros.structures.items.itemSprite;
+import xyz.quazaros.extra.sprites.itemSprite;
 import xyz.quazaros.structures.player.playerList;
 import xyz.quazaros.util.commands.commands;
 import xyz.quazaros.util.commands.tabComplete;
@@ -43,6 +43,7 @@ public class initialize {
         mainVariables Main = getVariables();
 
         Main.version = new version();
+        Main.sprite = new itemSprite();
         Main.data = new config();
         Main.lang = new lang();
         Main.file = new file();
@@ -51,7 +52,6 @@ public class initialize {
         Main.commands = new commands();
         Main.tabComplete = new tabComplete();
         Main.timer = new timer();
-        Main.sprite = new itemSprite();
 
         Main.commandNames = new ArrayList<>(Arrays.asList("aitem", "amob", "atime", "areset", "ahelp"));
     }
