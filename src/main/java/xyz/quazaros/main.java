@@ -3,6 +3,7 @@ package xyz.quazaros;
 import org.bukkit.entity.Boss;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.quazaros.items.itemList;
+import xyz.quazaros.sprites.version;
 
 public final class main extends JavaPlugin {
 
@@ -11,6 +12,7 @@ public final class main extends JavaPlugin {
     public file File;
     public itemList ItemList;
     public bossbar BossBar;
+    public version version;
 
     public main() {
         plugin = this;
@@ -32,6 +34,7 @@ public final class main extends JavaPlugin {
         ItemList = new itemList();
         File = new file();
         BossBar = new bossbar();
+        version = new version();
 
         File.get();
 
