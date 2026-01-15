@@ -1,10 +1,12 @@
 package xyz.quazaros.util.commands.itemCommands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import xyz.quazaros.main;
 import xyz.quazaros.util.files.config.lang;
 import xyz.quazaros.util.main.mainVariables;
 
+import static xyz.quazaros.extra.sprites.conversions.toPlayerNBT;
 import static xyz.quazaros.util.main.mainVariables.getVariables;
 
 public class player {
@@ -40,9 +42,14 @@ public class player {
         xyz.quazaros.structures.player.player tempPlayer = Main.player_list.get_player_from_string(args[0]);
         if (tempPlayer == null) {
             p.sendMessage(Lang.colorBad + Lang.playerNotFound);
-        } else {
-            if (!mob) {p.sendMessage(Lang.colorDom + tempPlayer.name + ": " + Lang.colorSec + tempPlayer.score);}
-            else {p.sendMessage(Lang.colorDom + tempPlayer.name + ": " + Lang.colorSec + tempPlayer.mobScore);}
+            return;
         }
+
+        String message;
+        if (!mob) {message = toPlayerNBT(tempPlayer.name, Integer.toString(tempPlayer.score));}
+        else {message = toPlayerNBT(tempPlayer.name, Integer.toString(tempPlayer.mobScore));}
+
+        String command = "tellraw " + p.getName() + " " + message;
+        Bukkit.dispatchCommand(p, command);
     }
 }

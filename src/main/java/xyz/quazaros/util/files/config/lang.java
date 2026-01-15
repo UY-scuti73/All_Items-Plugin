@@ -91,6 +91,8 @@ public class lang {
 
     public final String colorGoodStr;
     public final String colorBadStr;
+    public final String colorDomStr;
+    public final String colorSecStr;
 
     public lang() {
         colorGood = ChatColor.GREEN;
@@ -103,6 +105,8 @@ public class lang {
 
         colorGoodStr = "green";
         colorBadStr = "red";
+        colorDomStr = "light_purple";
+        colorSecStr = "aqua";
     }
 
     public void initialize(YamlConfiguration config) {

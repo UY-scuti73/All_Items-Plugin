@@ -29,4 +29,22 @@ public class conversions {
 
         return temp;
     }
+
+    public static String toPlayerNBT(String playerName, String score) {
+        String temp;
+
+        if (!getVariables().data.general_sprites) {
+            temp =
+                "[{\"color\":\"" + getVariables().lang.colorDomStr + "\",\"text\":\"" + playerName + ": \"}," +
+                "{\"color\":\"" + getVariables().lang.colorSecStr + "\",\"text\":\"" + score + "\"}]";
+        } else {
+            String sprite = "{\"player\":\"" + playerName + "\"}";
+            temp =
+                "[{\"color\":\"white\",\"text\":\"(\"}," + sprite + ",{\"color\":\"white\",\"text\":\") \"}" +
+                ",{\"color\":\"" + getVariables().lang.colorDomStr + "\",\"text\":\"" + playerName + ": \"}," +
+                "{\"color\":\"" + getVariables().lang.colorSecStr + "\",\"text\":\"" + score + "\"}]";
+        }
+
+        return temp;
+    }
 }

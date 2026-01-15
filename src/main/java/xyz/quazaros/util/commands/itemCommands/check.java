@@ -95,7 +95,6 @@ public class check {
         String tempColor = isFound ? getVariables().lang.colorGoodStr : getVariables().lang.colorBadStr;
         String text = toNBT(tempColor, tempItem.item_display_name, tempItem.item_sprite, suffix);
         String command = "tellraw " + p.getName() + " " + text;
-        System.out.println(command);
         Bukkit.dispatchCommand(p, command);
     }
 }

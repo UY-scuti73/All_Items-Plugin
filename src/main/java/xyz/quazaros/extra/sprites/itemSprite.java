@@ -20,10 +20,9 @@ public class itemSprite {
 
         String ret;
 
-        if (getVariables().version.mc_version > 21.9 || getVariables().version.mc_version == 21.11) {
+        if (getVariables().version.isGreater(21.11)) {
             ret = "{\"color\":\"white\",\"type\":\"object\",\"sprite\":\"minecraft:" + tempData.type + "/" + tempData.path + "\",\"atlas\":\"minecraft:" + tempData.type + "s\"}";
         } else {
-            System.out.println("T");
             if (tempData.type.equalsIgnoreCase("block")) {
                 ret = "{\"color\":\"white\",\"type\":\"object\",\"sprite\":\"minecraft:" + tempData.type + "/" + tempData.path + "\",\"atlas\":\"minecraft:" + tempData.type + "s\"}";
             } else {

@@ -51,17 +51,30 @@ public class version {
     }
 
     public boolean readyForSprites() {
-        return mc_version >= 21.9;
+        return isGreater(21.9);
+    }
+
+    public boolean isGreater(double a) {
+        String verStr = Double.toString(mc_version);
+        String aStr = Double.toString(a);
+
+        if (verStr.length() > aStr.length()) {
+            return true;
+        } else if (verStr.length() < aStr.length()) {
+            return false;
+        } else {
+            return mc_version >= a;
+        }
     }
 
     public void setGlint(ItemMeta item_meta, boolean setGlint) {
-        if (mc_version >= 20.5) {
+        if (isGreater(20.5)) {
             item_meta.setEnchantmentGlintOverride(setGlint);
         }
     }
 
     public void setPotionMeta(PotionMeta potion_meta, PotionType i) {
-        if (mc_version >= 20.5) {
+        if (isGreater(20.5)) {
             potion_meta.setBasePotionType(i);
         } else {
             try {
@@ -80,7 +93,7 @@ public class version {
 
     public PotionType getPotionMeta(PotionMeta potion_meta) {
         PotionType baseType = null;
-        if (mc_version >= 20.5) {
+        if (isGreater(20.5)) {
             baseType = potion_meta.getBasePotionType();
         } else {
             try {
@@ -104,7 +117,7 @@ public class version {
     }
 
     public void initializeHorns(ArrayList<item> items) {
-        if (mc_version >= 20) {
+        if (isGreater(20.0)) {
             try {
                 Class<?> musicInstrumentClass = Class.forName("org.bukkit.MusicInstrument");
                 Method valuesMethod = musicInstrumentClass.getMethod("values");
@@ -148,7 +161,7 @@ public class version {
     }
 
     public void getHorn(ItemStack currentItem, ArrayList<item> items, ArrayList<Integer> index_list) {
-        if (mc_version >= 20) {
+        if (isGreater(20.0)) {
             try {
                 Class<?> instrumentClass = Class.forName("org.bukkit.MusicInstrument");
                 Class<?> keyedClass = Class.forName("org.bukkit.NamespacedKey");
