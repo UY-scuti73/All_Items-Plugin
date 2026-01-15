@@ -94,7 +94,7 @@ public class file {
             }
             //Checks if list is completed
             if (main.getPlugin().ItemList.isCompleted()) {
-                main.getPlugin().BossBar.updateBossBar();
+                main.getPlugin().BossBar.updateBossBar(true);
                 main.getPlugin().ItemList.currentItem = null;
             }
         }

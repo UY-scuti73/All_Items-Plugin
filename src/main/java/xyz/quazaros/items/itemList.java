@@ -48,7 +48,7 @@ public class itemList {
             }
 
             setRandomItem();
-            main.getPlugin().BossBar.updateBossBar();
+            main.getPlugin().BossBar.updateBossBar(false);
 
             return curItem;
         }

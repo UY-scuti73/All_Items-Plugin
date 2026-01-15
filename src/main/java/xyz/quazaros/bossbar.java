@@ -1,10 +1,11 @@
 package xyz.quazaros;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import xyz.quazaros.items.itemList;
 
@@ -12,30 +13,74 @@ public class bossbar {
 
     public BossBar spBossBar;
 
-    public final ChatColor color1;
-    public final ChatColor color2;
-    public final ChatColor color3;
+    public final String color1;
+    public final String color2;
+    public final String color3;
 
     public bossbar() {
-        spBossBar = Bukkit.createBossBar("Test", BarColor.RED, BarStyle.SOLID);
+        NamespacedKey bossbarkey = new NamespacedKey(main.getPlugin(), "73");
+
+        spBossBar = Bukkit.createBossBar(bossbarkey, "All Item Bossbar", BarColor.RED, BarStyle.SOLID);
         spBossBar.setProgress(0.5);
 
-        color1 = ChatColor.LIGHT_PURPLE;
-        color2 = ChatColor.AQUA;
-        color3 = ChatColor.WHITE;
+        color1 = "light_purple";
+        color2 = "aqua";
+        color3 = "white";
     }
 
-    public void updateBossBar() {
+    public void updateBossBar(boolean isBoot) {
         itemList ItemList = main.getPlugin().ItemList;
         if (ItemList.currentItem == null) {
+            System.out.println("TEST");
             setComplete();
             return;
         }
 
-        String newTitle = color1 + "Current Item: " + color2 + ItemList.currentItem.display_name + color3 + " | " + color1 + "Progress: " + color2 + ItemList.getProgString();
-        spBossBar.setTitle(newTitle);
+        String newTitle;
+
+        if (main.getPlugin().version.isGreater(21.9)) {
+            String currentSprite = main.getPlugin().itemSprite.getSprite(ItemList.currentItem.type);
+            newTitle =
+                "[{\"color\":\"" + color1 + "\",\"text\":\"Current Item: \"}," +
+                "{\"color\":\"" + color2 + "\",\"text\":\"" + ItemList.currentItem.display_name + "\"}," +
+                "{\"color\":\"" + color3 + "\",\"text\":\" (\"}," +
+                currentSprite +
+                ",{\"color\":\"" + color3 + "\",\"text\":\")\"}," +
+                "{\"color\":\"" + color3 + "\",\"text\":\" | \"}," +
+                "{\"color\":\"" + color1 + "\",\"text\":\"Progress: \"}," +
+                "{\"color\":\"" + color1 + "\",\"text\":\"" + ItemList.getProgString() + "\"}]";
+        } else {
+            newTitle =
+                "[{\"color\":\"" + color1 + "\",\"text\":\"Current Item: \"}," +
+                "{\"color\":\"" + color2 + "\",\"text\":\"" + ItemList.currentItem.display_name + "\"}," +
+                "{\"color\":\"" + color3 + "\",\"text\":\" | \"}," +
+                "{\"color\":\"" + color1 + "\",\"text\":\"Progress: \"}," +
+                "{\"color\":\"" + color1 + "\",\"text\":\"" + ItemList.getProgString() + "\"}]";
+        }
+
+        String command = "bossbar set all_items_random:73 name " + newTitle;
+
+        if (isBoot) {
+            Bukkit.getScheduler().runTaskLater(main.getPlugin(), () -> {
+                sendCommand(command);
+            }, 10L);
+        } else {
+            sendCommand(command);
+        }
 
         spBossBar.setProgress(ItemList.getProgFloat());
+    }
+
+    private void sendCommand(String command) {
+        for (World world : Bukkit.getWorlds()) {
+            world.setGameRule(GameRule.SEND_COMMAND_FEEDBACK, false);
+        }
+
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+
+        for (World world : Bukkit.getWorlds()) {
+            world.setGameRule(GameRule.SEND_COMMAND_FEEDBACK, true);
+        }
     }
 
     public void setComplete() {
