@@ -869,6 +869,7 @@ closed_eyeblossom
 torchflower
 pitcher_plant
 wither_rose
+golden_dandelion
 cactus_flower
 azalea
 flowering_azalea
