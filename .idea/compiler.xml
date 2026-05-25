@@ -10,6 +10,7 @@
         <module name="all-items (1)" />
         <module name="all-items (3)" />
         <module name="all-items (2)" />
+        <module name="all-items (4)" />
       </profile>
     </annotationProcessing>
   </component>
