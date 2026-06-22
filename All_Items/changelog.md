@@ -1,3 +1,6 @@
+## 6.2
+- Updated the plugin to 26.2
+
 ## 6.1
 - Updated the plugin to 26.1 (only 1 new item so it was pretty easy lol)
 
