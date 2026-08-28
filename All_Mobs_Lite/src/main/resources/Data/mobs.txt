@@ -69,6 +69,7 @@ hoglin
 zoglin
 slime
 magma_cube
+sulfur_cube
 breeze
 blaze
 silverfish
