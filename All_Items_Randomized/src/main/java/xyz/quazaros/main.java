@@ -1,6 +1,9 @@
 package xyz.quazaros;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Boss;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.quazaros.items.itemList;
 
@@ -49,5 +52,15 @@ public final class main extends JavaPlugin {
     //Gets the plugin to use for the file path
     public static main getPlugin(){
         return plugin;
+    }
+
+    //Commands
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (!(sender instanceof Player p)) {return true;}
+        if (p.isOp() && cmd.getName().equalsIgnoreCase("skip")) {
+            getPlugin().ItemList.skip();
+        }
+        return true;
     }
 }

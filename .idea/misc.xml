@@ -5,13 +5,13 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/All_Items/pom.xml" />
-        <option value="$PROJECT_DIR$/All_Mobs_Lite/pom.xml" />
         <option value="$PROJECT_DIR$/All_Items_Lite/pom.xml" />
         <option value="$PROJECT_DIR$/All_Items_Randomized/pom.xml" />
+        <option value="$PROJECT_DIR$/All_Mobs_Lite/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_X" default="true" project-jdk-name="temurin-25" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_24" project-jdk-name="openjdk-26" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

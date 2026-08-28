@@ -1,5 +1,8 @@
 package xyz.quazaros.items;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import xyz.quazaros.main;
 
@@ -53,6 +56,14 @@ public class itemList {
             return curItem;
         }
         return null;
+    }
+
+    public void skip() {
+        item tempItem = submitItem(new ItemStack(currentItem.type, 1));
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendMessage(ChatColor.GREEN + tempItem.display_name + " Has Been Skipped");
+        }
     }
 
     private item getIndex(ItemStack itemStack) {
